@@ -1,0 +1,127 @@
+[INFO] 2025-07-22T10:51:30.705Z - Server running on port 3000
+[INFO] 2025-07-22T10:53:05.507Z - Server running on port 3000
+[INFO] 2025-07-22T11:05:15.550Z - Server running on port 3000
+[INFO] 2025-07-22T11:11:18.642Z - Server running on port 3000
+[ERROR] 2025-07-22T11:11:28.356Z - TypeError: Cannot destructure property 'url' of 'req.body' as it is undefined.
+    at scrape (file:///C:/Users/Administrateur/.cursor/my-express-playwright-app/src/controllers/scrapeController.js:5:13)
+    at Layer.handleRequest (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\layer.js:152:17)
+    at C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:295:15
+    at processParams (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:582:12)
+    at next (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:291:5)
+    at Function.handle (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:186:3)
+[INFO] 2025-07-22T11:12:12.347Z - Server running on port 3000
+[ERROR] 2025-07-22T11:52:40.740Z - TypeError: Cannot destructure property 'url' of 'req.body' as it is undefined.
+    at scrape (file:///C:/Users/Administrateur/.cursor/my-express-playwright-app/src/controllers/scrapeController.js:5:13)
+    at Layer.handleRequest (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\layer.js:152:17)
+    at C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:295:15
+    at processParams (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:582:12)
+    at next (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:291:5)
+    at Function.handle (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:186:3)
+[ERROR] 2025-07-22T11:52:49.884Z - TypeError: Cannot destructure property 'url' of 'req.body' as it is undefined.
+    at scrape (file:///C:/Users/Administrateur/.cursor/my-express-playwright-app/src/controllers/scrapeController.js:5:13)
+    at Layer.handleRequest (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\layer.js:152:17)
+    at C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:295:15
+    at processParams (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:582:12)
+    at next (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:291:5)
+    at Function.handle (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:186:3)
+[ERROR] 2025-07-22T11:52:50.355Z - TypeError: Cannot destructure property 'url' of 'req.body' as it is undefined.
+    at scrape (file:///C:/Users/Administrateur/.cursor/my-express-playwright-app/src/controllers/scrapeController.js:5:13)
+    at Layer.handleRequest (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\layer.js:152:17)
+    at C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:295:15
+    at processParams (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:582:12)
+    at next (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:291:5)
+    at Function.handle (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:186:3)
+[ERROR] 2025-07-22T11:52:50.866Z - TypeError: Cannot destructure property 'url' of 'req.body' as it is undefined.
+    at scrape (file:///C:/Users/Administrateur/.cursor/my-express-playwright-app/src/controllers/scrapeController.js:5:13)
+    at Layer.handleRequest (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\layer.js:152:17)
+    at C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:295:15
+    at processParams (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:582:12)
+    at next (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:291:5)
+    at Function.handle (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:186:3)
+[ERROR] 2025-07-22T11:52:52.873Z - TypeError: Cannot destructure property 'url' of 'req.body' as it is undefined.
+    at scrape (file:///C:/Users/Administrateur/.cursor/my-express-playwright-app/src/controllers/scrapeController.js:5:13)
+    at Layer.handleRequest (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\layer.js:152:17)
+    at C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:295:15
+    at processParams (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:582:12)
+    at next (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:291:5)
+    at Function.handle (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:186:3)
+[ERROR] 2025-07-22T11:52:54.063Z - TypeError: Cannot destructure property 'url' of 'req.body' as it is undefined.
+    at scrape (file:///C:/Users/Administrateur/.cursor/my-express-playwright-app/src/controllers/scrapeController.js:5:13)
+    at Layer.handleRequest (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\layer.js:152:17)
+    at C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:295:15
+    at processParams (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:582:12)
+    at next (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:291:5)
+    at Function.handle (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:186:3)
+[INFO] 2025-07-22T11:55:31.536Z - Server running on port 3000
+[ERROR] 2025-07-22T11:55:37.043Z - browserType.launch: Executable doesn't exist at C:\Users\Administrateur\AppData\Local\ms-playwright\chromium_headless_shell-1181\chrome-win\headless_shell.exe
+╔═════════════════════════════════════════════════════════════════════════╗
+║ Looks like Playwright Test or Playwright was just installed or updated. ║
+║ Please run the following command to download new browsers:              ║
+║                                                                         ║
+║     npx playwright install                                              ║
+║                                                                         ║
+║ <3 Playwright Team                                                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+    at scrape (C:\Users\Administrateur\.cursor\my-express-playwright-app\src\services\playwrightScraper.js:4:34)
+    at scrape (C:\Users\Administrateur\.cursor\my-express-playwright-app\src\controllers\scrapeController.js:9:24)
+    at Layer.handleRequest (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\layer.js:152:17)
+    at C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:295:15
+    at processParams (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:582:12)
+    at next (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:291:5)
+    at Function.handle (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:186:3)
+    at router (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:60:12)
+    at Layer.handleRequest (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:342:13)
+    at C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:297:9
+    at processParams (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:582:12)
+    at next (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:291:5)
+    at urlencodedParser (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\body-parser\lib\types\urlencoded.js:57:7)
+    at Layer.handleRequest (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\lib\layer.js:152:17)
+    at trimPrefix (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:342:13)
+    at C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:297:9
+    at processParams (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:582:12)
+    at next (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\router\index.js:291:5)
+    at C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\body-parser\lib\read.js:132:5
+    at invokeCallback (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\raw-body\index.js:238:16)
+    at done (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\raw-body\index.js:227:7)
+    at IncomingMessage.onEnd (C:\Users\Administrateur\.cursor\my-express-playwright-app\node_modules\raw-body\index.js:287:7)
+[INFO] 2025-07-22T11:56:52.565Z - Server running on port 3000
+[INFO] 2025-08-05T15:09:57.703Z - Server running on port 3000
+[INFO] 2025-08-05T15:13:40.870Z - Server running on port 5000
+[INFO] 2025-08-05T15:13:41.657Z - Monitoring for new emails...
+[INFO] 2025-08-05T15:13:41.661Z - Email monitoring active and continuous...
+[INFO] 2025-08-05T15:13:41.662Z - Polling for new emails at 2025-08-05T15:13:41.662Z
+[ERROR] 2025-08-05T15:13:41.668Z - Error polling messages:
+[INFO] 2025-08-05T15:13:41.669Z - Attempting re-authentication after error...
