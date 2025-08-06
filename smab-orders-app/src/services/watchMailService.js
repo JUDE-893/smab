@@ -9,7 +9,7 @@ export default async function watchMailService(app) {
     //   await listPrinters();
       const auth = await authorize(app);
       logger.info("Monitoring for new emails...");
-      await watchEmails(auth);
+      await watchEmails(auth,app);
     } catch (error) {
       logger.error("Application error:", error.message);
     }

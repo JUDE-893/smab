@@ -58,7 +58,7 @@ export const authorize = async (expressApp) => {  // Pass the Express app as an 
 
     const oauth2Client = createOAuthClient();
     const token = await loadToken();
-
+    console.log('[T]', token);
     if (token) {
       oauth2Client.setCredentials(token);
       return oauth2Client;

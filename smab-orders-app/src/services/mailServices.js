@@ -9,9 +9,9 @@ import * as cheerio from "cheerio";
 
 
 const POLL_INTERVAL = process.env.POLL_INTERVAL || 10000;
-console.log("pi", POLL_INTERVAL);
+
 // Main email watching function
-export const watchEmails = async (auth) => {
+export const watchEmails = async (auth, app) => {
     let gmail = google.gmail({ version: "v1", auth });
     process.stdout.setEncoding("utf8");
 
@@ -20,26 +20,26 @@ export const watchEmails = async (auth) => {
 
     // Token refresh mechanism
     let lastTokenRefresh = Date.now();
-    // const refreshTokenIfNeeded = async () => {
-    //   const TWELVE_HOURS = 12 * 60 * 60 * 1000;
-    //   if (Date.now() - lastTokenRefresh > TWELVE_HOURS) {
-    //     logger.info("Refreshing authentication token...");
-    //     try {
-    //       auth = await authorize();
-    //       gmail = google.gmail({ version: "v1", auth });
-    //       lastTokenRefresh = Date.now();
-    //       logger.info("Authentication token refreshed successfully");
-    //     } catch (error) {
-    //       logger.error("Failed to refresh token:", error.message);
-    //     }
-    //   }
-    // };
+    const refreshTokenIfNeeded = async () => {
+      const TWELVE_HOURS = 12 * 60 * 60 * 1000;
+      if (Date.now() - lastTokenRefresh > TWELVE_HOURS) {
+        logger.info("Refreshing authentication token...");
+        try {
+          auth = await authorize();
+          gmail = google.gmail({ version: "v1", auth });
+          lastTokenRefresh = Date.now();
+          logger.info("Authentication token refreshed successfully");
+        } catch (error) {
+          logger.error("Failed to refresh token:", error.message);
+        }
+      }
+    };
 
     // In the poll function:
     const poll = async () => {
       try {
         // Refresh token if needed
-        // await refreshTokenIfNeeded();
+        await refreshTokenIfNeeded();
 
         // Ping to verify connection
         logger.info(`Polling for new emails at ${new Date().toISOString()}`);
@@ -63,11 +63,12 @@ export const watchEmails = async (auth) => {
         }
       } catch (error) {
         logger.error("Error polling messages:", error.message);
+        console.log(error);
         // Try to re-authenticate on error
         if (error.message.includes("auth") || error.message.includes("token")) {
           try {
             logger.info("Attempting re-authentication after error...");
-            auth = await authorize();
+            auth = await authorize(app);
             gmail = google.gmail({ version: "v1", auth });
             lastTokenRefresh = Date.now();
           } catch (authError) {
@@ -99,7 +100,7 @@ const processEmail = async (gmail, message) => {
         id: message.id,
         format: "full",
       });
-      console.log("[MSG]", new Date(email.data.internalDate));
+
 
       const headers = email.data.payload.headers;
       const getHeader = (name) =>
@@ -121,7 +122,7 @@ const processEmail = async (gmail, message) => {
       logger.info(
         `Extracted Order #${orderInfo.orderNumber} with ${orderInfo.products.length} products`
       );
-      // console.log("orderInfo", orderInfo);
+      console.log("orderInfo", orderInfo);
       // const pdfPath = await generatePdf(orderInfo);
       const pdfPath = null;
       if (!pdfPath) {

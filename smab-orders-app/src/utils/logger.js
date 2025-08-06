@@ -21,7 +21,7 @@ const error = (msg) => {
 const warn = (msg) => {
   const message = `[WARNING] ${new Date().toISOString()} - ${msg}\n`;
   fs.appendFileSync(logFile, message);
-  console.error(message.trim());
+  console.warn(message.trim());
 };
 
 export default { info, error, warn };
