@@ -18,4 +18,10 @@ const error = (msg) => {
   console.error(message.trim());
 };
 
-export default { info, error }; 
+const warn = (msg) => {
+  const message = `[WARNING] ${new Date().toISOString()} - ${msg}\n`;
+  fs.appendFileSync(logFile, message);
+  console.error(message.trim());
+};
+
+export default { info, error, warn };

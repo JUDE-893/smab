@@ -8,10 +8,8 @@ import open from "open";
 
 // const TOKEN_PATH = path.join(__dirname, "token.json");
 // const SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"];
-const SCOPES = [process.env.SCOPES];
 const TOKEN_PATH = process.env.TOKEN_PATH;
-const POLL_INTERVAL = process.env.POLL_INTERVAL || 10000;
-
+console.log("rrr", TOKEN_PATH);
 /**
  * @returns : OAuth2 client
  * @description : This function is used to create an OAuth2 client.
@@ -21,7 +19,7 @@ const createOAuthClient = () =>
     new google.auth.OAuth2(
       process.env.CLIENT_ID,
       process.env.CLIENT_SECRET,
-      "http://localhost:3000/oauth2callback"
+      'http://localhost:5000/auth/google/callback'
     );
 
 // Token management functions
@@ -53,58 +51,58 @@ const loadToken = async () => {
  * If the user is not authenticated, it will open the browser to the consent URL and wait for the user to authenticate.
  * Once the user has authenticated, it will save the tokens to the disk and return the OAuth2 client.
 */
-export const authorize = async () => {
+export const authorize = async (expressApp) => {  // Pass the Express app as an argument
+
+    const SCOPES = [process.env.SCOPES];
+    console.log("scopes#", SCOPES);
+
     const oauth2Client = createOAuthClient();
     const token = await loadToken();
-  
+
     if (token) {
       oauth2Client.setCredentials(token);
       return oauth2Client;
     }
-  
+
     const authUrl = oauth2Client.generateAuthUrl({
       access_type: "offline",
       scope: SCOPES,
     });
-  
+    console.log("authurl*", authUrl);
     /**
      * @returns : Promise<OAuth2 client>
-     * @description : This function is used to wait for the user to authenticate with Google.
-     * It will open the browser to the consent URL and wait for the user to authenticate.
-     * Once the user has authenticated, it will save the tokens to the disk and return the OAuth2 client.
-    */
+     * @description : Waits for user authentication by attaching a temporary route to the existing Express app.
+     */
     const waitForAuth = async () => {
-        // 1. Dynamically load the 'open' helper so we can launch the browser
         const open = (await import("open")).default;
-      
-        // 2. Spin up a local HTTP server listening on port 3000
-        const server = http.createServer(async (req, res) => {
-          // 3. Only react to the OAuth2 callback path
-          if (req.url.startsWith("/oauth2callback")) {
-            // 4. Parse out the '?code=...' from the incoming URL
-            const code = new URL(req.url, "http://localhost:3000")
-              .searchParams.get("code");
-      
-            // 5. Exchange code for tokens with Google
-            const { tokens } = await oauth2Client.getToken(code);
-            oauth2Client.setCredentials(tokens);
-      
-            // 6. Persist tokens to disk for future runs
-            await saveToken(tokens);
-      
-            // 7. Let the user know they can close the browser tab
-            res.end("Authentication successful! You can close this window.");
-      
-            // 8. Shut down the temporary server
-            server.close();
-          }
+
+        return new Promise((resolve) => {
+            // 1. Add a temporary route to handle the OAuth callback
+            const callbackRoute = "/auth/google/callback"; // Customize this as needed
+            expressApp.get(callbackRoute, async (req, res) => {
+                const code = req.query.code;
+
+                // 2. Exchange code for tokens
+                const { tokens } = await oauth2Client.getToken(code);
+                oauth2Client.setCredentials(tokens);
+
+                // 3. Save tokens for future use
+                await saveToken(tokens);
+
+                // 4. Respond and resolve the Promise
+                res.send("Authentication successful! You can close this window.");
+                resolve(oauth2Client);
+
+                // 5. (Optional) Remove the temporary route if needed
+                expressApp._router.stack = expressApp._router.stack.filter(
+                    (layer) => layer.route?.path !== callbackRoute
+                );
+            });
+
+            // 6. Open the auth URL in the browser
+            open(authUrl);
         });
-      
-        // 9. Start listening, then open the consent URL in the default browser
-        await new Promise((resolve) => server.listen(3000, resolve));
-        await open(authUrl);
-      };      
-  
-    await waitForAuth();
-    return oauth2Client;
-  };
+    };
+
+    return await waitForAuth();
+};

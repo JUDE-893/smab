@@ -4,14 +4,13 @@ import logger from "../utils/logger.js";
 
 
 // Application entry point
-export default async function watchMailService() {
+export default async function watchMailService(app) {
     try {
     //   await listPrinters();
-      const auth = await authorize();
+      const auth = await authorize(app);
       logger.info("Monitoring for new emails...");
       await watchEmails(auth);
     } catch (error) {
       logger.error("Application error:", error.message);
     }
   };
-  
