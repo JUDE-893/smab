@@ -5,6 +5,8 @@ import { authorize } from "./googleService.js";
 import * as cheerio from "cheerio";
 // import { printPDF, DEFAULT_PRINTER } from "./printService";
 // import { generatePdf } from "./pdfService";
+import Order from '../models/orderModel.js';
+import { log } from "console";
 
 
 
@@ -122,7 +124,7 @@ const processEmail = async (gmail, message) => {
       logger.info(
         `Extracted Order #${orderInfo.orderNumber} with ${orderInfo.products.length} products`
       );
-      console.log("orderInfo", orderInfo);
+      await insertOrUpdateOrder(orderInfo);
       // const pdfPath = await generatePdf(orderInfo);
       const pdfPath = null;
       if (!pdfPath) {
@@ -153,12 +155,12 @@ const processEmail = async (gmail, message) => {
       // Add delay between printing and marking as read
       await new Promise((resolve) => setTimeout(resolve, 3000));
 
-      const readMarkResult = await markAsRead(gmail, message.id);
-      if (!readMarkResult) {
-        logger.warn(
-          `Failed to mark message ${message.id} as read despite successful processing`
-        );
-      }
+      // const readMarkResult = await markAsRead(gmail, message.id);
+      // if (!readMarkResult) {
+      //   logger.warn(
+      //     `Failed to mark message ${message.id} as read despite successful processing`
+      //   );
+      // }
 
       logger.info(`Successfully completed processing email ${message.id}`);
     } catch (error) {
@@ -240,10 +242,12 @@ const extractOrderInfo = (html) => {
     const orderNumberMatch = infoText.match(/رقم الطلب:\s*(\d+)/);
     const orderDateMatch = infoText.match(/تاريخ الطلب:\s*([0-9/]+)/);
     const paymentMethodMatch = infoText.match(/طريقة الدفع:\s*([^\n]+)/);
+    const salesAgentMatch = infoText.match(/اسم ممثل المبيعات:\s*([^\n]+)/);
 
     const orderNumber = orderNumberMatch ? orderNumberMatch[1].trim() : "";
     const orderDate = orderDateMatch ? orderDateMatch[1].trim() : "";
     const paymentMethod = paymentMethodMatch ? paymentMethodMatch[1].trim() : "";
+    const salesAgent = salesAgentMatch ? salesAgentMatch[1].trim() : "";
 
     // Extract products
     const tableRows = $("table tr");
@@ -269,6 +273,7 @@ const extractOrderInfo = (html) => {
       orderDate,
       paymentMethod,
       products,
+      salesAgent
     };
   };
 
@@ -289,3 +294,32 @@ const markAsRead = async (gmail, messageId) => {
       return false;
     }
   };
+
+// Insert new order document or update existing one
+async function insertOrUpdateOrder(orderInfo) {
+  console.log("orderInfo", orderInfo);
+
+  try {
+    // FIND
+    const order = await Order.findOne({ orderNumber: orderInfo?.orderNumber });
+    console.log("[? EXISTING ORDER]", order);
+
+    if (!order) {
+      // INSERT
+      await Order.create(orderInfo);
+      logger.info('🎉 Order created:', orderInfo?.orderNumber);
+    } else {
+      // UPDATE
+      const updatedOrder = await Order.findOneAndUpdate(
+        { orderNumber: orderInfo?.orderNumber }, // filter
+        { $set: orderInfo },                     // update data
+        { upsert: true, new: true }              // create if not found, return updated doc
+      );
+      logger.info('🔄 Order updated:', updatedOrder?.orderNumber);
+    }
+  } catch (err) {
+    logger.error('❌ Error processing order:', orderInfo.orderNumber, err);
+    console.log(err);
+    
+  }
+}

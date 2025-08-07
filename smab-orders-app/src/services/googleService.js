@@ -57,13 +57,13 @@ export const authorize = async (expressApp) => {  // Pass the Express app as an 
     const SCOPES = [process.env.SCOPES];
     console.log("scopes#", SCOPES);
 
-    const oauth2Client = createOAuthClient();
+    let oauth2Client = createOAuthClient();
     const token = await loadToken();
     console.log('[T]', token);
     if (token) {
       // console.log("(token)", token);
       // oauth2Client.setCredentials(token);
-      await refreshIfNeeded(oauth2Client, token);
+      oauth2Client = await refreshIfNeeded(oauth2Client, token);
       return oauth2Client;
     }
 
@@ -118,7 +118,6 @@ export const authorize = async (expressApp) => {  // Pass the Express app as an 
 */
 async function refreshIfNeeded(oauth2Client, token) {
   // const token = oauth2Client.credentials;
-  console.log("[cred]", token);
   
   if (!token.expiry_date || token.expiry_date <= Date.now()) {
     // Use the stored refresh_token
@@ -131,6 +130,7 @@ async function refreshIfNeeded(oauth2Client, token) {
     oauth2Client.setCredentials(credentials);
     await saveToken(newToken);
   }
+  oauth2Client.setCredentials(token);
   return oauth2Client;
 }
 

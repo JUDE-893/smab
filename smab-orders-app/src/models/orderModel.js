@@ -66,8 +66,8 @@ const orderSchema = new mongoose.Schema({
   }
 });
 
-// Create index on orderNumber for search
-orderSchema.index({ orderNumber: 1 });
+// // Create index on orderNumber for search
+// orderSchema.index({ orderNumber: 1 });
 
 // Pre-save hook to convert orderDate string to Date object if needed
 orderSchema.pre('save', function(next) {
@@ -80,4 +80,4 @@ orderSchema.pre('save', function(next) {
 
 const Order = mongoose.model('Order', orderSchema);
 
-module.exports = Order;
+export default Order;
