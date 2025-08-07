@@ -12,5 +12,7 @@ export default async function watchMailService(app) {
       await watchEmails(auth,app);
     } catch (error) {
       logger.error("Application error:", error.message);
+      console.log(error);
+      
     }
   };

@@ -3,6 +3,7 @@ import fs from "fs/promises";
 import http from "http";
 import path from "path";
 import open from "open";
+import { log } from "console";
 
 
 
@@ -60,13 +61,16 @@ export const authorize = async (expressApp) => {  // Pass the Express app as an 
     const token = await loadToken();
     console.log('[T]', token);
     if (token) {
-      oauth2Client.setCredentials(token);
+      // console.log("(token)", token);
+      // oauth2Client.setCredentials(token);
+      await refreshIfNeeded(oauth2Client, token);
       return oauth2Client;
     }
 
     const authUrl = oauth2Client.generateAuthUrl({
       access_type: "offline",
       scope: SCOPES,
+      // prompt: "consent"
     });
     console.log("authurl*", authUrl);
     /**
@@ -106,3 +110,27 @@ export const authorize = async (expressApp) => {  // Pass the Express app as an 
 
     return await waitForAuth();
 };
+
+/**
+ * @returns : Promise<OAuth2 client>
+ * @description : This function is used to refresh access token.
+ * It will read the token oauth2Client and check for expired token; if so it will refreshe it.
+*/
+async function refreshIfNeeded(oauth2Client, token) {
+  // const token = oauth2Client.credentials;
+  console.log("[cred]", token);
+  
+  if (!token.expiry_date || token.expiry_date <= Date.now()) {
+    // Use the stored refresh_token
+    const  credentials  = await oauth2Client.refreshToken(
+      token.refresh_token
+    );
+    let newToken = { ...credentials.tokens, refresh_token: token.refresh_token}
+    console.log("[credentials]", newToken);
+    
+    oauth2Client.setCredentials(credentials);
+    await saveToken(newToken);
+  }
+  return oauth2Client;
+}
+
