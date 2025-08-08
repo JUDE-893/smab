@@ -70,7 +70,7 @@ export const authorize = async (expressApp) => {  // Pass the Express app as an 
     const authUrl = oauth2Client.generateAuthUrl({
       access_type: "offline",
       scope: SCOPES,
-      // prompt: "consent"
+      prompt: "consent"
     });
     console.log("authurl*", authUrl);
     /**
@@ -118,7 +118,7 @@ export const authorize = async (expressApp) => {  // Pass the Express app as an 
 */
 async function refreshIfNeeded(oauth2Client, token) {
   // const token = oauth2Client.credentials;
-  
+
   if (!token.expiry_date || token.expiry_date <= Date.now()) {
     // Use the stored refresh_token
     const  credentials  = await oauth2Client.refreshToken(
@@ -126,11 +126,10 @@ async function refreshIfNeeded(oauth2Client, token) {
     );
     let newToken = { ...credentials.tokens, refresh_token: token.refresh_token}
     console.log("[credentials]", newToken);
-    
+
     oauth2Client.setCredentials(credentials);
     await saveToken(newToken);
   }
   oauth2Client.setCredentials(token);
   return oauth2Client;
 }
-

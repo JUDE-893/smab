@@ -6,7 +6,8 @@ import * as cheerio from "cheerio";
 // import { printPDF, DEFAULT_PRINTER } from "./printService";
 // import { generatePdf } from "./pdfService";
 import Order from '../models/orderModel.js';
-import { log } from "console";
+import pool from '../config/db/createMysqlConnectionPool.js';
+// import { log } from "console";
 
 
 
@@ -200,37 +201,37 @@ return header.replace(/=\?UTF-8\?.\?(.*?)\?=/g, (match, p1) => {
 
 // Email content processing functions
 const getEmailBody = (payload) => {
-const extractBodyFromPart = (part) => ({
-    content: decodeBody(part.body),
-    type: part.mimeType,
-});
+  const extractBodyFromPart = (part) => ({
+      content: decodeBody(part.body),
+      type: part.mimeType,
+  });
 
-const findPartByMimeType = (parts, mimeType) =>
-    parts.find((part) => part.mimeType === mimeType);
+  const findPartByMimeType = (parts, mimeType) =>
+      parts.find((part) => part.mimeType === mimeType);
 
-if (payload.parts) {
-    const htmlPart = findPartByMimeType(payload.parts, "text/html");
-    if (htmlPart) return extractBodyFromPart(htmlPart);
+  if (payload.parts) {
+      const htmlPart = findPartByMimeType(payload.parts, "text/html");
+      if (htmlPart) return extractBodyFromPart(htmlPart);
 
-    const textPart = findPartByMimeType(payload.parts, "text/plain");
-    if (textPart) return extractBodyFromPart(textPart);
+      const textPart = findPartByMimeType(payload.parts, "text/plain");
+      if (textPart) return extractBodyFromPart(textPart);
 
-    // Recursively check nested parts
-    for (const part of payload.parts) {
-    if (part.parts) {
-        const nestedBody = getEmailBody(part);
-        if (nestedBody.content !== "No readable content found")
-        return nestedBody;
-    }
-    }
-}
+      // Recursively check nested parts
+      for (const part of payload.parts) {
+      if (part.parts) {
+          const nestedBody = getEmailBody(part);
+          if (nestedBody.content !== "No readable content found")
+          return nestedBody;
+      }
+      }
+  }
 
-if (payload.body) return extractBodyFromPart(payload);
+  if (payload.body) return extractBodyFromPart(payload);
 
-return {
-    content: "No readable content found",
-    type: "plain",
-};
+  return {
+      content: "No readable content found",
+      type: "plain",
+  };
 };
 
 // Order processing functions
@@ -295,7 +296,11 @@ const markAsRead = async (gmail, messageId) => {
     }
   };
 
-// Insert new order document or update existing one
+
+/**
+ * Insert new order document or update existing one.
+ * @param {object} orderInfo - object of product infos.
+ */
 async function insertOrUpdateOrder(orderInfo) {
   console.log("orderInfo", orderInfo);
 
@@ -308,6 +313,8 @@ async function insertOrUpdateOrder(orderInfo) {
       // INSERT
       await Order.create(orderInfo);
       logger.info('🎉 Order created:', orderInfo?.orderNumber);
+      // UPDATE STOCK
+      await updateStock('decrease', updatedOrder.products); // Subtracts quantities
     } else {
       // UPDATE
       const updatedOrder = await Order.findOneAndUpdate(
@@ -316,10 +323,51 @@ async function insertOrUpdateOrder(orderInfo) {
         { upsert: true, new: true }              // create if not found, return updated doc
       );
       logger.info('🔄 Order updated:', updatedOrder?.orderNumber);
+      // UPDATE STOCK
+      await updateStock('increase', updatedOrder.products); // Adds quantities back
+      await updateStock('decrease', updatedOrder.products); // Subtracts quantities
     }
   } catch (err) {
     logger.error('❌ Error processing order:', orderInfo.orderNumber, err);
     console.log(err);
-    
+
+  }
+}
+
+/**
+ * Updates stock for multiple products.
+ * @param {'increase' | 'decrease'} operation - Whether to add or subtract stock.
+ * @param {Array} products - Array of product objects.
+ */
+async function updateStock(operation, products) {
+  if (!['increase', 'decrease'].includes(operation)) {
+    throw new Error('Invalid operation: must be "increase" or "decrease"');
+  }
+
+  const sign = operation === 'increase' ? '+' : '-';
+
+  const query = `
+    UPDATE llx_product_stock
+    SET reel = reel ${sign} ?
+    WHERE fk_product = ? AND fk_entrepot = ?
+  `;
+
+  const connection = await pool.getConnection();
+  try {
+    await connection.beginTransaction();
+
+    for (const product of products) {
+      const { quantity, barcode, warehouse } = product;
+      await connection.execute(query, [quantity, barcode, warehouse]);
+    }
+
+    await connection.commit();
+    console.log(`✅ Stock ${operation}d for ${products.length} products`);
+  } catch (err) {
+    await connection.rollback();
+    console.error('❌ Error updating stock:', err);
+    throw err;
+  } finally {
+    connection.release();
   }
 }
