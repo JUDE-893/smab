@@ -303,34 +303,55 @@ const markAsRead = async (gmail, messageId) => {
  */
 async function insertOrUpdateOrder(orderInfo) {
   console.log("orderInfo", orderInfo);
-
-  try {
-    // FIND
-    const order = await Order.findOne({ orderNumber: orderInfo?.orderNumber });
-    console.log("[? EXISTING ORDER]", order);
-
-    if (!order) {
-      // INSERT
-      await Order.create(orderInfo);
-      logger.info('🎉 Order created:', orderInfo?.orderNumber);
-      // UPDATE STOCK
-      await updateStock('decrease', updatedOrder.products); // Subtracts quantities
-    } else {
-      // UPDATE
-      const updatedOrder = await Order.findOneAndUpdate(
-        { orderNumber: orderInfo?.orderNumber }, // filter
-        { $set: orderInfo },                     // update data
-        { upsert: true, new: true }              // create if not found, return updated doc
-      );
-      logger.info('🔄 Order updated:', updatedOrder?.orderNumber);
-      // UPDATE STOCK
-      await updateStock('increase', updatedOrder.products); // Adds quantities back
-      await updateStock('decrease', updatedOrder.products); // Subtracts quantities
+  let retry = true;
+  while (retry) {
+    retry = false
+    try {
+      // FIND
+      const order = await Order.findOne({ orderNumber: orderInfo?.orderNumber });
+      console.log("[? EXISTING ORDER]", order);
+  
+      if (!order) {
+        // INSERT
+        await Order.create(orderInfo);
+        logger.info('🎉 Order created:', orderInfo?.orderNumber);
+        // UPDATE STOCK
+        await updateStock('decrease', orderInfo.products); // Subtracts quantities
+      } else {
+        // UPDATE 
+        const now = new Date();
+        // let reconciliedProducts = mergeProducts(order.products, orderInfo.products)
+        let reconciliedProducts = [...order.products, filterOutWarehouseProducts(order.products,order.products[0]?.warehouse)]
+        // update query
+        const update = {
+          $set: {
+            // mutable fields that should be updated each time
+            updatedAt: now,
+            products : reconciliedProducts
+          }
+        };
+        // update request
+        const updatedOrder = await Order.findOneAndUpdate(
+          { orderNumber: orderInfo.orderNumber },
+          update,
+          { new: true }
+        );
+        
+        logger.info('🔄 Order updated:', updatedOrder?.orderNumber);
+        // UPDATE STOCK
+        await updateStock('increase', order.products); // Adds quantities back
+        await updateStock('decrease', updatedOrder.products); // Subtracts quantities
+      };
+    } catch (err) {
+      // check for duplicate error
+      const isDup = err && (err.code === 11000 || err.name === 'MongoServerError' && err.code === 11000);
+      if (isDup) {
+        retry = true
+      };
+      logger.error('❌ Error processing order:', orderInfo.orderNumber, err);
+      console.log(err);
+  
     }
-  } catch (err) {
-    logger.error('❌ Error processing order:', orderInfo.orderNumber, err);
-    console.log(err);
-
   }
 }
 
@@ -347,9 +368,11 @@ async function updateStock(operation, products) {
   const sign = operation === 'increase' ? '+' : '-';
 
   const query = `
-    UPDATE llx_product_stock
-    SET reel = reel ${sign} ?
-    WHERE fk_product = ? AND fk_entrepot = ?
+    UPDATE llx_product_stock ps
+    JOIN llx_product p ON ps.fk_product = p.rowid
+    JOIN llx_entrepot e ON ps.fk_entrepot = e.rowid
+    SET ps.reel = ps.reel ${sign} ?
+    WHERE p.ref = ? AND e.ref = ?
   `;
 
   const connection = await pool.getConnection();
@@ -370,4 +393,40 @@ async function updateStock(operation, products) {
   } finally {
     connection.release();
   }
+}
+
+// BENCHED
+/**
+ * Merges incoming products into an existing product list.
+ * - If a product with the same name and barcode exists, its quantity is updated.
+ * - If no match is found, the product is added to the list.
+ * - Matching is based on the combination of 'name' and 'barcode' fields.
+ *
+ * @param {Array} existingProducts - Array of current product objects in the order.
+ * @param {Array} incomingProducts - Array of new product objects to merge.
+ * @returns {Array} - A new array of merged product objects.
+ */
+function mergeProducts(existingProducts, incomingProducts) {
+  const key = (p) => `${p.name}-${p.barcode}`;
+  const productMap = Object.fromEntries(
+    existingProducts.map(p => [key(p), { ...p }])
+  );
+
+  for (const prod of incomingProducts) {
+    const k = key(prod);
+    if (productMap[k]) {
+      // Update quantity only
+      productMap[k].quantity = prod.quantity;
+    } else {
+      // Add new product
+      productMap[k] = { ...prod };
+    }
+  }
+
+  return Object.values(productMap);
+}
+
+function filterOutWarehouseProducts(existingProducts, warehouse) {
+  let filteredPds = existingProducts((pds) => pds.warehouse !== warehouse)
+  return filteredPds
 }

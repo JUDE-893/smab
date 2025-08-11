@@ -1,0 +1,8 @@
+#ISSUE01: 
+@ [src/services/mailServices.js/fn:insertOrUpdateOrder]
+the actual issue lays in updating an existing order exactly in updating the products array. the expected behaviour : 
+- new order = create new array [products]
+- update Order (when comming from athor service) : merge the new products with the existing one in the order
+- update product (the same service) (a list of the updated products is recieved, if a product is removed from the order it will be simply missing from the new order data) : merge the new products with the existing one in the order + remove the missing ones
+
+the current output : the new products got merged but the missing products (removed ones) keep existing in the doc array as it did not been removed due to simple merge
