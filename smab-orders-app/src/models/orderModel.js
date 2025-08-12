@@ -82,21 +82,3 @@ const Order = mongoose.model('Order', orderSchema);
 
 export default Order;
 
-// originalProd{
-//   name: "n1",
-//   quantity: 3,
-//   barcode: "b1",
-//   warehouse: "w1",
-// };
-// prod1{
-//   name: "n1",
-//   quantity: 5,
-//   barcode: "b1",
-//   warehouse: "w1",
-// };
-// prod2{
-//   name: "n1",
-//   quantity: 3,
-//   barcode: "b2",
-//   warehouse: "w1",
-// };

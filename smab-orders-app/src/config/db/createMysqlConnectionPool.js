@@ -1,5 +1,8 @@
 import mysql from 'mysql2/promise';
 
+console.log("[MYSQL_PASSWORD]", process.env.MYSQL_PASSWORD);
+
+
 const pool = mysql.createPool({
   host: process.env.MYSQL_HOST,
   port: process.env.MYSQL_PORT || 3306,

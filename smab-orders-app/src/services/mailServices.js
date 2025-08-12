@@ -7,7 +7,7 @@ import * as cheerio from "cheerio";
 // import { generatePdf } from "./pdfService";
 import Order from '../models/orderModel.js';
 import pool from '../config/db/createMysqlConnectionPool.js';
-// import { log } from "console";
+
 
 
 
@@ -66,7 +66,6 @@ export const watchEmails = async (auth, app) => {
         }
       } catch (error) {
         logger.error("Error polling messages:", error.message);
-        console.log(error);
         // Try to re-authenticate on error
         if (error.message.includes("auth") || error.message.includes("token")) {
           try {
@@ -303,13 +302,15 @@ const markAsRead = async (gmail, messageId) => {
  */
 async function insertOrUpdateOrder(orderInfo) {
   console.log("orderInfo", orderInfo);
-  let retry = true;
-  while (retry) {
-    retry = false
+  let retry = true,
+  retriesCount = 1;
+
+  while (retry && retriesCount <= 3) {
+    retry = false;
+    retriesCount += 1;
     try {
       // FIND
       const order = await Order.findOne({ orderNumber: orderInfo?.orderNumber });
-      console.log("[? EXISTING ORDER]", order);
   
       if (!order) {
         // INSERT
@@ -321,7 +322,8 @@ async function insertOrUpdateOrder(orderInfo) {
         // UPDATE 
         const now = new Date();
         // let reconciliedProducts = mergeProducts(order.products, orderInfo.products)
-        let reconciliedProducts = [...order.products, filterOutWarehouseProducts(order.products,order.products[0]?.warehouse)]
+        let reconciliedProducts = [...orderInfo.products, ...filterOutWarehouseProducts(order.products,orderInfo.products[0]?.warehouse)];
+        
         // update query
         const update = {
           $set: {
@@ -335,7 +337,7 @@ async function insertOrUpdateOrder(orderInfo) {
           { orderNumber: orderInfo.orderNumber },
           update,
           { new: true }
-        );
+        ); 
         
         logger.info('🔄 Order updated:', updatedOrder?.orderNumber);
         // UPDATE STOCK
@@ -348,9 +350,11 @@ async function insertOrUpdateOrder(orderInfo) {
       if (isDup) {
         retry = true
       };
+      // log error after retrying 3 times
+      if (retriesCount > 3) {
+        logger.error('❌ Error processing order after 3 unseuccessfull retry times:', orderInfo.orderNumber, err);
+      }
       logger.error('❌ Error processing order:', orderInfo.orderNumber, err);
-      console.log(err);
-  
     }
   }
 }
@@ -385,10 +389,10 @@ async function updateStock(operation, products) {
     }
 
     await connection.commit();
-    console.log(`✅ Stock ${operation}d for ${products.length} products`);
+    logger.log(`✅ Stock ${operation}d for ${products.length} products`);
   } catch (err) {
     await connection.rollback();
-    console.error('❌ Error updating stock:', err);
+    logger.error('❌ Error updating stock:', err);
     throw err;
   } finally {
     connection.release();
@@ -427,6 +431,6 @@ function mergeProducts(existingProducts, incomingProducts) {
 }
 
 function filterOutWarehouseProducts(existingProducts, warehouse) {
-  let filteredPds = existingProducts((pds) => pds.warehouse !== warehouse)
+  let filteredPds = existingProducts.filter((pds) => pds.warehouse !== warehouse)
   return filteredPds
 }
