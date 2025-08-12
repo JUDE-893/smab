@@ -1,27 +1,52 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import winston from 'winston';
+import DailyRotateFile from "winston-daily-rotate-file";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const logFile = path.join(__dirname, '../../logs/app.log');
+// define log message format 
+const customFormat = winston.format.printf(({ level, message, timestamp }) => {
+  return `[${level.toUpperCase()}] ${timestamp} - ${message}`;
+});
 
-const info = (msg) => {
-  const message = `[INFO] ${new Date().toISOString()} - ${msg}\n`;
-  fs.appendFileSync(logFile, message);
-  console.log(message.trim());
-};
+// define dailly file creation and format
+const dailyRotateFileTransport = (dir) => 
+    new DailyRotateFile({
+        filename: 'app-%DATE%.log',
+        datePattern: 'YYYY-MM-DD',
+        zippedArchive: true,
+        maxSize: '20m',
+        maxFiles: '365d', 
+        dirname: `logs/${dir}`
+    });
 
-const error = (msg) => {
-  const message = `[ERROR] ${new Date().toISOString()} - ${msg}\n`;
-  fs.appendFileSync(logFile, message);
-  console.error(message.trim());
-};
+const infoLogger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    customFormat
+  ),
+  transports: [
+    dailyRotateFileTransport("info"),
+    // Console output
+    new winston.transports.Console()
+  ]
+});
 
-const warn = (msg) => {
-  const message = `[WARNING] ${new Date().toISOString()} - ${msg}\n`;
-  fs.appendFileSync(logFile, message);
-  console.warn(message.trim());
-};
+const errLogger = winston.createLogger({
+  level: 'error',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    customFormat
+  ),
+  transports: [
+    dailyRotateFileTransport("error"),
+    // Console output
+    new winston.transports.Console()
+  ]
+});
 
-export default { info, error, warn };
+export default {
+        info: (msg) => infoLogger.info(msg),
+        error: (msg) => errLogger.error(msg)
+    }
+
+
+
