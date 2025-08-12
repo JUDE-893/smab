@@ -44,9 +44,10 @@ const errLogger = winston.createLogger({
 });
 
 export default {
-        info: (msg) => infoLogger.info(msg),
-        error: (msg) => errLogger.error(msg)
-    }
+  info: (msg) => infoLogger.info(msg),
+  warn: (msg) => infoLogger.info(msg),
+  error: (msg) => errLogger.error(msg)
+}
 
 
 

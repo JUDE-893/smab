@@ -1,12 +1,12 @@
 import { google } from "googleapis";
-import fs from "fs/promises";
-import logger from "../utils/logger.js";
 import { authorize } from "./googleService.js";
-import * as cheerio from "cheerio";
 // import { printPDF, DEFAULT_PRINTER } from "./printService";
-// import { generatePdf } from "./pdfService";
+import { generatePdf } from "./printerServices.js";
+import * as cheerio from "cheerio";
 import Order from '../models/orderModel.js';
 import pool from '../config/db/createMysqlConnectionPool.js';
+import logger from "../utils/logger.js";
+import fs from "fs/promises";
 
 
 
@@ -125,8 +125,10 @@ const processEmail = async (gmail, message) => {
         `Extracted Order #${orderInfo.orderNumber} with ${orderInfo.products.length} products`
       );
       await insertOrUpdateOrder(orderInfo);
-      // const pdfPath = await generatePdf(orderInfo);
-      const pdfPath = null;
+      const pdfPath = await generatePdf(orderInfo);
+      console.log("[pdfPath]", pdfPath);
+      
+      pdfPath = null;
       if (!pdfPath) {
         logger.error(
           `Failed to generate PDF for order #${orderInfo.orderNumber}`

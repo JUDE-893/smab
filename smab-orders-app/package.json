@@ -11,11 +11,15 @@
   "dependencies": {
     "cheerio": "^1.1.2",
     "dotenv": "^17.2.1",
+    "ejs": "^3.1.10",
     "express": "^5.1.0",
     "googleapis": "^155.0.0",
     "mongoose": "^8.17.0",
     "mysql2": "^3.14.3",
     "open": "^10.2.0",
+    "path": "^0.12.7",
+    "pdf-to-printer": "^5.6.0",
+    "puppeteer": "^24.16.1",
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0"
   }
