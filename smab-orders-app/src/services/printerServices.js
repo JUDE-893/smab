@@ -68,7 +68,7 @@ export const printPDF = async (filePath, printerName) => {
   };
 
 export const generatePdf = async (orderInfo) => {
-    const { orderNumber, orderDate, salesAgent, products } = orderInfo;
+    const { orderNumber, orderDate, salesAgent, products, orderUpdateDate } = orderInfo;
     const formattedDate = orderDate.replace(/\//g, "-");
     const pdfFileName = `${orderNumber}_${formattedDate}.pdf`;
     const pdfPath = `./orders/${pdfFileName}`;
@@ -98,6 +98,7 @@ export const generatePdf = async (orderInfo) => {
       salesAgent,
       products,
       logoBase64,
+      orderUpdateDate
     });
   
     logger.info(`Launching browser for PDF generation: ${pdfFileName}`);
@@ -158,40 +159,3 @@ export const generatePdf = async (orderInfo) => {
       }
     }
   };
-
-  const order = {
-    _id: "689b066f85b0408655dd48aa",
-    orderNumber: "1439",
-    orderDate: "2025/04/07",
-    paymentMethod: "",
-    products: [
-      {
-        name: "Soudeuse a tapis 900 verticale",
-        quantity: 4,
-        barcode: "000.000.115",
-        warehouse: "MAG",
-        _id: "689b07d429194c0d5eb3abab"
-      },
-      {
-        name: "Ensacheuse de thé automatique avec Tag",
-        quantity: 1,
-        barcode: "000.000.925",
-        warehouse: "MAG",
-        _id: "689b07d429194c0d5eb3abac"
-      },
-      {
-        name: "Doseuse et boucheuse de pots 100-1000ml",
-        quantity: 1,
-        barcode: "000.000.1326",
-        warehouse: "MAG",
-        _id: "689b07d429194c0d5eb3abad"
-      }
-    ],
-    updatedAt: new Date("2025-08-12T09:22:28.963Z"),
-    salesAgent: "Sales Agent3",
-    isConfirmed: false,
-    __v: 0
-  };
-generatePdf(order)
-  .then((g) => console.log("[GENERATEPDF]", g))
-  .catch((err) => console.error("[GENERATEPDF ERROR]", err));

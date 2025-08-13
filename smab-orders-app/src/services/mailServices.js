@@ -7,6 +7,7 @@ import Order from '../models/orderModel.js';
 import pool from '../config/db/createMysqlConnectionPool.js';
 import logger from "../utils/logger.js";
 import fs from "fs/promises";
+import { format } from 'date-fns';
 
 
 
@@ -124,8 +125,10 @@ const processEmail = async (gmail, message) => {
       logger.info(
         `Extracted Order #${orderInfo.orderNumber} with ${orderInfo.products.length} products`
       );
-      await insertOrUpdateOrder(orderInfo);
-      let pdfPath = await generatePdf(orderInfo);
+      let rOrder = await insertOrUpdateOrder(orderInfo);
+      console.log("[rOrder]", rOrder);
+      
+      let pdfPath = await generatePdf(rOrder);
       console.log("[pdfPath]", pdfPath);
       
       pdfPath = null;
@@ -316,10 +319,12 @@ async function insertOrUpdateOrder(orderInfo) {
   
       if (!order) {
         // INSERT
-        await Order.create(orderInfo);
+        let newOrder = await Order.create(orderInfo);
         logger.info('🎉 Order created:', orderInfo?.orderNumber);
         // UPDATE STOCK
         await updateStock('decrease', orderInfo.products); // Subtracts quantities
+        // return new order data
+        return orderInfo;
       } else {
         // UPDATE 
         const now = new Date();
@@ -345,6 +350,10 @@ async function insertOrUpdateOrder(orderInfo) {
         // UPDATE STOCK
         await updateStock('increase', order.products); // Adds quantities back
         await updateStock('decrease', updatedOrder.products); // Subtracts quantities
+        // return order new order data
+        orderInfo.orderUpdateDate = format(new Date(), 'MM/dd/yyyy');
+        orderInfo.products = reconciliedProducts;
+        return orderInfo;
       };
     } catch (err) {
       // check for duplicate error
@@ -391,10 +400,11 @@ async function updateStock(operation, products) {
     }
 
     await connection.commit();
-    logger.log(`✅ Stock ${operation}d for ${products.length} products`);
+    logger.info(`✅ Stock ${operation}d for ${products.length} products`);
   } catch (err) {
     await connection.rollback();
     logger.error('❌ Error updating stock:', err);
+    console.log(err);
     throw err;
   } finally {
     connection.release();
