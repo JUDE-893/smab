@@ -4,6 +4,12 @@ const { getPrinters, print } = pkg;
 import path from "path";
 import fs from "fs/promises";
 import ejs from "ejs";
+import { fileURLToPath } from 'url';
+import puppeteer from "puppeteer";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const BROWSER_PATH = process.env.BROWSER_PATH;
 
 // Printer utility functions
 export const listPrinters = async () => {
@@ -73,7 +79,7 @@ export const generatePdf = async (orderInfo) => {
     // Read logo file and convert to base64
     let logoBase64 = "";
     try {
-      const logoPath = path.join(__dirname, "public", "smab.png");
+      const logoPath = path.join(__dirname, "../../public", "smab.png");
       const logoBuffer = await fs.readFile(logoPath);
       logoBase64 = `data:image/png;base64,${logoBuffer.toString("base64")}`;
     } catch (error) {
@@ -83,7 +89,7 @@ export const generatePdf = async (orderInfo) => {
       logoBase64 = "data:image/png;base64,";
     }
   
-    const templatePath = path.join(__dirname, "src/views", "index.ejs");
+    const templatePath = path.join(__dirname, "../views", "index.ejs");
     logger.info(`Using template: ${templatePath}`);
   
     const html = await ejs.renderFile(templatePath, {
@@ -186,5 +192,6 @@ export const generatePdf = async (orderInfo) => {
     isConfirmed: false,
     __v: 0
   };
-let g = generatePdf(order)
-console.log("[GENERATEPDF]", g);
+generatePdf(order)
+  .then((g) => console.log("[GENERATEPDF]", g))
+  .catch((err) => console.error("[GENERATEPDF ERROR]", err));

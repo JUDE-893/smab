@@ -125,7 +125,7 @@ const processEmail = async (gmail, message) => {
         `Extracted Order #${orderInfo.orderNumber} with ${orderInfo.products.length} products`
       );
       await insertOrUpdateOrder(orderInfo);
-      const pdfPath = await generatePdf(orderInfo);
+      let pdfPath = await generatePdf(orderInfo);
       console.log("[pdfPath]", pdfPath);
       
       pdfPath = null;
