@@ -73,7 +73,34 @@ const orderSchema = new mongoose.Schema({
 orderSchema.pre('save', function(next) {
   if (typeof this.orderDate === 'string') {
     const [day, month, year] = this.orderDate.split('/');
-    this.orderDate = new Date(`${year}-${month}-${day}`);
+    if (day && month && year) {
+      const parsedDate = new Date(`${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`);
+      if (!isNaN(parsedDate.getTime())) {
+        this.orderDate = parsedDate;
+      }
+    }
+  }
+  next();
+});
+
+// Pre-validate hook to ensure orderDate is a valid Date
+orderSchema.pre('validate', function(next) {
+  if (this.orderDate && !(this.orderDate instanceof Date) || isNaN(this.orderDate.getTime())) {
+    this.orderDate = new Date();
+  }
+  next();
+});
+
+// Pre-create hook to handle Order.create() operations
+orderSchema.pre('create', function(next) {
+  if (typeof this.orderDate === 'string') {
+    const [day, month, year] = this.orderDate.split('/');
+    if (day && month && year) {
+      const parsedDate = new Date(`${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`);
+      if (!isNaN(parsedDate.getTime())) {
+        this.orderDate = parsedDate;
+      }
+    }
   }
   next();
 });

@@ -69,7 +69,17 @@ export const printPDF = async (filePath, printerName) => {
 
 export const generatePdf = async (orderInfo) => {
     const { orderNumber, orderDate, salesAgent, products, orderUpdateDate } = orderInfo;
-    const formattedDate = orderDate.replace(/\//g, "-");
+    
+    // Handle orderDate whether it's a Date object or string
+    let formattedDate;
+    if (orderDate instanceof Date) {
+      formattedDate = orderDate.toISOString().split('T')[0]; // YYYY-MM-DD format
+    } else if (typeof orderDate === 'string') {
+      formattedDate = orderDate.replace(/\//g, "-");
+    } else {
+      formattedDate = new Date().toISOString().split('T')[0];
+    }
+    
     const pdfFileName = `${orderNumber}_${formattedDate}.pdf`;
     const pdfPath = `./orders/${pdfFileName}`;
   
@@ -159,3 +169,5 @@ export const generatePdf = async (orderInfo) => {
       }
     }
   };
+let p = await listPrinters()
+console.log("[PRINTERS]" , p);

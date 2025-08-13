@@ -1,13 +1,14 @@
 import { google } from "googleapis";
 import { authorize } from "./googleService.js";
-// import { printPDF, DEFAULT_PRINTER } from "./printService";
-import { generatePdf } from "./printerServices.js";
+// import { printPDF, process.env. } from "./printService";
+import { generatePdf, printPDF } from "./printerServices.js";
 import * as cheerio from "cheerio";
 import Order from '../models/orderModel.js';
 import pool from '../config/db/createMysqlConnectionPool.js';
 import logger from "../utils/logger.js";
 import fs from "fs/promises";
 import { format } from 'date-fns';
+import { log } from "console";
 
 
 
@@ -150,8 +151,8 @@ const processEmail = async (gmail, message) => {
       );
 
       // Print with longer timeout for PM2 environment
-      // const printResult = await printPDF(pdfPath, DEFAULT_PRINTER);
-      //
+      // const printResult = await printPDF(pdfPath, process.env.DEFAULT_PRINTER);
+      
       // if (!printResult) {
       //   logger.error(`Printing failed for ${pdfPath} - Email will remain unread`);
       //   return;
@@ -240,6 +241,7 @@ const getEmailBody = (payload) => {
 
 // Order processing functions
 const extractOrderInfo = (html) => {
+  
     const $ = cheerio.load(html);
     const infoText = $("body > div > div").text();
 
@@ -248,11 +250,29 @@ const extractOrderInfo = (html) => {
     const orderDateMatch = infoText.match(/تاريخ الطلب:\s*([0-9/]+)/);
     const paymentMethodMatch = infoText.match(/طريقة الدفع:\s*([^\n]+)/);
     const salesAgentMatch = infoText.match(/اسم ممثل المبيعات:\s*([^\n]+)/);
+    // const notesMatch = infoText.match(/ملاحظات:\s*(?!<)([^\s<][^<\n]*)?/);
 
     const orderNumber = orderNumberMatch ? orderNumberMatch[1].trim() : "";
     const orderDate = orderDateMatch ? orderDateMatch[1].trim() : "";
     const paymentMethod = paymentMethodMatch ? paymentMethodMatch[1].trim() : "";
     const salesAgent = salesAgentMatch ? salesAgentMatch[1].trim() : "";
+    const notes= getField("ملاحظات:"); // "" if empty, ignores tables automatically
+
+    // Helper to get clean text after a label
+    function getField(label) {
+      let fieldValue = "";
+      $('*').each((_, el) => {
+        const text = $(el).text().trim();
+        if (text.startsWith(label)) {
+          fieldValue = text.replace(label, "").trim();
+          return false; // stop loop once found
+        }
+      });
+      return fieldValue;
+    };
+
+  console.log("orderNumber", orderNumber);
+ 
 
     // Extract products
     const tableRows = $("table tr");
@@ -278,7 +298,8 @@ const extractOrderInfo = (html) => {
       orderDate,
       paymentMethod,
       products,
-      salesAgent
+      salesAgent,
+      notes
     };
   };
 
@@ -351,7 +372,7 @@ async function insertOrUpdateOrder(orderInfo) {
         await updateStock('increase', order.products); // Adds quantities back
         await updateStock('decrease', updatedOrder.products); // Subtracts quantities
         // return order new order data
-        orderInfo.orderUpdateDate = format(new Date(), 'MM/dd/yyyy');
+        orderInfo.orderUpdateDate = format(new Date(), 'HH:mm dd/MM/yyyy');
         orderInfo.products = reconciliedProducts;
         return orderInfo;
       };
@@ -366,6 +387,8 @@ async function insertOrUpdateOrder(orderInfo) {
         logger.error('❌ Error processing order after 3 unseuccessfull retry times:', orderInfo.orderNumber, err);
       }
       logger.error('❌ Error processing order:', orderInfo.orderNumber, err);
+      console.log(err);
+      
     }
   }
 }
