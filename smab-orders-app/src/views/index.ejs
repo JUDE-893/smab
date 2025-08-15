@@ -170,10 +170,15 @@
                 <p>تاريخ تحديث الطلب: <%= orderUpdateDate %>
                 </p>
             <% } %>
-              
+
             <p>
                 <%= salesAgent %> :اسم ممثل المبيعات
             </p>
+
+            <% if (notes) { %>
+                <p>ملاحظات: <%= notes %>
+                </p>
+            <% } %>
         </div>
         <table class="order-table">
             <thead>

@@ -38,19 +38,19 @@ export const printPDF = async (filePath, printerName) => {
         logger.info(`Trying with absolute path: ${absolutePath}`);
         filePath = absolutePath;
       }
-  
+
       // Print with longer timeout for PM2
       logger.info(`Sending ${filePath} to printer ${printerName}`);
       await print(filePath, { printer: printerName });
       logger.info(`Document ${filePath} sent to printer ${printerName}`);
-  
+
       // Add a small delay to let the printer process the job
       await new Promise((resolve) => setTimeout(resolve, 5000));
       return true;
     } catch (error) {
       logger.error(`Error printing document ${filePath}:`, error.message);
       logger.error(`Printer error details: ${JSON.stringify(error)}`);
-  
+
       // Retry mechanism with increased delay for PM2
       try {
         logger.info(`Retrying print for ${filePath} after 10 seconds...`);
@@ -68,8 +68,8 @@ export const printPDF = async (filePath, printerName) => {
   };
 
 export const generatePdf = async (orderInfo) => {
-    const { orderNumber, orderDate, salesAgent, products, orderUpdateDate } = orderInfo;
-    
+    const { orderNumber, orderDate, salesAgent, products, orderUpdateDate, notes } = orderInfo;
+
     // Handle orderDate whether it's a Date object or string
     let formattedDate;
     if (orderDate instanceof Date) {
@@ -79,13 +79,13 @@ export const generatePdf = async (orderInfo) => {
     } else {
       formattedDate = new Date().toISOString().split('T')[0];
     }
-    
+
     const pdfFileName = `${orderNumber}_${formattedDate}.pdf`;
     const pdfPath = `./orders/${pdfFileName}`;
-  
+
     // Ensure absolute path for PM2
     const absolutePdfPath = path.resolve(pdfPath);
-  
+
     // Read logo file and convert to base64
     let logoBase64 = "";
     try {
@@ -95,22 +95,23 @@ export const generatePdf = async (orderInfo) => {
     } catch (error) {
       logger.warn("Could not load logo image:", error.message);
       console.log(error);
-      
+
       logoBase64 = "data:image/png;base64,";
     }
-  
+
     const templatePath = path.join(__dirname, "../views", "index.ejs");
     logger.info(`Using template: ${templatePath}`);
-  
+
     const html = await ejs.renderFile(templatePath, {
       orderNumber,
       orderDate,
       salesAgent,
       products,
       logoBase64,
-      orderUpdateDate
+      orderUpdateDate,
+      notes
     });
-  
+
     logger.info(`Launching browser for PDF generation: ${pdfFileName}`);
     const browser = await puppeteer.launch({
       executablePath: BROWSER_PATH,
@@ -123,19 +124,19 @@ export const generatePdf = async (orderInfo) => {
       ],
       timeout: 60000, // 60 seconds
     });
-  
+
     try {
       const page = await browser.newPage();
-  
+
       // Set longer navigation timeout for PM2 environment
       page.setDefaultNavigationTimeout(60000);
-  
+
       logger.info(`Setting HTML content for order #${orderNumber}`);
       await page.setContent(html, {
         waitUntil: "networkidle0",
         timeout: 60000,
       });
-  
+
       logger.info(
         `Generating PDF for order #${orderNumber} at path: ${absolutePdfPath}`
       );
@@ -151,7 +152,7 @@ export const generatePdf = async (orderInfo) => {
         },
         timeout: 60000,
       });
-  
+
       logger.info("PDF generated successfully: " + pdfFileName);
       return absolutePdfPath;
     } catch (error) {
