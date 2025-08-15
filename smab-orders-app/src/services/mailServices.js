@@ -128,10 +128,10 @@ const processEmail = async (gmail, message) => {
       );
       let rOrder = await insertOrUpdateOrder(orderInfo);
       console.log("[rOrder]", rOrder);
-      
+
       let pdfPath = await generatePdf(rOrder);
       console.log("[pdfPath]", pdfPath);
-      
+
       pdfPath = null;
       if (!pdfPath) {
         logger.error(
@@ -152,7 +152,7 @@ const processEmail = async (gmail, message) => {
 
       // Print with longer timeout for PM2 environment
       // const printResult = await printPDF(pdfPath, process.env.DEFAULT_PRINTER);
-      
+
       // if (!printResult) {
       //   logger.error(`Printing failed for ${pdfPath} - Email will remain unread`);
       //   return;
@@ -241,7 +241,7 @@ const getEmailBody = (payload) => {
 
 // Order processing functions
 const extractOrderInfo = (html) => {
-  
+
     const $ = cheerio.load(html);
     const infoText = $("body > div > div").text();
 
@@ -256,7 +256,7 @@ const extractOrderInfo = (html) => {
     const orderDate = orderDateMatch ? orderDateMatch[1].trim() : "";
     const paymentMethod = paymentMethodMatch ? paymentMethodMatch[1].trim() : "";
     const salesAgent = salesAgentMatch ? salesAgentMatch[1].trim() : "";
-    const notes= getField("ملاحظات:"); // "" if empty, ignores tables automatically
+    const notes = Boolean(getField("ملاحظات:")) ? getField("ملاحظات:") : null ; // "" if empty, ignores tables automatically
 
     // Helper to get clean text after a label
     function getField(label) {
@@ -272,7 +272,7 @@ const extractOrderInfo = (html) => {
     };
 
   console.log("orderNumber", orderNumber);
- 
+
 
     // Extract products
     const tableRows = $("table tr");
@@ -337,21 +337,21 @@ async function insertOrUpdateOrder(orderInfo) {
     try {
       // FIND
       const order = await Order.findOne({ orderNumber: orderInfo?.orderNumber });
-  
+
       if (!order) {
         // INSERT
         let newOrder = await Order.create(orderInfo);
         logger.info('🎉 Order created:', orderInfo?.orderNumber);
         // UPDATE STOCK
-        await updateStock('decrease', orderInfo.products); // Subtracts quantities
+        // await updateStock('decrease', orderInfo.products); // Subtracts quantities
         // return new order data
         return orderInfo;
       } else {
-        // UPDATE 
+        // UPDATE
         const now = new Date();
         // let reconciliedProducts = mergeProducts(order.products, orderInfo.products)
         let reconciliedProducts = [...orderInfo.products, ...filterOutWarehouseProducts(order.products,orderInfo.products[0]?.warehouse)];
-        
+
         // update query
         const update = {
           $set: {
@@ -365,12 +365,12 @@ async function insertOrUpdateOrder(orderInfo) {
           { orderNumber: orderInfo.orderNumber },
           update,
           { new: true }
-        ); 
-        
+        );
+
         logger.info('🔄 Order updated:', updatedOrder?.orderNumber);
         // UPDATE STOCK
-        await updateStock('increase', order.products); // Adds quantities back
-        await updateStock('decrease', updatedOrder.products); // Subtracts quantities
+        // await updateStock('increase', order.products); // Adds quantities back
+        // await updateStock('decrease', updatedOrder.products); // Subtracts quantities
         // return order new order data
         orderInfo.orderUpdateDate = format(new Date(), 'HH:mm dd/MM/yyyy');
         orderInfo.products = reconciliedProducts;
@@ -388,7 +388,7 @@ async function insertOrUpdateOrder(orderInfo) {
       }
       logger.error('❌ Error processing order:', orderInfo.orderNumber, err);
       console.log(err);
-      
+
     }
   }
 }
