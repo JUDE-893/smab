@@ -30,6 +30,8 @@ import {
   ToggleGroupItem,
 } from "@/components/ui/toggle-group"
 
+
+
 export const description = "An interactive area chart"
 
 const chartData = [
@@ -211,7 +213,7 @@ export function ChartAreaInteractive() {
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
         <ChartContainer
           config={chartConfig}
-          className="aspect-auto h-[250px] w-full"
+          className="flex flex flex-row aspect-auto h-[250px] w-full"
         >
           <AreaChart data={filteredData}>
             <defs>
@@ -285,6 +287,7 @@ export function ChartAreaInteractive() {
             />
           </AreaChart>
         </ChartContainer>
+
       </CardContent>
     </Card>
   )
