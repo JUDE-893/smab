@@ -5,7 +5,8 @@
     "type": "Cover page",
     "status": "In Process",
     "target": "18",
-    "limit": "5",
+    "e": "5",
+    "limits": "50",
     "reviewer": "Eddie Lake"
   },
   {

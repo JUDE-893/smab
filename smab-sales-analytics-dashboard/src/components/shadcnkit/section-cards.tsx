@@ -11,40 +11,21 @@ import {
 } from "@/components/ui/card"
 import { MetricBox } from '@/components/custom/MetricBox'
 
-let metrics = [
-  {
-    title: "$14,250.00",
-    description: "Total Revenue",
-    trendValue: 12.5,
-    trendDirection: "up" as const,
-    metricMessage: "Trending up this month",
-  },
-  {
-    title: "35",
-    description: "Total Orders",
-    trendValue: 7.1,
-    trendDirection: "up" as const,
-    metricMessage: "Steady performance increase",
-  },
-  {
-    title: "71",
-    description: "New Leads",
-    trendValue: 20,
-    trendDirection: "down" as const,
-    metricMessage: "Down -11% new customers this period",
-  },
-  {
-    title: "45,678",
-    description: "Active Accounts",
-    trendValue: 12.45,
-    trendDirection: "up" as const,
-    metricMessage: "Strong user retention",
-  },
-]
 
+type Metric = {
+  title: string;
+  description: string;
+  trendValue: number;
+  trendDirection: TrendDirection;
+  metricMessage: string;
+};
 
+type SectionCardsProps = {
+  metrics: Metric[];
+};
 
-export function SectionCards() {
+export function SectionCards({metrics}: SectionCardsProps) {
+  
   return (
     <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
       {
