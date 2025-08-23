@@ -20,35 +20,33 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 
-export const description = "A radar chart with a legend"
+type ChartMetaData = {
+  title: string;
+  description: string;
+  dataKey: string;
+  nameKey?: string
+};
 
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-]
+type RadarChartInteractiveProps = {
+  chartConfig: ChartConfig;
+  chartMetaData: ChartMetaData;
+  chartData: unknown[]
+};
 
-const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "var(--chart-1)",
-  },
-  mobile: {
-    label: "Mobile",
-    color: "var(--chart-2)",
-  },
-} satisfies ChartConfig
+export function ChartRadar({
+  chartConfig,
+  chartMetaData,
+  chartData
+}: RadarChartInteractiveProps) {
 
-export function ChartRadar() {
+  const radarDataKeys = Object.keys(chartConfig);
+
   return (
     <Card>
       <CardHeader className="items-center pb-4">
-        <CardTitle>Radar Chart - Legend</CardTitle>
+        <CardTitle>{chartMetaData?.title}</CardTitle>
         <CardDescription>
-          Showing total visitors for the last 6 months
+          {chartMetaData?.description}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -67,14 +65,19 @@ export function ChartRadar() {
               cursor={false}
               content={<ChartTooltipContent indicator="line" />}
             />
-            <PolarAngleAxis dataKey="month" />
+            <PolarAngleAxis dataKey={chartMetaData?.dataKey} />
             <PolarGrid />
-            <Radar
-              dataKey="desktop"
-              fill="var(--color-desktop)"
-              fillOpacity={0.6}
-            />
-            <Radar dataKey="mobile" fill="var(--color-mobile)" />
+
+            { radarDataKeys.map((k, i) => {
+                return <Radar
+                dataKey={k?.toLowerCase()}
+                fill={chartConfig[k?.toLowerCase()]?.color}
+                fillOpacity={(i+1)/radarDataKeys?.length}
+                key={i}
+              />
+            })
+            }
+
             <ChartLegend className="mt-8" content={<ChartLegendContent />} />
           </RadarChart>
         </ChartContainer>

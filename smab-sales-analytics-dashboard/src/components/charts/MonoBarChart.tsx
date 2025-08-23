@@ -1,12 +1,15 @@
 "use client"
 
+
 import * as React from "react"
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
+import { TrendingUp } from "lucide-react"
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Legend } from "recharts"
 
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -16,49 +19,29 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-
-
-// } satisfies ChartConfig
-
-// type ChartConfig = {
-//   tooltipKey: {
-//     label: string;
-//   };
-//   chart1: {  // required
-//     label: string;
-//     color: string;
-//   };
-//   chart2?: { // optional
-//     label: string;
-//     color: string;
-//   };
-//   chartx?: { // optional
-//     label: string;
-//     color: string;
-//   };
-// };
+import { metadata } from "@/app/layout"
 
 type ChartMetaData = {
   title: string;
   description: string;
+  dataKey: string;
+  nameKey?: string
 };
 
-type ChartBarInteractiveProps = {
+type MonoBarChartProps = {
   chartConfig: ChartConfig;
   chartMetaData: ChartMetaData;
   chartData: unknown[]
 };
 
-
 export function MonoChartBar({
   chartConfig,
   chartMetaData,
   chartData
-}: ChartBarInteractiveProps) {
+}: MonoBarChartProps) {
 
-  const charts = Object.keys(chartConfig).slice(1);
-  const [activeChart, setActiveChart] = React.useState<keyof typeof chartConfig>(charts[0]);
-
+  const [activeChart, setActiveChart] =
+    React.useState<keyof typeof chartConfig>("desktop")
 
   return (
     <Card className="py-0">
@@ -70,7 +53,7 @@ export function MonoChartBar({
           </CardDescription>
         </div>
         <div className="flex">
-          {charts.map((key) => {
+          {["desktop", "mobile"].map((key) => {
             const chart = key as keyof typeof chartConfig
             return (
               <button
@@ -82,6 +65,7 @@ export function MonoChartBar({
                 <span className="text-muted-foreground text-xs">
                   {chartConfig[chart].label}
                 </span>
+
               </button>
             )
           })}
@@ -102,7 +86,7 @@ export function MonoChartBar({
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey={chartMetaData?.dataKey ?? "date"}
+              dataKey={chartMetaData?.dataKey}
               tickLine={false}
               axisLine={false}
               tickMargin={8}
@@ -119,7 +103,7 @@ export function MonoChartBar({
               content={
                 <ChartTooltipContent
                   className="w-[150px]"
-                  nameKey="tooltipKey"
+                  nameKey={chartMetaData?.nameKey}
                   labelFormatter={(value) => {
                     return new Date(value).toLocaleDateString("en-US", {
                       month: "short",

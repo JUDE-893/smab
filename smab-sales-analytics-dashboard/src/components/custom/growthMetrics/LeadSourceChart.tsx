@@ -40,6 +40,10 @@ const chartMetaData = {
   dataKey:"leads",
   nameKey:"source"
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5f5df81cabf1827faed9d7ced0be54a01d27ad53
 export function LeadSourceChart() {
 
   return (

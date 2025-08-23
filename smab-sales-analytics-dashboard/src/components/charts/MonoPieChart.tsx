@@ -63,7 +63,7 @@ export function MonoPieChart({
               dataKey={chartMetaData.dataKey}
               nameKey={chartMetaData.nameKey}
               cx="50%"
-              cy="50%"
+              cy="60%"
               innerRadius={70}
               outerRadius={90}
               strokeWidth={2}
