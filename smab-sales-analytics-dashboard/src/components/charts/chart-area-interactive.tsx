@@ -77,8 +77,7 @@ export function ChartAreaInteractive({
   })
 
   const chartDataKeys = Object.keys(chartConfig).splice(1);
-  console.log("[chatDAtKEYS]", chartConfig['mobile']?.color);
-  
+
   return (
     <Card className="@container/card">
       <CardHeader>
@@ -146,7 +145,7 @@ export function ChartAreaInteractive({
                 </linearGradient>
               </defs>
             )}
-           
+
             </defs>
             <CartesianGrid vertical={false} />
             <XAxis

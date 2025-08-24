@@ -65,13 +65,13 @@ export const schema = z.object({
     limit: z.string(),
     reviewer: z.string(),
   })
-  
+
   // Create a separate component for the drag handle
   function DragHandle({ id }: { id: number }) {
     const { attributes, listeners } = useSortable({
       id,
     })
-  
+
     return (
       <Button
         {...attributes}
@@ -85,7 +85,7 @@ export const schema = z.object({
       </Button>
     )
   }
-  
+
   const columns: ColumnDef<z.infer<typeof schema>>[] = [
     {
       id: "drag",
@@ -119,8 +119,8 @@ export const schema = z.object({
       enableHiding: true,
     },
     {
-      accessorKey: "header",
-      header: "Header",
+      accessorKey: "title",
+      header: "Title",
       cell: ({ row }) => {
         return <TableCellViewer item={row.original} />
       },
@@ -206,11 +206,11 @@ export const schema = z.object({
       header: "Reviewer",
       cell: ({ row }) => {
         const isAssigned = row.original.reviewer !== "Assign reviewer"
-  
+
         if (isAssigned) {
           return row.original.reviewer
         }
-  
+
         return (
           <>
             <Label htmlFor={`${row.original.id}-reviewer`} className="sr-only">
@@ -270,7 +270,7 @@ const chartData = [
     { month: "May", desktop: 209, mobile: 130 },
     { month: "June", desktop: 214, mobile: 140 },
   ]
-  
+
   const chartConfig = {
     desktop: {
       label: "Desktop",
@@ -281,10 +281,10 @@ const chartData = [
       color: "var(--primary)",
     },
   }
-  
+
   function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
     const isMobile = useIsMobile()
-  
+
     return (
       <Drawer direction={isMobile ? "bottom" : "right"}>
         <DrawerTrigger asChild>

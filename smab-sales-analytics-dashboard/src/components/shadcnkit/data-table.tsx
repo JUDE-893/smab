@@ -28,6 +28,7 @@ import {
   IconChevronsRight,
   IconLayoutColumns,
   IconPlus,
+  IconTableImport
 } from "@tabler/icons-react"
 import {
   ColumnFiltersState,
@@ -67,6 +68,8 @@ import {
 } from "@/components/ui/table"
 import { Tabs, TabsContent } from "@/components/ui/tabs"
 import { DataTableToolbar } from './data-table-toolbar'
+import { DataTableViewOptions } from "./data-table-view-options"
+
 
 function DraggableRow({ row }) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
@@ -92,8 +95,6 @@ function DraggableRow({ row }) {
     </TableRow>
   )
 }
-
-
 
 export function DataTable({ initialData, columns}) {
   const [data, setData] = React.useState(() => initialData)
@@ -163,42 +164,10 @@ export function DataTable({ initialData, columns}) {
       <div className="flex items-center justify-between px-4 lg:px-6">
         <DataTableToolbar table={table} />
         <div className="flex items-center gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm">
-                <IconLayoutColumns />
-                <span className="hidden lg:inline">Customize Columns</span>
-                <span className="lg:hidden">Columns</span>
-                <IconChevronDown />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              {table
-                .getAllColumns()
-                .filter(
-                  (column) =>
-                    typeof column.accessorFn !== "undefined" &&
-                    column.getCanHide()
-                )
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  )
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <DataTableViewOptions table={table} />
           <Button variant="outline" size="sm">
-            <IconPlus />
-            <span className="hidden lg:inline">Add Section</span>
+            <IconTableImport />
+            <span className="hidden lg:inline">Export as Excel</span>
           </Button>
         </div>
       </div>
