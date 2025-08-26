@@ -1,18 +1,18 @@
-import { DataTable } from "@/components/shadcnkit/data-table"
+
 import { SiteHeader } from "@/components/shadcnkit/site-header"
 import { TooltipDoc } from "@/components/shadcnkit/TooltipDoc"
-import { LeadSourceChart } from '@/components/custom/growthMetrics/LeadSourceChart';
-import { NewClientsChart } from '@/components/custom/growthMetrics/NewClientsChart';
-import { ConvertionOverviewChart } from '@/components/custom/growthMetrics/ConvertionOverviewChart';
-import { NewLeadsChart } from '@/components/custom/growthMetrics/NewLeadsChart';
-import { LeadsGoalChart } from '@/components/custom/growthMetrics/LeadsGoalChart';
-import { ClientsGoalChart } from '@/components/custom/growthMetrics/ClientsGoalChart';
-import { LeadsDataTable } from '@/components/custom/growthMetrics/LeadsDataTable';
+import { LeadSourceChart } from '@/components/custom/salesMetrics/LeadSourceChart';
+import { NewClientsChart } from '@/components/custom/salesMetrics/NewClientsChart';
+import { AgentsSalesValue } from '@/components/custom/salesMetrics/AgentsSalesValue';
+import { TotalSalesChart } from '@/components/custom/salesMetrics/TotalSalesChart';
+import { LeadsGoalChart } from '@/components/custom/salesMetrics/LeadsGoalChart';
+import { SellGoalChart } from '@/components/custom/salesMetrics/SellGoalChart';
+import { LeadsDataTable } from '@/components/custom/salesMetrics/LeadsDataTable';
 import { DateFilter } from '@/components/shadcnkit/DateFilter';
-import { AvgConvertionRateGoal } from '@/components/custom/growthMetrics/AvgConvertionRateGoal2';
+import { AvgConvertionRateGoal } from '@/components/custom/salesMetrics/AvgConvertionRateGoal2';
 import { IconChartBar } from "@tabler/icons-react"
 import { Button } from "@/components/ui/button"
-import { HeaderMetrics } from "@/components/custom/growthMetrics/HeaderMetrics";
+import { HeaderMetrics } from "@/components/custom/salesMetrics/HeaderMetrics";
 
 const filterDocTltp = `Note: any search, sort or filter operation are only applyed on data within the selected date range`
 
@@ -24,6 +24,8 @@ export default function Page() {
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <HeaderMetrics />
+
+              <h1 className="text-5xl font-bold ml-8 mt-12 mb-4">Sales Analytics</h1>
 
               <div className="flex items-center justify-between px-4 w-full lg:px-6 @container/card">
                 <DateFilter />
@@ -40,15 +42,17 @@ export default function Page() {
                 grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs
                 lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-3">
                <LeadsGoalChart />
-               <ClientsGoalChart />
+               <SellGoalChart />
                <AvgConvertionRateGoal />
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-6">
-                <NewLeadsChart />
+                <TotalSalesChart />
                 <NewClientsChart />
                 <LeadSourceChart />
-                <ConvertionOverviewChart />
+                <AgentsSalesValue />
               </div>
+
+              <h1 className="text-3xl font-bold ml-8 mt-7">Sales Agents details</h1>
               <LeadsDataTable />
             </div>
           </div>

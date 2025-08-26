@@ -21,13 +21,11 @@ import {
 } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import {
-  IconChevronDown,
+
   IconChevronLeft,
   IconChevronRight,
   IconChevronsLeft,
   IconChevronsRight,
-  IconLayoutColumns,
-  IconPlus,
   IconTableImport
 } from "@tabler/icons-react"
 import {
@@ -44,12 +42,7 @@ import {
   VisibilityState,
 } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+
 import { Label } from "@/components/ui/label"
 import {
   Select,

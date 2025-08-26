@@ -17,6 +17,7 @@ import {
   IconSearch,
   IconSettings,
   IconUsers,
+  IconCurrencyDollar
 } from "@tabler/icons-react"
 
 import { NavDocuments } from "@/components/shadcnkit/nav-documents"
@@ -49,6 +50,11 @@ const data = {
       title: "Growth Metrics",
       url: "/growth-metrics",
       icon: IconChartBar,
+    },
+    {
+      title: "Sales Metrics",
+      url: "/sales",
+      icon: IconCurrencyDollar,
     },
     {
       title: "Lifecycle",
