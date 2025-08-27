@@ -86,15 +86,46 @@ export const getHeaderMetrics = errorCatchingLayer(async (req, res, next) => {
     }
   }
 
-  return res.status(200).json({
-    message: 'sales header stats fetched successfully',
-    data : {
-      orderLenght: orders?.length,
-      avgOrdersPerAgent,
-      totalSales,
-      bestSellingAgent
-  }
-  });
+  const formatCurrency = (value) => {
+    try {
+      return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value || 0);
+    } catch {
+      return String(value ?? 0);
+    }
+  };
+
+  const metrics = [
+    {
+      title: formatCurrency(totalSales),
+      description: 'Total Sales Value',
+      trendValue: 0,
+      trendDirection: 'up',
+      metricMessage: '—'
+    },
+    {
+      title: formatCurrency(bestSellingAgent?.totalSales || 0),
+      description: 'Best Selling Record',
+      trendValue: 0,
+      trendDirection: 'up',
+      metricMessage: bestSellingAgent?.salesAgent ? `Top agent: ${bestSellingAgent.salesAgent}` : 'Top agent: Unknown'
+    },
+    {
+      title: `${orders?.length}`,
+      description: 'Total Orders',
+      trendValue: 0,
+      trendDirection: 'up',
+      metricMessage: '—'
+    },
+    {
+      title: `${avgOrdersPerAgent.toFixed(1)}`,
+      description: 'Average Order Per Agent',
+      trendValue: 0,
+      trendDirection: 'up',
+      metricMessage: '—'
+    }
+  ];
+
+  return res.status(200).json({message: "header metrics fetched successfully", data: metrics});
 });
 
 
