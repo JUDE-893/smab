@@ -23,7 +23,7 @@ import { formatDateRange } from '@/lib/utils';
 export function DateFilter() {
 
   const isMobile = useIsMobile()
-  const [timeRange, setTimeRange] = React.useState("90d")
+  const [timeRange, setTimeRange] = React.useState(process.env.NEXT_PUBLIC_DEFAULT_TIMERANGE ?? "90d")
 
   const router = useRouter();
   const pathname = usePathname();
@@ -58,8 +58,6 @@ export function DateFilter() {
     router.push(url)
   }, [pathname, router, searchParams, timeRange]);
 
-  console.log('[timeRange]',timeRange);
-  
 
   return (
     <>

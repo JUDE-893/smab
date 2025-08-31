@@ -78,8 +78,8 @@ export function MonoPieChart({
 
 
             >
-            {true && chartData.map((entry) => (
-                <Cell key={entry.source} fill={entry.fill}  cursor="pointer" />
+            {chartData && chartData.map((entry) => (
+                <Cell key={entry?.[chartMetaData.nameKey]} fill={chartConfig?.[entry?.[chartMetaData.nameKey]]?.color}  cursor="pointer" />
               ))}
             </Pie>
             <Legend

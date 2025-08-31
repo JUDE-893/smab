@@ -1,4 +1,9 @@
+"use client"
+
 import { SectionCards } from "@/components/shadcnkit/section-cards"
+import { getSalesHeaderMetrics } from '@/services/salesServices'
+import { useCustomQuery } from '@/hooks/useCustomQuery'
+import { useTimeRange } from '@/hooks/useTimeRange'
 
 const metrics = [
     {
@@ -33,7 +38,16 @@ const metrics = [
   ]
 
 export function HeaderMetrics() {
+
+    const timeRange = useTimeRange();
+
+
+    const { data, isLoading } = useCustomQuery(
+      ['sales-header-metrics',timeRange],
+      async () => await getSalesHeaderMetrics(timeRange)
+    )
+
     return (
-        <SectionCards metrics={metrics} /> 
+        <SectionCards metrics={data} />
     )
 }

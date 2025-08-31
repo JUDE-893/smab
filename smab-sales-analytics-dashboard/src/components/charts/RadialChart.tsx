@@ -27,7 +27,7 @@ type ChartMetaData = {
     dataKey: string;
     nameKey?: string
   };
-  
+
 type RadarChartInteractiveProps = {
 chartConfig: ChartConfig;
 chartMetaData: ChartMetaData;
@@ -41,7 +41,7 @@ export function ChartRadial({
   }: RadarChartInteractiveProps) {
 
       const radialDataKeys = Object.keys(chartConfig);
-  const totalVisitors = chartData[0][radialDataKeys[1]] + ' / '+ `${chartData[0][radialDataKeys[1]] + chartData[0][radialDataKeys[0]]}`
+  const totalVisitors = chartData?.[0]?.[radialDataKeys[1]] + ' / '+ `${chartData?.[0]?.[radialDataKeys[0]]}`;
 
   return (
     <Card className="flex flex-col h-60">
@@ -54,7 +54,7 @@ export function ChartRadial({
           config={chartConfig}
           className="mx-auto aspect-square h-50 w-full"
         >
-          <RadialBarChart
+          {chartData?.length > 0 && <RadialBarChart
             data={chartData}
             endAngle={180}
             innerRadius={80}
@@ -90,7 +90,7 @@ export function ChartRadial({
                 }}
               />
             </PolarRadiusAxis>
-            {radialDataKeys.map((k) => 
+            {radialDataKeys.map((k) =>
             <RadialBar
               key={k}
               dataKey={k.toLowerCase()}
@@ -99,8 +99,8 @@ export function ChartRadial({
               fill={chartConfig[k]?.color}
               className="stroke-transparent stroke-2"
             />)}
-            
-          </RadialBarChart>
+
+          </RadialBarChart>}
         </ChartContainer>
       </CardContent>
 

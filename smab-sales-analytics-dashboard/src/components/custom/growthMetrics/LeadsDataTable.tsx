@@ -122,6 +122,8 @@ export const schema = z.object({
       accessorKey: "title",
       header: "Title",
       cell: ({ row }) => {
+        console.log("[ROW]", row);
+
         return <TableCellViewer item={row.original} />
       },
       enableHiding: true,

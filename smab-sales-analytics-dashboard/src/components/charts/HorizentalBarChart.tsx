@@ -23,10 +23,8 @@ type ChartMetaData = {
     description: string;
     dataKey: string;
     nameKey: string
-    posColor: string
-    negColor: string
   };
-  
+
   type HorizentalChartBarProps = {
     chartConfig: ChartConfig;
     chartMetaData: ChartMetaData;
@@ -40,13 +38,13 @@ export function HorizentalChartBar({
     chartData
   }: HorizentalChartBarProps) {
   return (
-    <Card>
+    <Card className="@container/card">
       <CardHeader>
         <CardTitle>{chartMetaData.title}</CardTitle>
         <CardDescription>{chartMetaData.description}</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
+        <ChartContainer config={chartConfig} className="flex flex flex-row aspect-auto h-[340px] w-full">
           <BarChart
             accessibilityLayer
             data={chartData}
@@ -54,6 +52,7 @@ export function HorizentalChartBar({
             margin={{
               left: 0,
             }}
+            maxBarSize={60}
           >
             <YAxis
               dataKey={chartMetaData.nameKey}

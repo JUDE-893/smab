@@ -1,4 +1,9 @@
+"use client"
+
 import { MonoChartBar } from '@/components/charts/MonoBarChart';
+import { getOrderMetricsPerDay } from '@/services/salesServices'
+import { useCustomQuery } from '@/hooks/useCustomQuery'
+import { useTimeRange } from '@/hooks/useTimeRange'
 
 
 const chartData = [
@@ -94,32 +99,37 @@ const chartData = [
     { date: "2024-06-29", desktop: 103, mobile: 160 },
     { date: "2024-06-30", desktop: 446, mobile: 400 },
   ]
-  
+
   const chartConfig = {
-    desktop: {
-      label: "New Clients",
+    orders_count: {
+      label: "Orders",
       color: "var(--chart-2)",
-    },
-    mobile: {
-      label: "Old Clients",
-      color: "var(--chart-1)",
-    },
-  }
-  
-  const chartMetaData = {
-    title : "new clients",
-    description: 'metrics new client in this period',
-    dataKey: "date",
-    nameKey: "the numbers"
+    }
   }
 
-export function NewClientsChart() {
+  const chartMetaData = {
+    title : "Total Orders",
+    description: 'metrics of total orders made in this period',
+    dataKey: "date",
+    nameKey: "orders_count"
+  }
+
+export function TotalOrdersChart() {
+
+  const timeRange = useTimeRange();
+
+
+  const { data, isLoading } = useCustomQuery(
+    ['total-orders-metrics-per-day',timeRange],
+    async () => await getOrderMetricsPerDay(timeRange)
+  )
+
 
     return (
       <MonoChartBar
         chartMetaData={chartMetaData}
         chartConfig={chartConfig}
-        chartData={chartData}
+        chartData={data?.orderMetricsPerDay}
        />
     )
   }

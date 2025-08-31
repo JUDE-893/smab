@@ -40,12 +40,14 @@ export function MonoChartBar({
   chartData
 }: MonoBarChartProps) {
 
+  const chartKeys = Object.keys(chartConfig)
+
   const [activeChart, setActiveChart] =
-    React.useState<keyof typeof chartConfig>("desktop")
+    React.useState<keyof typeof chartConfig>(chartKeys?.[0] ?? 'default')
 
   return (
     <Card className="py-0">
-      <CardHeader className="flex flex-col items-stretch border-b !p-0 sm:flex-row">
+      <CardHeader className={`flex flex-col items-stretch !p-0 sm:flex-row h-20 ${chartKeys?.length > 1 ? "border-b" : ""}`}>
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 pt-4 pb-3 sm:!py-0">
           <CardTitle>{chartMetaData?.title}</CardTitle>
           <CardDescription>
@@ -53,7 +55,7 @@ export function MonoChartBar({
           </CardDescription>
         </div>
         <div className="flex">
-          {["desktop", "mobile"].map((key) => {
+          {chartKeys?.length > 1 && chartKeys?.map((key) => {
             const chart = key as keyof typeof chartConfig
             return (
               <button

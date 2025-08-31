@@ -62,7 +62,7 @@ import {
 import { Tabs, TabsContent } from "@/components/ui/tabs"
 import { DataTableToolbar } from './data-table-toolbar'
 import { DataTableViewOptions } from "./data-table-view-options"
-
+import { DataExportButtons } from './DataExportButtons'
 
 function DraggableRow({ row }) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
@@ -89,7 +89,8 @@ function DraggableRow({ row }) {
   )
 }
 
-export function DataTable({ initialData, columns}) {
+export function DataTable({ initialData, columns, tableFilterConfig, exportDataConfig}) {
+
   const [data, setData] = React.useState(() => initialData)
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
@@ -108,6 +109,11 @@ export function DataTable({ initialData, columns}) {
     useSensor(KeyboardSensor, {})
   )
 
+  // update the data state with the fetched data
+  React.useEffect(() => {
+    setData(initialData);
+  }, [initialData]);
+
   const dataIds = React.useMemo<UniqueIdentifier[]>(
     () => data?.map(({ id }) => id) || [],
     [data]
@@ -123,7 +129,7 @@ export function DataTable({ initialData, columns}) {
       columnFilters,
       pagination,
     },
-    getRowId: (row) => row.id.toString(),
+    getRowId: (row) => row.orderNumber,
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
@@ -149,24 +155,22 @@ export function DataTable({ initialData, columns}) {
     }
   }
 
+
   return (
     <Tabs
       defaultValue="outline"
       className="w-full flex-col justify-start gap-6"
     >
       <div className="flex items-center justify-between px-4 lg:px-6">
-        <DataTableToolbar table={table} />
+        <DataTableToolbar table={table} filterConfig={tableFilterConfig} />
         <div className="flex items-center gap-2">
           <DataTableViewOptions table={table} />
-          <Button variant="outline" size="sm">
-            <IconTableImport />
-            <span className="hidden lg:inline">Export as Excel</span>
-          </Button>
+          <DataExportButtons data={initialData} exportDataConfig={exportDataConfig} />
         </div>
       </div>
       <TabsContent
         value="outline"
-        className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
+        className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6 "
       >
         <div className="overflow-hidden rounded-lg border">
           <DndContext
@@ -195,7 +199,7 @@ export function DataTable({ initialData, columns}) {
                   </TableRow>
                 ))}
               </TableHeader>
-              <TableBody className="**:data-[slot=table-cell]:first:w-8">
+              <TableBody className="**:data-[slot=table-cell]:first:w-8 bg-gradient-to-t from-primary/3  shadow-xs">
                 {table.getRowModel().rows?.length ? (
                   <SortableContext
                     items={dataIds}

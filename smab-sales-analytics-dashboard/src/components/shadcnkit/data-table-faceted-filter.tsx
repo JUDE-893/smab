@@ -171,6 +171,7 @@
 
 
 // -----------------------------------------------------------------------------
+// data-table-faceted-filter.tsx
 import * as React from "react"
 import { Column } from "@tanstack/react-table"
 import { Check, PlusCircle } from "lucide-react"
@@ -213,8 +214,6 @@ export function DataTableFacetedFilter<TData, TValue>({
   const selectedValues = new Set(column?.getFilterValue() as string[])
   const [isOpen, setIsOpen] = React.useState(false);
 
-  console.log("isopen", isOpen);
-  
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
@@ -263,14 +262,22 @@ export function DataTableFacetedFilter<TData, TValue>({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0" align="start">
+      <PopoverContent
+        className="p-0 w-auto min-w-[200px]"
+        align="start"
+        style={{
+          zIndex: 9999,
+          position: 'relative'
+        }}
+      >
         <Command>
           <CommandInput placeholder={title} />
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup>
-              {options.map((option) => {
+              {options?.map((option) => {
                 const isSelected = selectedValues.has(option.value)
+
                 return (
                   <CommandItem
                     key={option.value}

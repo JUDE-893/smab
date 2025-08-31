@@ -1,20 +1,25 @@
+"use client"
+
 import { ChartRadial } from '@/components/charts/RadialChart';
+import { getMetricsPlans } from '@/services/salesServices'
+import { useCustomQuery } from '@/hooks/useCustomQuery'
+
 
 const chartData = [{ month: "january", left: 12800, achieved: 17200 }]
 
 const chartConfig = {
-  left: {
+  plan: {
     label: "Left",
     color: "var(--chart-4)",
   },
-  achieved: {
-    label: "Achieved",
+  value: {
+    label: "Sales",
     color: "var(--chart-3)",
   },
 }
 
 const chartMetaData = {
-    title: "Sales Value",
+    title: "Sales Goal",
     description: 'Targeted sales value goal',
     dataKey:"Sales Value",
     nameKey:"source"
@@ -22,12 +27,21 @@ const chartMetaData = {
 
 export function SellGoalChart() {
 
+
+  const plan = "month";
+
+  const { data, isLoading } = useCustomQuery(
+    ['metrics-plans', plan],
+    async () => await getMetricsPlans(plan)
+  )
+
+  console.log('data', data);
+
     return (
       <ChartRadial
         chartMetaData={chartMetaData}
         chartConfig={chartConfig}
-        chartData={chartData}
+        chartData={[data?.sales] ?? []}
        />
     )
   }
-
