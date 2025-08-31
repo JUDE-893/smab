@@ -4,7 +4,8 @@ import { getHeaderMetrics,
         getOrders,
         getSalesMetricsPerDay,
         getOrderMetricsPerDay,
-        getAgentSales } 
+        getAgentSales,
+        getPlansMetrics }
         from '../controllers/salesControllers.js';
 
 const router = Router();
@@ -18,6 +19,7 @@ router.get('/chart-analysis', getChartsAnalysis);
 router.get('/agent-sales', getAgentSales);
 router.get('/order-metrics-per-day', getOrderMetricsPerDay);
 router.get('/sales-metrics-per-day', getSalesMetricsPerDay);
+router.get('/metrics-plans', getPlansMetrics);
 
 
 export default router;

@@ -1,6 +1,8 @@
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import { addDays } from "date-fns";
+import dayjs from 'dayjs';
+import isoWeek from 'dayjs/plugin/isoWeek.js';
 
 // catches the error throw in the embeded function and forward it to the last middleware
 export function errorCatchingLayer(fnc) {
@@ -63,7 +65,7 @@ export function decrypt(text, secret) {
 const fromObject = (obj, keys) =>
   Object.fromEntries(keys.map(key => [key, obj[key]]));
 
-// global unhandled error é rejections handler 
+// global unhandled error é rejections handler
 export const cdebugger = () => {
   // Handle ALL error types
   const handleError = (err, origin) => {
@@ -87,3 +89,46 @@ export const cdebugger = () => {
     console.warn('⚠️ Warning:', warning);
   });
 }
+
+
+dayjs.extend(isoWeek);
+
+/**
+ * Get date range for current day, week, month, or year
+ * @param {'daily'|'week'|'month'|'year'} type - Range type
+ * @param {boolean} customWeek - If true, week starts on Saturday (matches your example)
+ * @returns {string[]} ["YYYY-MM-DD", "YYYY-MM-DD"]
+ */
+export const getDateRange = (type = 'week', customWeek = false) => {
+  const today = dayjs();
+  let start, end;
+
+  if (type === 'day') {
+    start = today;
+    end = today;
+  }
+  else if (type === 'week') {
+    if (customWeek) {
+      // Week starting Saturday
+      start = today.day(6); // Saturday
+      end = start.add(5, 'day'); // Saturday + 5 days = Thursday
+    } else {
+      // ISO week: Monday to Saturday
+      start = today.isoWeekday(1); // Monday
+      end = today.isoWeekday(6);   // Saturday
+    }
+  }
+  else if (type === 'month') {
+    start = today.startOf('month');
+    end = today.endOf('month');
+  }
+  else if (type === 'year') {
+    start = today.startOf('year');
+    end = today.endOf('year');
+  }
+  else {
+    throw new Error('Invalid type. Use "daily", "week", "month", or "year".');
+  }
+
+  return [start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD')];
+};

@@ -1,7 +1,10 @@
 import { errorCatchingLayer } from '../utils/helpers.js';
 import Order from '../models/orderModel.js';
+import MetricsPlans from '../models/metricsPlanModel.js';
 import logger from '../utils/logger.js';
+import { getDateRange } from '../utils/helpers.js';
 import { format } from 'date-fns';
+
 // import pool from '../config/db/mysql.js';
 // import { mergeProducts } from '../utils/helpers.js';
 
@@ -265,8 +268,8 @@ export const getSalesMetricsPerDay = errorCatchingLayer(async (req, res, next) =
 
   const salesMetricsPerDay = await Order.aggregate([
     { $match: { orderDate: { $gte: startDate, $lte: endDate } } },
-    { $group: { _id: { $dateToString: { format: '%Y-%m-%d', date: '$orderDate', timezone: 'UTC' } }, totalSales: { $sum: aggPriceExpr } } },
-    { $project: { _id: 0, date: '$_id', totalSales: 1 } },
+    { $group: { _id: { $dateToString: { format: '%Y-%m-%d', date: '$orderDate', timezone: 'UTC' } }, sales: { $sum: aggPriceExpr } } },
+    { $project: { _id: 0, date: '$_id', sales: 1 } },
     { $sort: { date: 1 } }
   ]);
 
@@ -301,8 +304,8 @@ export const getOrderMetricsPerDay = errorCatchingLayer(async (req, res, next) =
 
   const orderMetricsPerDay = await Order.aggregate([
     { $match: { orderDate: { $gte: startDate, $lte: endDate } } },
-    { $group: { _id: { $dateToString: { format: '%Y-%m-%d', date: '$orderDate', timezone: 'UTC' } }, orderCount: { $sum: 1 } } },
-    { $project: { _id: 0, date: '$_id', orderCount: 1 } },
+    { $group: { _id: { $dateToString: { format: '%Y-%m-%d', date: '$orderDate', timezone: 'UTC' } }, orders_count: { $sum: 1 } } },
+    { $project: { _id: 0, date: '$_id', orders_count: 1 } },
     { $sort: { date: 1 } }
   ]);
 
@@ -335,11 +338,18 @@ export const getAgentSales = errorCatchingLayer(async (req, res, next) => {
   startDate.setUTCHours(0, 0, 0, 0);
   endDate.setUTCHours(23, 59, 59, 999);
 
+  // 1️⃣ Price conversion expression
   const aggPriceExpr = {
     $convert: {
       input: {
         $replaceAll: {
-          input: { $replaceAll: { input: { $ifNull: ['$prixttc', '0'] }, find: ',', replacement: '.' } },
+          input: {
+            $replaceAll: {
+              input: { $ifNull: ['$prixttc', '0'] },
+              find: ',',
+              replacement: '.'
+            }
+          },
           find: ' ',
           replacement: ''
         }
@@ -350,12 +360,65 @@ export const getAgentSales = errorCatchingLayer(async (req, res, next) => {
     }
   };
 
+  // 2️⃣ Match stage: filter by date range
+  const matchStage = {
+    $match: {
+      orderDate: {
+        $gte: startDate,
+        $lte: endDate
+      }
+    }
+  };
+
+  // 3️⃣ Group stage: group by normalized sales agent
+  const groupStage = {
+    $group: {
+      _id: {
+        $toLower: {
+          $replaceAll: {
+            input: {
+              $replaceAll: {
+                input: { $ifNull: ['$salesAgent', 'Unknown'] },
+                find: ' ',
+                replacement: '_'
+              }
+            },
+            find: '-',
+            replacement: '_'
+          }
+        }
+      },
+      sales: { $sum: aggPriceExpr },
+      orders_count: { $sum: 1 }
+    }
+  };
+
+  // 4️⃣ Project stage: rename fields
+  const projectStage = {
+    $project: {
+      _id: 0,
+      agent: '$_id',
+      sales: 1,
+      orders_count: 1
+    }
+  };
+
+  // 5️⃣ Sort stage: sort by sales descending, then agent ascending
+  const sortStage = {
+    $sort: {
+      sales: -1,
+      agent: 1
+    }
+  };
+
+  // 🧠 Final aggregation call
   const agentSales = await Order.aggregate([
-    { $match: { orderDate: { $gte: startDate, $lte: endDate } } },
-    { $group: { _id: { $ifNull: ['$salesAgent', 'Unknown'] }, totalSales: { $sum: aggPriceExpr }, orderCount: { $sum: 1 } } },
-    { $project: { _id: 0, salesAgent: '$_id', totalSales: 1, orderCount: 1 } },
-    { $sort: { totalSales: -1, salesAgent: 1 } }
+    matchStage,
+    groupStage,
+    projectStage,
+    sortStage
   ]);
+
 
   return res.status(200).json({
     message: 'agent sales fetched successfully',
@@ -397,4 +460,72 @@ export const getOrders = errorCatchingLayer(async (req, res, next) => {
       orders: orders
     }
   });
+});
+
+
+export const getPlansMetrics = errorCatchingLayer(async (req, res, next) => {
+  const { plan } = req.query; // Default to 'monthly'
+
+
+  if (!["day", 'week', 'month', 'year'].includes(plan)) {
+    return res.status(400).json({ message: 'plan is invalid or missing. Expected : day, week, month, year' });
+  }
+
+  const dates = getDateRange(plan);
+
+  // Create inclusive day range in UTC
+  const startDate = new Date(dates[0]);
+  const endDate = new Date(dates[1]);
+
+  startDate.setUTCHours(0, 0, 0, 0);
+  endDate.setUTCHours(23, 59, 59, 999);
+
+  // Use Promise.all for parallel execution
+  const [result, salesPlans, ordersPlans] = await Promise.all([
+    Order.aggregate([
+    {
+      $match: {
+        orderDate: { $gte: startDate, $lte: endDate }
+      }
+    },
+    {
+      $addFields: {
+        // Convert prixttc from string to number, handle null/undefined
+        numericPrixttc: {
+          $cond: {
+            if: { $eq: ["$prixttc", null] },
+            then: 0,
+            else: { $toDouble: "$prixttc" }
+          }
+        }
+      }
+    },
+    {
+      $group: {
+        _id: null,
+        totalOrders: { $sum: 1 },
+        totalSales: { $sum: "$numericPrixttc" }
+      }
+    }
+  ]),
+    MetricsPlans.findOne({ name: "sales_plan" }).lean(),
+    MetricsPlans.findOne({ name: "orders_plan" }).lean()
+  ]);
+
+  // Safely get plan values with defaults
+  const salesPlanValue = salesPlans?.[plan] || 0;
+  const ordersPlanValue = ordersPlans?.[plan] || 0;
+  console.log('[result]', result);
+  const data = {
+    sales: {
+      plan: salesPlanValue,
+      value: result[0]?.totalSales || 0,
+    },
+    orders: {
+      plan: ordersPlanValue,
+      value: result[0]?.totalOrders || 0,
+    }
+  };
+
+  return res.status(200).json({ message: "metrics plans fetched successfully", data });
 });
