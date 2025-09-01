@@ -41,7 +41,7 @@ export function ChartRadial({
   }: RadarChartInteractiveProps) {
 
       const radialDataKeys = Object.keys(chartConfig);
-  const totalVisitors = chartData?.[0]?.[radialDataKeys[1]] + ' / '+ `${chartData?.[0]?.[radialDataKeys[0]]}`;
+  const totalVisitors = chartData?.[0]?.[radialDataKeys[1]] + ' / '+ `${Math.abs(chartData?.[0]?.[radialDataKeys[0]] + chartData?.[0]?.[radialDataKeys[1]] )}`;
 
   return (
     <Card className="flex flex-col h-60">

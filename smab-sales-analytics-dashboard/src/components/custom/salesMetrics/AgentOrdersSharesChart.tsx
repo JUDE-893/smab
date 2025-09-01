@@ -20,7 +20,7 @@ const chartConfig = {
   },
   sales_agent1: {
     label: "Sales Agent 1",
-    color: "var(--chart-1)",
+    color: "var(--chart-2)",
   },
   sales_agent2: {
     label: "Sales Agent2",
@@ -28,15 +28,15 @@ const chartConfig = {
   },
   sales_agent3: {
     label: "Sales Agent3",
-    color: "var(--chart-3)",
+    color: "var(--chart-2)",
   },
   sales_agent4: {
     label: "Sales Agent4",
-    color: "var(--chart-4)",
+    color: "var(--chart-2)",
   },
   sales_agent5: {
     label: "Sales Agent5",
-    color: "var(--chart-5)",
+    color: "var(--chart-2)",
   },
 }
 

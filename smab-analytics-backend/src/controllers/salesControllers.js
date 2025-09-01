@@ -91,11 +91,16 @@ export const getHeaderMetrics = errorCatchingLayer(async (req, res, next) => {
 
   const formatCurrency = (value) => {
     try {
-      return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value || 0);
+      const formatted = new Intl.NumberFormat('fr-MA', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(value);
+      return `${formatted}`;
     } catch {
-      return String(value ?? 0);
+      return `${value ?? 0}`;
     }
   };
+  
 
   const metrics = [
     {
