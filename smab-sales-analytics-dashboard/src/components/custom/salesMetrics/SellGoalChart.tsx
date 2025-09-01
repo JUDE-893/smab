@@ -28,7 +28,7 @@ const chartMetaData = {
 export function SellGoalChart() {
 
 
-  const plan = "month";
+  const plan = "year";
 
   const { data, isLoading } = useCustomQuery(
     ['metrics-plans', plan],

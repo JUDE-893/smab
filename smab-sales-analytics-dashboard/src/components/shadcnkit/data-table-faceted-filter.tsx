@@ -194,6 +194,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Separator } from "@/components/ui/separator"
+import { Portal } from "@radix-ui/react-portal"
 
 interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>
@@ -212,17 +213,17 @@ export function DataTableFacetedFilter<TData, TValue>({
 }: DataTableFacetedFilterProps<TData, TValue>) {
   const facets = column?.getFacetedUniqueValues()
   const selectedValues = new Set(column?.getFilterValue() as string[])
-  const [isOpen, setIsOpen] = React.useState(false);
+  const triggerRef = React.useRef(null);
 
   return (
-    <Popover open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger asChild>
+    <Popover >
+      <PopoverTrigger ref={triggerRef} asChild>
         <Button
           variant="outline"
           size="sm"
           className="h-8 border-dashed"
           role="combobox"
-          aria-expanded={isOpen}
+          
         >
           <PlusCircle className="mr-2 h-4 w-4" />
           {title}
@@ -263,78 +264,82 @@ export function DataTableFacetedFilter<TData, TValue>({
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="p-0 w-auto min-w-[200px]"
+        className="p-0 max-w-64"
         align="start"
         style={{
           zIndex: 9999,
           position: 'relative'
         }}
       >
-        <Command>
-          <CommandInput placeholder={title} />
-          <CommandList>
-            <CommandEmpty>No results found.</CommandEmpty>
-            <CommandGroup>
-              {options?.map((option) => {
-                const isSelected = selectedValues.has(option.value)
+        <Portal container={triggerRef.current}>
+          <Command className="relative z-50 p-0 w-auto w-64">
+            <CommandInput placeholder={title} />
+            <CommandList>
+              <CommandEmpty>No results found.</CommandEmpty>
+              <CommandGroup>
+                {options?.map((option) => {
+                  const isSelected = selectedValues.has(option.value)
 
-                return (
-                  <CommandItem
-                    key={option.value}
-                    onSelect={() => {
-                      const newSelectedValues = new Set(selectedValues)
-                      if (isSelected) {
-                        newSelectedValues.delete(option.value)
-                      } else {
-                        newSelectedValues.add(option.value)
-                      }
-                      const filterValues = Array.from(newSelectedValues)
-                      column?.setFilterValue(
-                        filterValues.length ? filterValues : undefined
-                      )
-                    }}
-                  >
-                    <div
-                      className={cn(
-                        "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-                        isSelected
-                          ? "bg-primary text-primary-foreground"
-                          : "opacity-50 [&_svg]:invisible"
-                      )}
+                  return (
+                    <CommandItem
+                      key={option.value}
+                      onSelect={() => {
+                        const newSelectedValues = new Set(selectedValues)
+                        if (isSelected) {
+                          newSelectedValues.delete(option.value)
+                        } else {
+                          newSelectedValues.add(option.value)
+                        }
+                        const filterValues = Array.from(newSelectedValues)
+                        column?.setFilterValue(
+                          filterValues.length ? filterValues : undefined
+                        )
+                      }}
                     >
-                      <Check className={cn("h-4 w-4")} />
-                    </div>
-                    {option.icon && (
-                      <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-                    )}
-                    <span>{option.label}</span>
-                    {facets?.get(option.value) && (
-                      <span className="ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs">
-                        {facets.get(option.value)}
-                      </span>
-                    )}
-                  </CommandItem>
-                )
-              })}
-            </CommandGroup>
-            {selectedValues.size > 0 && (
-              <>
-                <CommandSeparator />
-                <CommandGroup>
-                  <CommandItem
-                    onSelect={() => {
-                      column?.setFilterValue(undefined)
-                      setIsOpen(false)
-                    }}
-                    className="justify-center text-center"
-                  >
-                    Clear filters
-                  </CommandItem>
-                </CommandGroup>
-              </>
-            )}
-          </CommandList>
-        </Command>
+                      <div
+                        className={cn(
+                          "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                          isSelected
+                            ? "bg-primary text-primary-foreground"
+                            : "opacity-50 [&_svg]:invisible"
+                        )}
+                      >
+                        <Check className={cn("h-4 w-4")} />
+                      </div>
+                      {option.icon && (
+                        <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+                      )}
+                      <span>{option.label}</span>
+                      {facets?.get(option.value) && (
+                        <span className="ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs">
+                          {facets.get(option.value)}
+                        </span>
+                      )}
+                    </CommandItem>
+                  )
+                })}
+              </CommandGroup>
+              {selectedValues.size > 0 && (
+                <>
+                  <CommandSeparator />
+                  <CommandGroup>
+                    <CommandItem
+                      onSelect={() => {
+                        column?.setFilterValue(undefined)
+                        
+                      }}
+                      className="justify-center text-center"
+                    >
+                      Clear filters
+                    </CommandItem>
+                  </CommandGroup>
+                </>
+              )}
+            </CommandList>
+          </Command>
+        </Portal>
+          
+              
       </PopoverContent>
     </Popover>
   )

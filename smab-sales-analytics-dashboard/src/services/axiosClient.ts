@@ -1,8 +1,9 @@
 // lib/axiosClient.js
 import axios from 'axios';
 
+console.log("process.env.NEXT_PUBLIC_BACKEND_API_BASE_URL", process.env.NEXT_PUBLIC_BACKEND_API_BASE_URL);
 const axiosClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BACKEND_API_URL, // Use env for flexibility
+  baseURL: process.env.NEXT_PUBLIC_BACKEND_API_BASE_URL || 'htp://localhost:5002/smab-analytics/api/', // Use env for flexibility
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

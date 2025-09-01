@@ -45,20 +45,20 @@ const agentsOptions = [
 ];
 const paymentOptions = [
   {
-    label: "Low",
+    label: "Virement",
     value: "Virement",
     icon: ArrowDown,
   },
   {
-    label: "Medium",
-    value: "medium",
-    icon: ArrowRight,
-  },
-  {
-    label: "High",
-    value: "high",
+    label: "Cash",
+    value: "Cash",
     icon: ArrowUp,
   },
+  {
+    label: "Other",
+    value: "Other",
+    icon: ArrowRight,
+  }
 ];
 
 export const tableFilterConfig = {
