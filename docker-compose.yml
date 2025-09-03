@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./smab-analytics-backend
+      dockerfile: Dockerfile
+    container_name: smab-analytics-backend
+    restart: unless-stopped
+    env_file:
+      - ./smab-analytics-backend/.env
+    environment:
+      - MONGODB_HOST_SCHEME=mongodb://mongo
+      - MONGODB_PORT=27017
+    ports:
+      - "5002:5002"
+    depends_on:
+      - mongo
+    volumes:
+      - ./smab-analytics-backend/logs:/app/logs
+
+  dashboard:
+    build:
+      context: ./smab-sales-analytics-dashboard
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_BACKEND_API_BASE_URL: ${NEXT_PUBLIC_BACKEND_API_BASE_URL:-http://localhost:5002/smab-analytics/api/}
+    container_name: smab-sales-analytics-dashboard
+    restart: unless-stopped
+    env_file:
+      - ./smab-sales-analytics-dashboard/.env
+    ports:
+      - "3004:3004"
+    depends_on:
+      - backend
+
+  mongo:
+    image: mongo:6
+    container_name: smab-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
+
+

@@ -14,6 +14,9 @@ import { IconChartBar } from "@tabler/icons-react"
 import { Button } from "@/components/ui/button"
 import { HeaderMetrics } from "@/components/custom/salesMetrics/HeaderMetrics";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 const filterDocTltp = `Note: any search, sort or filter operation are only applyed on data within the selected date range`
 
 export default function Page() {
