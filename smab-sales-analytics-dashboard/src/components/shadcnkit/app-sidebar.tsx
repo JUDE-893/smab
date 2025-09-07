@@ -33,6 +33,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { Modal } from '@/components/shadcnkit/modal'
+import SearchBox from '@/components/shadcnkit/page-content-searchBox'
+
 
 const data = {
   user: {
@@ -137,7 +140,11 @@ const data = {
       icon: IconHelp,
     },
     {
-      title: "Search",
+      title: (<Modal trigger={<h1>Search</h1>}
+                     className='w-[2000]'
+              >
+                <SearchBox />
+             </Modal>),
       url: "#",
       icon: IconSearch,
     },
