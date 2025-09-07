@@ -119,7 +119,7 @@ export function TotalOrdersChart() {
   const timeRange = useTimeRange();
 
 
-  const { data, isLoading } = useCustomQuery(
+  const { data, isLoading, error } = useCustomQuery(
     ['total-orders-metrics-per-day',timeRange],
     async () => await getOrderMetricsPerDay(timeRange)
   )
@@ -127,7 +127,7 @@ export function TotalOrdersChart() {
 
     return (
       <MonoChartBar
-        chartMetaData={chartMetaData}
+        chartMetaData={{...chartMetaData, isLoading: isLoading, error}}
         chartConfig={chartConfig}
         chartData={data?.orderMetricsPerDay}
        />

@@ -28,7 +28,7 @@ export function OrdersGoalChart() {
 
   const plan = "month";
 
-  const { data, isLoading } = useCustomQuery(
+  const { data, isLoading, error } = useCustomQuery(
     ['metrics-plans', plan],
     async () => await getMetricsPlans(plan)
   )
@@ -39,7 +39,7 @@ export function OrdersGoalChart() {
 
     return (
       <ChartRadial
-        chartMetaData={chartMetaData}
+        chartMetaData={{...chartMetaData, isLoading: isLoading, error}}
         chartConfig={chartConfig}
         chartData={chartData}
        />

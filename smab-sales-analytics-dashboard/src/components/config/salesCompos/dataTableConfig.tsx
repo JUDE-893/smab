@@ -11,6 +11,7 @@ import {
   } from "lucide-react"
 import {  IconTableImport
 } from "@tabler/icons-react"
+import { Skeleton } from "@/components/ui/skeleton"
 
 import { exportOrdersToExcel } from '@/services/exportDataServices/exportOrdersToExcel'
 
@@ -89,3 +90,13 @@ export const exportDataConfig = {
     icon: IconTableImport,
   }
 ]}
+
+// skeleton Row
+export const skeletonRow = {
+  paymentMethod: <Skeleton className="@container/card h-[25px] w-45 rounded-xl" />,
+  prixttc: <Skeleton className="@container/card h-[25px] w-45 rounded-xl" />,
+  customerName: <Skeleton className="@container/card h-[25px] w-45 rounded-xl" />,
+  salesAgent: <Skeleton className="@container/card h-[25px] w-45 rounded-xl" />,
+  orderDate: <Skeleton className="@container/card h-[25px] w-45 rounded-xl" />,
+  orderNumber: <Skeleton className="@container/card h-[25px] w-45 rounded-xl" />
+}

@@ -20,6 +20,9 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 import { metadata } from "@/app/layout"
+import { LargeCardSkeleton } from '@/components/shadcnkit/large-card-skeleton'
+import { DisplayErrorMessage } from '@/components/shadcnkit/error-message-display'
+
 
 type ChartMetaData = {
   title: string;
@@ -39,6 +42,8 @@ export function MonoChartBar({
   chartMetaData,
   chartData
 }: MonoBarChartProps) {
+
+  if (chartMetaData?.isLoading) return <LargeCardSkeleton />
 
   const chartKeys = Object.keys(chartConfig)
 
@@ -73,7 +78,8 @@ export function MonoChartBar({
           })}
         </div>
       </CardHeader>
-      <CardContent className="px-2 sm:p-6">
+      {!chartMetaData?.error
+        ? <CardContent className="px-2 sm:p-6">
         <ChartContainer
           config={chartConfig}
           className="aspect-auto h-[250px] w-full"
@@ -119,7 +125,9 @@ export function MonoChartBar({
             <Bar dataKey={activeChart} fill={`var(--color-${activeChart})`} />
           </BarChart>
         </ChartContainer>
-      </CardContent>
+          </CardContent>
+        : <DisplayErrorMessage error={chartMetaData?.error} className=" h-64" />
+      }
     </Card>
   )
 }

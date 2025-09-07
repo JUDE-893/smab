@@ -17,6 +17,9 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
+import { DisplayErrorMessage } from '@/components/shadcnkit/error-message-display'
+
+
 
 type ChartMetaData = {
     title: string;
@@ -30,57 +33,65 @@ type ChartMetaData = {
     chartMetaData: ChartMetaData;
     chartData: unknown[]
   };
-
+import { LargeCardSkeleton } from '@/components/shadcnkit/large-card-skeleton'
 
 export function HorizentalChartBar({
     chartConfig,
     chartMetaData,
     chartData
   }: HorizentalChartBarProps) {
+
+
+  if (chartMetaData?.isLoading) return <LargeCardSkeleton />
+
   return (
     <Card className="@container/card">
       <CardHeader>
         <CardTitle>{chartMetaData.title}</CardTitle>
         <CardDescription>{chartMetaData.description}</CardDescription>
       </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig} className="flex flex flex-row aspect-auto h-[340px] w-full">
-          <BarChart
-            accessibilityLayer
-            data={chartData}
-            layout="vertical"
-            margin={{
-              left: 0,
-            }}
-            maxBarSize={60}
-          >
-            <YAxis
-              dataKey={chartMetaData.nameKey}
-              type="category"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) =>
-                chartConfig[value as keyof typeof chartConfig]?.label
-              }
-            />
-            <XAxis dataKey={chartMetaData.dataKey} type="number" hide />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Bar dataKey={chartMetaData.dataKey} layout="vertical" radius={5} />
-          </BarChart>
-        </ChartContainer>
-      </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 leading-none font-medium">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="text-muted-foreground leading-none">
-          Showing total visitors for the last 6 months
-        </div>
-      </CardFooter>
+      {!chartMetaData?.error ? <>
+          <CardContent>
+          <ChartContainer config={chartConfig} className="flex flex flex-row aspect-auto h-[340px] w-full">
+            <BarChart
+              accessibilityLayer
+              data={chartData}
+              layout="vertical"
+              margin={{
+                left: 0,
+              }}
+              maxBarSize={60}
+            >
+              <YAxis
+                dataKey={chartMetaData.nameKey}
+                type="category"
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+                tickFormatter={(value) =>
+                  chartConfig[value as keyof typeof chartConfig]?.label
+                }
+              />
+              <XAxis dataKey={chartMetaData.dataKey} type="number" hide />
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
+              <Bar dataKey={chartMetaData.dataKey} layout="vertical" radius={5} />
+            </BarChart>
+          </ChartContainer>
+        </CardContent>
+        <CardFooter className="flex-col items-start gap-2 text-sm">
+          <div className="flex gap-2 leading-none font-medium">
+            Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+          </div>
+          <div className="text-muted-foreground leading-none">
+            Showing total visitors for the last 6 months
+          </div>
+        </CardFooter>
+      </>
+      : <DisplayErrorMessage error={chartMetaData?.error} className=" h-64" />
+    }
     </Card>
   )
 }

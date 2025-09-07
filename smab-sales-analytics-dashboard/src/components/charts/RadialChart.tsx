@@ -18,8 +18,8 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 import { metadata } from "@/app/layout"
-
-
+import { CardHeaderSkeleton } from '@/components/shadcnkit/card-header-skeleton'
+import { DisplayErrorMessage } from '@/components/shadcnkit/error-message-display'
 
 type ChartMetaData = {
     title: string;
@@ -40,16 +40,19 @@ export function ChartRadial({
     chartData
   }: RadarChartInteractiveProps) {
 
-      const radialDataKeys = Object.keys(chartConfig);
+  const radialDataKeys = Object.keys(chartConfig);
   const totalVisitors = chartData?.[0]?.[radialDataKeys[1]] + ' / '+ `${Math.abs(chartData?.[0]?.[radialDataKeys[0]] + chartData?.[0]?.[radialDataKeys[1]] )}`;
 
   return (
     <Card className="flex flex-col h-60">
       <CardHeader className="items-center pb-0">
-        <CardTitle>{chartMetaData?.title}</CardTitle>
-        <CardDescription>{chartMetaData?.description}</CardDescription>
+        {!chartMetaData?.isLoading
+          ? <><CardTitle>{chartMetaData?.title}</CardTitle>
+            <CardDescription>{chartMetaData?.description}</CardDescription></>
+          : <CardHeaderSkeleton /> }
       </CardHeader>
-      <CardContent className="flex flex-1 items-center pb-0">
+      {!chartMetaData?.error
+        ? <CardContent className="flex flex-1 items-center pb-0">
         <ChartContainer
           config={chartConfig}
           className="mx-auto aspect-square h-50 w-full"
@@ -102,7 +105,8 @@ export function ChartRadial({
 
           </RadialBarChart>}
         </ChartContainer>
-      </CardContent>
+          </CardContent>
+        : <DisplayErrorMessage error={chartMetaData?.error} className=" h-64" />}
 
     </Card>
   )

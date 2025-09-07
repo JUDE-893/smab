@@ -57,7 +57,7 @@ import {
 } from "@tabler/icons-react";
 
 import { DataTable } from '@/components/shadcnkit/data-table'
-import { tableFilterConfig, exportDataConfig } from "@/components/config/salesCompos/dataTableConfig"
+import { tableFilterConfig, exportDataConfig, skeletonRow } from "@/components/config/salesCompos/dataTableConfig"
 import { OrderDetailsDrawer } from '@/components/shadcnkit/order-details-drawer'
 import { DataTableColumnHeader } from "@/components/shadcnkit/data-table-column-header"
 
@@ -128,7 +128,12 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
       <DataTableColumnHeader column={column} title="Order Date" />
     ),
     cell: ({ row }) => {
-      const date = new Date(row.original.orderDate);
+      let OrderDate = row.original.orderDate;
+
+      if(row.original.orderDate?.props) return OrderDate
+
+      const date = new Date(OrderDate);
+
       return (
         <div className="w-32">
           <p>
@@ -170,6 +175,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
       <DataTableColumnHeader column={column} title="Price" />
     ),
     cell: ({ row }) => {
+      if(row.original.prixttc?.props) return row.original.prixttc;
 
       return (
          <div className="w-32">
@@ -385,11 +391,11 @@ export function SalesOrdersDataTable() {
     async () => await getAllOrders(timeRange)
   );
 
-
+  let initialData = !(isLoading) ? d?.orders : Array.from({ length: 10 }, (_, i) => i).map((r) => skeletonRow )
 
     return (
         <DataTable
-            initialData={d?.orders ?? []}
+            initialData={initialData ?? []}
             columns={columns}
             tableFilterConfig={tableFilterConfig}
             exportDataConfig={exportDataConfig}

@@ -123,11 +123,11 @@ export function OrderDetailsDrawer({ order, trigger }: OrderDetailsDrawerProps) 
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <Package className="h-5 w-5" />
-                <h3 className="text-lg font-semibold">Products ({order.products.length})</h3>
+                <h3 className="text-lg font-semibold">Products ({order?.products?.length})</h3>
               </div>
 
               <div className="space-y-3 max-h-64 overflow-y-auto">
-                {order.products.map((product, index) => (
+                {order?.products?.map((product, index) => (
                   <div key={product?._id} className="border rounded-lg p-4 space-y-2">
                     <div className="flex justify-between items-start">
                       <h4 className="font-medium text-sm leading-tight pr-2">{product.name}</h4>

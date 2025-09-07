@@ -24,13 +24,15 @@ type SectionCardsProps = {
   metrics: Metric[];
 };
 
-export function SectionCards({metrics}: SectionCardsProps) {
+export function SectionCards({metrics, error}: SectionCardsProps) {
+  console.log("errpr", error);
 
+  let array = metrics ?? Array.from({ length: 4 }, (_, i) => i);
   return (
     <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
       {
-        metrics && metrics.map( (mtr, ind) => {
-          return <MetricBox key={ind} data={mtr} />
+        array.map( (mtr, ind) => {
+          return <MetricBox key={ind} data={mtr} error={error} />
         })
       }
     </div>

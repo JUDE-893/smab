@@ -30,6 +30,9 @@ import {
 } from "@/components/ui/toggle-group"
 import { DataExportButtons } from "@/components/shadcnkit/DataExportButtons"
 import { exportDataConfig } from "@/components/config/salesCompos/areaChartConfig"
+import { LargeCardSkeleton } from '@/components/shadcnkit/large-card-skeleton'
+import { DisplayErrorMessage } from '@/components/shadcnkit/error-message-display'
+
 
 type ChartMetaData = {
   title: string;
@@ -51,6 +54,8 @@ export function ChartAreaInteractive({
     chartData
   }: PieChartInteractiveProps) {
 
+  if (chartMetaData?.isLoading) return <LargeCardSkeleton />
+
   const chartDataKeys = Object.keys(chartConfig).splice(1);
 
   return (
@@ -67,7 +72,8 @@ export function ChartAreaInteractive({
           <DataExportButtons data={chartData} exportDataConfig={exportDataConfig} />
         </CardAction>
       </CardHeader>
-      <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
+      {!chartMetaData?.error
+        ? <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
         <ChartContainer
           config={chartConfig}
           className="flex flex flex-row aspect-auto h-[250px] w-full"
@@ -135,7 +141,9 @@ export function ChartAreaInteractive({
           </AreaChart>
         </ChartContainer>
 
-      </CardContent>
+          </CardContent>
+        : <DisplayErrorMessage error={chartMetaData?.error} className=" h-64" />
+    }
     </Card>
   )
 }

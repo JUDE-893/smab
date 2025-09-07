@@ -121,7 +121,7 @@ export function TotalSalesChart() {
   const timeRange = useTimeRange();
 
 
-  const { data, isLoading } = useCustomQuery(
+  const { data, isLoading, error } = useCustomQuery(
     ['total-sales-metrics-per-day',timeRange],
     async () => await getSalesMetricsPerDay(timeRange)
   )
@@ -129,7 +129,7 @@ export function TotalSalesChart() {
 
     return (
       <ChartAreaInteractive
-        chartMetaData={chartMetaData}
+        chartMetaData={{...chartMetaData, isLoading: isLoading, error}}
         chartConfig={chartConfig}
         chartData={data?.salesMetricsPerDay}
        />

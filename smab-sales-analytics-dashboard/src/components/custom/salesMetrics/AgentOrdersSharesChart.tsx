@@ -51,7 +51,7 @@ export function AgentOrdersSharesChart() {
 
   const timeRange = useTimeRange();
 
-  const { data, isLoading } = useCustomQuery(
+  const { data, isLoading, error } = useCustomQuery(
     ['agent-sales-and-orders',timeRange],
     async () => await getAgentSalesAndOrders(timeRange)
   );
@@ -63,7 +63,7 @@ export function AgentOrdersSharesChart() {
 
     return (
       <HorizentalChartBar
-        chartMetaData={chartMetaData}
+        chartMetaData={{...chartMetaData, isLoading: isLoading, error}}
         chartConfig={chartConfig}
         chartData={dataRec}
        />

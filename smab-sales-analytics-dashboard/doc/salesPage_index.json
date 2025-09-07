@@ -1,0 +1,112 @@
+[
+  {
+    "objectID": "sales#sales-analytics",
+    "hierarchy": { "lvl0": "Sales", "lvl1": "Sales Analytics" },
+    "title": "Sales",
+    "section": "Sales Analytics",
+    "url": "URL_PLACEHOLDER",
+    "content": "Total sales value, total orders, average order per agent for the sales analytics overview.",
+    "keywords": ["total sales value", "total orders", "average orders per agent", "analytics", "overview"],
+    "sectionId": "sales-analytics"
+  },
+  {
+    "objectID": "sales#best-selling-record",
+    "hierarchy": { "lvl0": "Sales", "lvl1": "Best Selling Record" },
+    "title": "Sales",
+    "section": "Best Selling Record",
+    "url": "URL_PLACEHOLDER",
+    "content": "Top agent and best seller highlights showing the highest performing records.",
+    "keywords": ["top agent", "best seller", "top performer", "highest sales", "leaderboard"],
+    "sectionId": "best-selling-record"
+  },
+  {
+    "objectID": "sales#generate-report",
+    "hierarchy": { "lvl0": "Sales", "lvl1": "Generate Report" },
+    "title": "Sales",
+    "section": "Generate Report",
+    "url": "URL_PLACEHOLDER",
+    "content": "Generate and export sales reports for analysis and sharing.",
+    "keywords": ["generate report", "reporting", "export report", "analytics report"],
+    "sectionId": "generate-report"
+  },
+  {
+    "objectID": "sales#orders-goal",
+    "hierarchy": { "lvl0": "Sales", "lvl1": "Orders Goal" },
+    "title": "Sales",
+    "section": "Orders Goal",
+    "url": "URL_PLACEHOLDER",
+    "content": "Targeted orders goal for tracking progress against order targets.",
+    "keywords": ["orders goal", "targeted orders goal", "order target", "goal tracking"],
+    "sectionId": "orders-goal"
+  },
+  {
+    "objectID": "sales#sales-goal",
+    "hierarchy": { "lvl0": "Sales", "lvl1": "Sales Goal" },
+    "title": "Sales",
+    "section": "Sales Goal",
+    "url": "URL_PLACEHOLDER",
+    "content": "Targeted sales value goal to measure revenue progress.",
+    "keywords": ["sales goal", "targeted sales value goal", "revenue target", "goal tracking"],
+    "sectionId": "sales-goal"
+  },
+  {
+    "objectID": "sales#total-sales",
+    "hierarchy": { "lvl0": "Sales", "lvl1": "Total Sales" },
+    "title": "Sales",
+    "section": "Total Sales",
+    "url": "URL_PLACEHOLDER",
+    "content": "Total sales per day and metrics of total sales values over time.",
+    "keywords": ["total sales per day", "sales metrics", "daily sales", "time series", "trend"],
+    "sectionId": "total-sales"
+  },
+  {
+    "objectID": "sales#export-sales-as-excel",
+    "hierarchy": { "lvl0": "Sales", "lvl1": "Export sales as Excel" },
+    "title": "Sales",
+    "section": "Export sales as Excel",
+    "url": "URL_PLACEHOLDER",
+    "content": "Export sales data to Excel for offline analysis and reporting.",
+    "keywords": ["export", "excel", "download", "report", "spreadsheet"],
+    "sectionId": "export-sales-as-excel"
+  },
+  {
+    "objectID": "sales#total-orders",
+    "hierarchy": { "lvl0": "Sales", "lvl1": "Total Orders" },
+    "title": "Sales",
+    "section": "Total Orders",
+    "url": "URL_PLACEHOLDER",
+    "content": "Metrics of total orders made in this period with total orders per day.",
+    "keywords": ["total orders", "orders per day", "order metrics", "daily orders", "volume"],
+    "sectionId": "total-orders"
+  },
+  {
+    "objectID": "sales#sales-shares",
+    "hierarchy": { "lvl0": "Sales", "lvl1": "Sales Shares" },
+    "title": "Sales",
+    "section": "Sales Shares",
+    "url": "URL_PLACEHOLDER",
+    "content": "Percentage of total sales attributed to each agent and their contribution values.",
+    "keywords": ["sales shares", "agent contribution", "percentage of sales", "by agent", "distribution"],
+    "sectionId": "sales-shares"
+  },
+  {
+    "objectID": "sales#orders-contributions",
+    "hierarchy": { "lvl0": "Sales", "lvl1": "Orders Contributions" },
+    "title": "Sales",
+    "section": "Orders Contributions",
+    "url": "URL_PLACEHOLDER",
+    "content": "Percentage of total orders attributed to each agent and their contribution values.",
+    "keywords": ["orders contributions", "agent orders", "percentage of orders", "by agent", "distribution"],
+    "sectionId": "orders-contributions"
+  },
+  {
+    "objectID": "sales#sales-orders",
+    "hierarchy": { "lvl0": "Sales", "lvl1": "Sales orders" },
+    "title": "Sales",
+    "section": "Sales orders",
+    "url": "URL_PLACEHOLDER",
+    "content": "Sales orders details and data table for transaction-level review.",
+    "keywords": ["sales orders", "orders details", "data table", "transactions", "order list"],
+    "sectionId": "sales-orders"
+  }
+]

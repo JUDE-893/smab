@@ -19,6 +19,9 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
+import { LargeCardSkeleton } from '@/components/shadcnkit/large-card-skeleton'
+import { DisplayErrorMessage } from '@/components/shadcnkit/error-message-display'
+
 
 type ChartMetaData = {
   title: string;
@@ -39,6 +42,8 @@ export function ChartRadar({
   chartData
 }: RadarChartInteractiveProps) {
 
+  if (chartMetaData?.isLoading) return <LargeCardSkeleton />
+
   const radarDataKeys = Object.keys(chartConfig);
 
   return (
@@ -49,47 +54,51 @@ export function ChartRadar({
           {chartMetaData?.description}
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <ChartContainer
-          config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
-        >
-          <RadarChart
-            data={chartData}
-            margin={{
-              top: -40,
-              bottom: -10,
-            }}
+      {!chartMetaData?.error 
+        ? <>
+          <CardContent>
+          <ChartContainer
+            config={chartConfig}
+            className="mx-auto aspect-square max-h-[250px]"
           >
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent indicator="line" />}
-            />
-            <PolarAngleAxis dataKey={chartMetaData?.dataKey} />
-            <PolarGrid />
-
-            { radarDataKeys.map((k, i) => {
-                return <Radar
-                dataKey={k?.toLowerCase()}
-                fill={chartConfig[k?.toLowerCase()]?.color}
-                fillOpacity={(i+1)/radarDataKeys?.length}
-                key={i}
+            <RadarChart
+              data={chartData}
+              margin={{
+                top: -40,
+                bottom: -10,
+              }}
+            >
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent indicator="line" />}
               />
-            })
-            }
+              <PolarAngleAxis dataKey={chartMetaData?.dataKey} />
+              <PolarGrid />
 
-            <ChartLegend className="mt-8" content={<ChartLegendContent />} />
-          </RadarChart>
-        </ChartContainer>
-      </CardContent>
-      <CardFooter className="flex-col gap-2 pt-4 text-sm">
-        <div className="flex items-center gap-2 leading-none font-medium">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="text-muted-foreground flex items-center gap-2 leading-none">
-          January - June 2024
-        </div>
-      </CardFooter>
+              { radarDataKeys.map((k, i) => {
+                  return <Radar
+                  dataKey={k?.toLowerCase()}
+                  fill={chartConfig[k?.toLowerCase()]?.color}
+                  fillOpacity={(i+1)/radarDataKeys?.length}
+                  key={i}
+                />
+              })
+              }
+
+              <ChartLegend className="mt-8" content={<ChartLegendContent />} />
+            </RadarChart>
+          </ChartContainer>
+          </CardContent>
+          <CardFooter className="flex-col gap-2 pt-4 text-sm">
+            <div className="flex items-center gap-2 leading-none font-medium">
+              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+            </div>
+            <div className="text-muted-foreground flex items-center gap-2 leading-none">
+              January - June 2024
+            </div>
+          </CardFooter>
+          </>
+        : <DisplayErrorMessage error={chartMetaData?.error} className=" h-64" />}
     </Card>
   )
 }

@@ -50,7 +50,7 @@ export function SalesAgentSharesChart() {
 
   const timeRange = useTimeRange();
 
-  const { data, isLoading } = useCustomQuery(
+  const { data, isLoading, error } = useCustomQuery(
     ['agent-sales-and-orders',timeRange],
     async () => await getAgentSalesAndOrders(timeRange)
   )
@@ -58,7 +58,7 @@ export function SalesAgentSharesChart() {
 
   return (
     <MonoPieChart
-      chartMetaData={chartMetaData}
+      chartMetaData={{...chartMetaData, isLoading: isLoading, error}}
       chartConfig={chartConfig}
       chartData={data?.agentSales}
      />

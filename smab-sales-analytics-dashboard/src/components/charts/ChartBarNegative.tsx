@@ -17,7 +17,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-
+import { MediumCardSkeleton } from '@/components/shadcnkit/med-card-skeleton'
+import { DisplayErrorMessage } from '@/components/shadcnkit/error-message-display'
 
 
 type ChartMetaData = {
@@ -41,13 +42,17 @@ export function ChartBarNegative({
   chartData
 }: ChartBarNegativeProps) {
 
+
+  return (<MediumCardSkeleton />)
+
   return (
     <Card className="h-60">
       <CardHeader>
         <CardTitle>{chartMetaData?.title}</CardTitle>
         <CardDescription>{chartMetaData?.description}</CardDescription>
       </CardHeader>
-      <CardContent>
+      {!chartMetaData?.error
+        ? <CardContent>
         <ChartContainer config={chartConfig} className="mx-auto aspect-square h-40 w-full mt-[-15px]">
           <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
@@ -66,7 +71,8 @@ export function ChartBarNegative({
             </Bar>
           </BarChart>
         </ChartContainer>
-      </CardContent>
+          </CardContent>
+        : <DisplayErrorMessage error={chartMetaData?.error} className=" h-25" />}
     </Card>
   )
 }
