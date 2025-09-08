@@ -1,18 +1,18 @@
 
 import { SiteHeader } from "@/components/shadcnkit/site-header"
 import { TooltipDoc } from "@/components/shadcnkit/TooltipDoc"
-import { SalesAgentSharesChart } from '@/components/custom/salesMetrics/SalesAgentSharesChart';
-import { TotalOrdersChart } from '@/components/custom/salesMetrics/TotalOrdersChart';
-import { AgentOrdersSharesChart } from '@/components/custom/salesMetrics/AgentOrdersSharesChart';
-import { TotalSalesChart } from '@/components/custom/salesMetrics/TotalSalesChart';
-import { OrdersGoalChart } from '@/components/custom/salesMetrics/OrdersGoalChart';
-import { SellGoalChart } from '@/components/custom/salesMetrics/SellGoalChart';
-import { SalesOrdersDataTable } from '@/components/custom/salesMetrics/SalesOrdersDataTable';
+import { SalesAgentSharesChart } from '@/components/custom/productsMetrics/SalesAgentSharesChart';
+import { TotalProductQuantityChart } from '@/components/custom/productsMetrics/TotalProductQuantityChart';
+import { TotalProductQuantity_Chart } from '@/components/custom/productsMetrics/TotalProductQuantity_Chart';
+import { TotalSalesChart } from '@/components/custom/productsMetrics/TotalSalesChart';
+import { OrdersGoalChart } from '@/components/custom/productsMetrics/OrdersGoalChart';
+import { SellGoalChart } from '@/components/custom/productsMetrics/SellGoalChart';
+import { SalesOrdersDataTable } from '@/components/custom/productsMetrics/SalesOrdersDataTable';
 import { DateFilter } from '@/components/shadcnkit/DateFilter';
-import { AvgConvertionRateGoal } from '@/components/custom/salesMetrics/AvgConvertionRateGoal2';
+import { AvgConvertionRateGoal } from '@/components/custom/productsMetrics/AvgConvertionRateGoal2';
 import { IconChartBar } from "@tabler/icons-react"
 import { Button } from "@/components/ui/button"
-import { HeaderMetrics } from "@/components/custom/salesMetrics/HeaderMetrics";
+import { HeaderMetrics } from "@/components/custom/productsMetrics/HeaderMetrics";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -41,18 +41,11 @@ export default function Page() {
                 </div>
               </div>
 
-              <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card
-                grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs
-                lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-3">
-               <OrdersGoalChart />
-               <SellGoalChart />
-               <AvgConvertionRateGoal />
-              </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-6">
                 <TotalSalesChart />
-                <TotalOrdersChart />
+                <TotalProductQuantityChart />
                 <SalesAgentSharesChart />
-                <AgentOrdersSharesChart />
+                <TotalProductQuantity_Chart />
               </div>
 
               <h1 className="text-3xl font-bold ml-8 mt-7" id="sales-orders">Sales orders details</h1>

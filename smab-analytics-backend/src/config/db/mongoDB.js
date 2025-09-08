@@ -16,7 +16,9 @@ export default function connectMongoDB() {
 
   const host = MONGODB_HOST_SCHEME.replace('mongodb://', ''); // strip scheme for manual URI build
 
-  const uri = `mongodb://${credentials}${host}:${MONGODB_PORT}/${MONGODB_DB_NAME}?authSource=${MONGODB_AUTH_DB}`;
+  const uri = process.env.NODE_ENV !== 'development' 
+                ? `mongodb://${credentials}${host}:${MONGODB_PORT}/${MONGODB_DB_NAME}?authSource=${MONGODB_AUTH_DB}`
+                : `mongodb://${host}:${MONGODB_PORT}/${MONGODB_DB_NAME}`;
 
   console.log('[MongoDB URI]', uri); // Optional: remove in production
 

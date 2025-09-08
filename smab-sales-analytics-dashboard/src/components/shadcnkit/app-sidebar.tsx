@@ -17,7 +17,8 @@ import {
   IconSearch,
   IconSettings,
   IconUsers,
-  IconCurrencyDollar
+  IconCurrencyDollar,
+  IconShoppingCartBolt
 } from "@tabler/icons-react"
 
 import { NavDocuments } from "@/components/shadcnkit/nav-documents"
@@ -58,6 +59,11 @@ const data = {
       title: "Sales Metrics",
       url: "/sales",
       icon: IconCurrencyDollar,
+    },
+    {
+      title: "Fast Moving Products",
+      url: "/products",
+      icon: IconShoppingCartBolt,
     },
     {
       title: "Lifecycle",

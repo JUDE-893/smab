@@ -1,10 +1,39 @@
 'use client';
 
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 export default function CustomHit({ hit }: { hit: any }) {
+  const searchParams = useSearchParams();
+  
+  // Get all current query parameters
+  const currentParams = new URLSearchParams(searchParams.toString());
+  
+  // Get the current timeRange if it exists
+  const timeRange = currentParams.get('timeRange');
+  
+  // Create URL with preserved query parameters
   const getSectionUrl = () => {
-    return `${hit.url}${hit.url.includes('#') ? '' : '#'}${hit.sectionId}`;
+    // Extract the base path without any hash or query parameters
+    const basePath = hit.url.split('#')[0].split('?')[0];
+    
+    // Create the URL with section hash
+    let url = `${basePath}#${hit.sectionId}`;
+    
+    // Preserve all existing query parameters including timeRange
+    if (timeRange) {
+      url += `?timeRange=${encodeURIComponent(timeRange)}`;
+    }
+    
+    // Add other existing query parameters (if any)
+    currentParams.forEach((value, key) => {
+      if (key !== 'timeRange') {
+        url += url.includes('?') ? '&' : '?';
+        url += `${key}=${encodeURIComponent(value)}`;
+      }
+    });
+    
+    return url;
   };
 
   return (

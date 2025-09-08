@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import logger from './utils/logger.js';
 import orderRoutes from './routes/orderRoutes.js';
 import salesRoutes from './routes/salesRoutes.js';
+import productRoutes from './routes/productRoutes.js';
 
 const app = express();
 app.use(helmet());
@@ -24,5 +25,6 @@ app.get('/health', (req, res) => {
 
 app.use('/smab-analytics/api/orders', orderRoutes);
 app.use('/smab-analytics/api/sales', salesRoutes);
+app.use('/smab-analytics/api/product', productRoutes);
 
 export default app;

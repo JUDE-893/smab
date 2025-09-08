@@ -18,31 +18,21 @@ import * as React from "react"
 import { DatePickerButton } from './DatePickerButton';
 import { formatDateRange } from '@/lib/utils';
 
-
-
 export function DateFilter() {
-
   const isMobile = useIsMobile()
-  const [timeRange, setTimeRange] = React.useState(process.env.NEXT_PUBLIC_DEFAULT_TIMERANGE ?? "90d")
-
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Initialize from URL on mount
-  React.useEffect(() => {
-    const fromUrl = searchParams.get('timeRange')
-    if (fromUrl && fromUrl !== timeRange) {
-      setTimeRange(fromUrl)
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  // Get timeRange directly from URL
+  const timeRange = searchParams.get('timeRange') || process.env.NEXT_PUBLIC_DEFAULT_TIMERANGE || "90d";
 
-  React.useEffect(() => {
-    if (isMobile) {
-      setTimeRange("7d")
-    }
-  }, [isMobile]);
+  const setTimeRange = (value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('timeRange', value);
+    const url = `${pathname}?${params.toString()}`;
+    router.push(url);
+  };
 
   function setCustomRange(date: RDPDateRange | undefined) {
     if (!date?.from || !date?.to) return
@@ -51,13 +41,10 @@ export function DateFilter() {
   }
 
   React.useEffect(() => {
-    if (timeRange === '' || timeRange === 'custom' ) return
-    const params = new URLSearchParams(searchParams.toString())
-    params.set('timeRange', timeRange)
-    const url = `${pathname}?${params.toString()}`
-    router.push(url)
-  }, [pathname, router, searchParams, timeRange]);
-
+    if (isMobile && timeRange !== "7d") {
+      setTimeRange("7d");
+    }
+  }, [isMobile]);
 
   return (
     <>
