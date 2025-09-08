@@ -68,16 +68,17 @@ export function HorizentalChartBar({
                 tickLine={false}
                 tickMargin={10}
                 axisLine={false}
+                hide={chartMetaData?.hideY ?? false}
                 tickFormatter={(value) =>
                   chartConfig[value as keyof typeof chartConfig]?.label
                 }
               />
-              <XAxis dataKey={chartMetaData.dataKey} type="number" hide />
+              <XAxis dataKey={chartMetaData.dataKey} type="number" hide={chartMetaData?.hideX ?? true } />
               <ChartTooltip
                 cursor={false}
-                content={<ChartTooltipContent hideLabel />}
+                content={<ChartTooltipContent hideLabel={chartMetaData?.hideLabel ?? false } />}
               />
-              <Bar dataKey={chartMetaData.dataKey} layout="vertical" radius={5} />
+              <Bar dataKey={chartMetaData.dataKey} layout="horizental" radius={0} />
             </BarChart>
           </ChartContainer>
         </CardContent>
