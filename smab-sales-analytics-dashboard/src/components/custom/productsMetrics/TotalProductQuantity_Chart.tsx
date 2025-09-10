@@ -30,7 +30,7 @@ export function TotalProductQuantity_Chart() {
     async () => await getTotalProductsQuantity(timeRange)
   );
 
-  console.log('DATA', data);
+
 
 
   let dataRec =  data?.map((agt) => {
@@ -40,7 +40,7 @@ export function TotalProductQuantity_Chart() {
    data?.forEach(element => {
     chartConfig[element?.barcode] = {label: element?.name}
   });
-  console.log('ChartConfig', chartConfig);
+
 
 
 

@@ -390,6 +390,7 @@ export function SalesOrdersDataTable() {
     ['sales-orders',timeRange],
     async () => await getAllOrders(timeRange)
   );
+  console.log("[D]", d);
 
   let initialData = !(isLoading) ? d?.orders : Array.from({ length: 10 }, (_, i) => i).map((r) => skeletonRow )
 

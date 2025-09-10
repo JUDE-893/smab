@@ -1,19 +1,17 @@
 "use client";
 
-import { z } from "zod";
-import { type ColumnDef } from "@tanstack/react-table";
-import { useSortable } from "@dnd-kit/sortable";
+
+
 import { toast } from "sonner";
 import { format } from "date-fns";
 
 import { useIsMobile } from "@/hooks/use-mobile";
-import { getAllOrders } from '@/services/salesServices'
+import { getOrdersProducts } from '@/services/productServices'
 import { useCustomQuery } from '@/hooks/useCustomQuery'
 import { useTimeRange } from '@/hooks/useTimeRange'
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import {
@@ -57,159 +55,8 @@ import {
 } from "@tabler/icons-react";
 
 import { DataTable } from '@/components/shadcnkit/data-table'
-import { tableFilterConfig, exportDataConfig, skeletonRow } from "@/components/config/salesCompos/dataTableConfig"
-import { OrderDetailsDrawer } from '@/components/shadcnkit/order-details-drawer'
-import { DataTableColumnHeader } from "@/components/shadcnkit/data-table-column-header"
+import { tableFilterConfig, exportDataConfig, skeletonRow, columns } from "@/components/config/productsCompos/dataTableConfig"
 
-export const schema = z.object({
-    id: z.string,
-    orderNumber: z.number(),
-    orderDate: z.string(),
-    paymentMethod: z.string(),
-    salesAgent: z.string(),
-    customerName: z.string(),
-    prixttc: z.string(),
-    reviewer: z.string(),
-  })
-
-// Create a separate component for the drag handle
-function DragHandle({ id }: { id: number }) {
-  const { attributes, listeners } = useSortable({
-    id
-  })
-
-
-  return (
-    <Button
-      {...attributes}
-      {...listeners}
-      variant="ghost"
-      size="icon"
-      className="text-muted-foreground size-7 hover:bg-transparent"
-    >
-      <IconGripVertical className="text-muted-foreground size-3" />
-      <span className="sr-only">Drag to reorder</span>
-    </Button>
-  )
-}
-
-const columns: ColumnDef<z.infer<typeof schema>>[] = [
-  {
-    id: "drag",
-    header: () => null,
-    cell: ({ row }) => <DragHandle id={+(row.index)} />,
-  },
-  // order Number
-  {
-    accessorKey: "orderNumber",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Order Number" />
-    ),
-    cell: ({ row }) => {
-
-      return (
-        <>
-          {row?.original?.orderNumber
-            ? <OrderDetailsDrawer
-            order={row.original}
-            trigger={<p className="hover:underline">{row?.original?.orderNumber}</p>}
-          />
-          : "Unknown"
-        }
-        </>
-      )
-    },
-    enableHiding: false,
-  },
-  // order Date
-  {
-    accessorKey: "orderDate",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Order Date" />
-    ),
-    cell: ({ row }) => {
-      let OrderDate = row.original.orderDate;
-
-      if(row.original.orderDate?.props) return OrderDate
-
-      const date = new Date(OrderDate);
-
-      return (
-        <div className="w-32">
-          <p>
-            {date ?
-            format(date, "HH:mm dd/M/yy")
-            : "Unknown date"
-          }
-          </p>
-        </div>
-      )}
-  },
-  // salesAgent
-  {
-    accessorKey: "salesAgent",
-    header: () => <div className="">Sales Agent</div>,
-    cell: ({ row }) => (
-      <>
-      {row?.original?.salesAgent ? <Badge variant="outline" className="text-chart-3 px-1.5">
-      {row.original.salesAgent}
-      </Badge>
-      : "Unknown"}
-      </>
-    ),
-  },
-  // customerName
-  {
-    accessorKey: "customerName",
-    header: () => <div className="">Customer Name</div>,
-    cell: ({ row }) => (
-      <p>
-        {row.original.customerName}
-      </p>
-    ),
-  },
-  // prixttc
-  {
-    accessorKey: "prixttc",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Price" />
-    ),
-    cell: ({ row }) => {
-      if(row.original.prixttc?.props) return row.original.prixttc;
-
-      return (
-         <div className="w-32">
-          <p>
-            { row.original.prixttc ? `${row.original.prixttc} MAD` : "Unknown" }
-          </p>
-        </div>
-      )
-    },
-  },
-  // paymentMethod
-  {
-    accessorKey: "paymentMethod",
-    header: "Payment Method",
-    cell: ({ row }) => (
-      <>
-      {row?.original?.paymentMethod ? <Badge variant="outline" className="text-chart-1 px-1.5">
-      {row.original.paymentMethod}
-      </Badge>
-      : "Unknown"}
-      </>
-    ),
-  },
-
-]
-
-const chartData = [
-    { month: "January", desktop: 186, mobile: 80 },
-    { month: "February", desktop: 305, mobile: 200 },
-    { month: "March", desktop: 237, mobile: 120 },
-    { month: "April", desktop: 73, mobile: 190 },
-    { month: "May", desktop: 209, mobile: 130 },
-    { month: "June", desktop: 214, mobile: 140 },
-  ]
 
 const chartConfig = {
     desktop: {
@@ -382,16 +229,17 @@ function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
  }
 
 
-export function SalesOrdersDataTable() {
+export function ProductsDataTable() {
 
   const timeRange = useTimeRange();
 
-  const { data:d, isLoading } = useCustomQuery(
-    ['sales-orders',timeRange],
-    async () => await getAllOrders(timeRange)
-  );
+  const { data: d, isLoading, error } = useCustomQuery(
+  ['orders-products', timeRange],
+  async () => await getOrdersProducts(timeRange)
+);
+  console.log('[D]', d);
 
-  let initialData = !(isLoading) ? d?.orders : Array.from({ length: 10 }, (_, i) => i).map((r) => skeletonRow )
+  let initialData = !(isLoading) ? d : Array.from({ length: 10 }, (_, i) => i).map((r) => skeletonRow )
 
     return (
         <DataTable

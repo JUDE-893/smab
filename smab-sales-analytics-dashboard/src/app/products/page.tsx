@@ -7,7 +7,7 @@ import { TotalProductQuantity_Chart } from '@/components/custom/productsMetrics/
 import { TotalSalesChart } from '@/components/custom/productsMetrics/TotalSalesChart';
 import { OrdersGoalChart } from '@/components/custom/productsMetrics/OrdersGoalChart';
 import { SellGoalChart } from '@/components/custom/productsMetrics/SellGoalChart';
-import { SalesOrdersDataTable } from '@/components/custom/productsMetrics/SalesOrdersDataTable';
+import { ProductsDataTable } from '@/components/custom/productsMetrics/ProductsDataTable';
 import { DateFilter } from '@/components/shadcnkit/DateFilter';
 import { AvgConvertionRateGoal } from '@/components/custom/productsMetrics/AvgConvertionRateGoal2';
 import { IconChartBar } from "@tabler/icons-react"
@@ -49,7 +49,7 @@ export default function Page() {
               </div>
 
               <h1 className="text-3xl font-bold ml-8 mt-7" id="sales-orders">Sales orders details</h1>
-              <SalesOrdersDataTable />
+              <ProductsDataTable />
             </div>
           </div>
         </div>

@@ -28,7 +28,10 @@ type ChartMetaData = {
   title: string;
   description: string;
   dataKey: string;
-  nameKey?: string
+  nameKey?: string;
+  hideX: boolean;
+  hideY: boolean;
+  toolTipLabel: () => void
 };
 
 type MonoBarChartProps = {
@@ -99,6 +102,7 @@ export function MonoChartBar({
               axisLine={false}
               tickMargin={8}
               minTickGap={32}
+              hide={chartMetaData?.hideX ?? false}
               tickFormatter={(value) => {
                 const date = new Date(value)
                 return date.toLocaleDateString("en-US", {
@@ -107,18 +111,27 @@ export function MonoChartBar({
                 })
               }}
             />
+            <YAxis
+              dataKey={chartMetaData?.nameKey}
+              tickLine={true}
+              axisLine={true}
+              tickMargin={8}
+              minTickGap={32}
+              hide={chartMetaData?.hideY ?? true}
+              width={20}
+            />
             <ChartTooltip
               content={
                 <ChartTooltipContent
                   className="w-[150px]"
                   nameKey={chartMetaData?.nameKey}
-                  labelFormatter={(value) => {
+                  labelFormatter={chartMetaData?.toolTipLabel ?? ((value) => {
                     return new Date(value).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
                       year: "numeric",
                     })
-                  }}
+                  })}
                 />
               }
             />

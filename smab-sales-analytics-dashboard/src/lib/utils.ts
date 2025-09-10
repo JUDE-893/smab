@@ -27,3 +27,7 @@ export function formatDateRange(range: DateRange): string {
   return `${fromStr},${toStr}`;
 }
 
+// 30748.079999999998 -> 30748.08
+export function roundToTwo(num: number): number {
+  return Math.round((num + Number.EPSILON) * 100) / 100;
+}

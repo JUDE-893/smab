@@ -1,49 +1,30 @@
 "use client"
 
 import { MonoPieChart } from '@/components/charts/MonoPieChart';
-import { getAgentSalesAndOrders } from '@/services/salesServices'
+import { getOrdersProducts } from '@/services/productServices'
 import { useCustomQuery } from '@/hooks/useCustomQuery'
 import { useTimeRange } from '@/hooks/useTimeRange'
 
-const chartData = [
-  { source: "chrome", leads: 275, fill: "var(--color-chrome)" },
-  { source: "safari", leads: 200, fill: "var(--color-safari)" },
-  { source: "firefox", leads: 187, fill: "var(--color-firefox)" },
-  { source: "edge", leads: 173, fill: "var(--color-edge)" },
-  { source: "other", leads: 90, fill: "var(--color-other)" },
+let tenColor = [
+  `var(--chart-1)`,
+  `var(--chart-2)`,
+  `var(--chart-3)`,
+  `var(--chart-4)`,
+  `var(--chart-5)`,
+  `var(--chart-1-foreground)`,
+  `var(--chart-2-foreground)`,
+  `var(--chart-3-foreground)`,
+  `var(--chart-4-foreground)`,
+  `var(--chart-5-foreground)`
 ]
 
-const chartConfig = {
-  sales: {
-    label: "Sales",
-  },
-  sales_agent1: {
-    label: "Sales Agent 1",
-    color: "var(--chart-1)",
-  },
-  sales_agent2: {
-    label: "Sales Agent2",
-    color: "var(--chart-2)",
-  },
-  sales_agent3: {
-    label: "Sales Agent3",
-    color: "var(--chart-3)",
-  },
-  sales_agent4: {
-    label: "Sales Agent4",
-    color: "var(--chart-4)",
-  },
-  sales_agent5: {
-    label: "Sales Agent5",
-    color: "var(--chart-5)",
-  },
-}
+const chartConfig = {}
 
 const chartMetaData = {
-  title: "Sales Shares",
-  description: 'Percentage of total sales attributed to an agent',
-  dataKey:"sales",
-  nameKey:"agent"
+  title: "Best Sellers Products",
+  description: 'Top #10 Best selling products with heightest revenue',
+  dataKey:"revenue",
+  nameKey:"barcode"
 }
 
 export function SalesAgentSharesChart() {
@@ -51,16 +32,22 @@ export function SalesAgentSharesChart() {
   const timeRange = useTimeRange();
 
   const { data, isLoading, error } = useCustomQuery(
-    ['agent-sales-and-orders',timeRange],
-    async () => await getAgentSalesAndOrders(timeRange)
-  )
+    ['orders-products', timeRange],
+    async () => await getOrdersProducts(timeRange)
+  );
 
+  let dataRec = data?.slice(0, 10);
+  console.log("[dataRec]", dataRec);
+
+  dataRec?.forEach((element, i) => {
+   chartConfig[element?.barcode] = {label: `${element?.barcode} - ${element?.name}`, color: tenColor[i]}
+ });
 
   return (
     <MonoPieChart
       chartMetaData={{...chartMetaData, isLoading: isLoading, error}}
       chartConfig={chartConfig}
-      chartData={data?.agentSales}
+      chartData={dataRec}
      />
   )
 }
