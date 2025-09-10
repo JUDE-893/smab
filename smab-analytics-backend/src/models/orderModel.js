@@ -23,6 +23,11 @@ const productSchema = new mongoose.Schema({
   warehouse: {
     type: String,
     required: true
+  },
+  details: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'ProductDetails',
+    required: true
   }
 });
 
@@ -118,4 +123,3 @@ orderSchema.pre('save', function(next) {
 const Order = mongoose.model('Order', orderSchema);
 
 export default Order;
-
