@@ -13,8 +13,8 @@ export async function getOrdersProducts(dateRange) {
   return data.data
 }
 
-export async function getProductDetails(codebar, year) {
-  const { data } = await axiosClient.get(`product/analytics?codebar=${codebar}${year && `&&year=${year}`}`);
+export async function getProductDetails(barcode, year) {
+  const { data } = await axiosClient.get(`product/analytics?barcode=${barcode}${year ? `&year=${year}` : ''}`);
 
   return data.data
 }

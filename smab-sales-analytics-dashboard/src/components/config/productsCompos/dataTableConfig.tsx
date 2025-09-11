@@ -51,11 +51,11 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
       <DataTableColumnHeader column={column} title="Reference" />
     ),
     cell: ({ row }) => {
-
+      if (row?.original?.barcode?.props) return row?.original?.barcode
       return (
         <>
           {row?.original?.barcode
-            ? <ProductDetailsDrawer 
+            ? <ProductDetailsDrawer
                 barcode={row?.original?.barcode}
                 trigger={<p className="hover:underline">{row?.original?.barcode}</p>}
           />
