@@ -21,13 +21,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import {
-    DropdownMenu,
-    DropdownMenuTrigger,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
+
 import { Separator } from "@/components/ui/separator";
 import {
     Drawer,
@@ -47,10 +41,6 @@ import {
 } from "@/components/ui/chart";
 import { AreaChart, Area, CartesianGrid, XAxis } from "recharts";
 import {
-    IconGripVertical,
-    IconCircleCheckFilled,
-    IconLoader,
-    IconDotsVertical,
     IconTrendingUp,
 } from "@tabler/icons-react";
 

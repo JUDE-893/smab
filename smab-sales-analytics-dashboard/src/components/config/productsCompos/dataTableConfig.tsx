@@ -22,7 +22,7 @@ import {  IconTableImport, IconGripVertical
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton"
-import { OrderDetailsDrawer } from '@/components/shadcnkit/order-details-drawer'
+import { ProductDetailsDrawer } from '@/components/custom/productsMetrics/ProductDetailsDrawer';
 import { DataTableColumnHeader } from "@/components/shadcnkit/data-table-column-header"
 
 
@@ -55,9 +55,9 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
       return (
         <>
           {row?.original?.barcode
-            ? <OrderDetailsDrawer
-            order={row.original}
-            trigger={<p className="hover:underline">{row?.original?.barcode}</p>}
+            ? <ProductDetailsDrawer 
+                barcode={row?.original?.barcode}
+                trigger={<p className="hover:underline">{row?.original?.barcode}</p>}
           />
           : "Unknown"
         }
