@@ -12,8 +12,8 @@ let chartConfig = {
 }
 
 const chartMetaData = {
-  title: "Orders Contributions",
-  description: 'Percentage of total orders attributed to an agent',
+  title: "Total Product Quantity",
+  description: 'Overview of total quantity for product sold',
   dataKey:"totalQuantity",
   nameKey:"barcode",
   hideLabel: false,
@@ -38,17 +38,27 @@ export function TotalProductQuantity_Chart() {
   });
 
    data?.forEach(element => {
-    chartConfig[element?.barcode] = {label: element?.name}
+    chartConfig[element?.barcode] = {label: `${element?.barcode} - ${element?.name}`}
   });
 
 
 
 
+    // return (
+    //   <HorizentalBarChartPage
+    //     chartMetaData={{...chartMetaData, isLoading: isLoading, error}}
+    //     chartConfig={chartConfig}
+    //     chartData={dataRec}
+    //    />
+    // )
+
+    // In your TotalProductQuantity_Chart component:
     return (
       <HorizentalChartBar
-        chartMetaData={{...chartMetaData, isLoading: isLoading, error}}
+        chartMetaData={{...chartMetaData, isLoading, error}}
         chartConfig={chartConfig}
         chartData={dataRec}
-       />
+        itemsPerPage={12} // Optional: customize items per page
+      />
     )
   }
