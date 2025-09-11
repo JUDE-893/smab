@@ -1,9 +1,9 @@
 
 import { SiteHeader } from "@/components/shadcnkit/site-header"
 import { TooltipDoc } from "@/components/shadcnkit/TooltipDoc"
-import { SalesAgentSharesChart } from '@/components/custom/productsMetrics/SalesAgentSharesChart';
+import { TopTenProductRevenue } from '@/components/custom/productsMetrics/TopTenProductRevenue';
 import { TotalProductQuantityChart } from '@/components/custom/productsMetrics/TotalProductQuantityChart';
-import { TotalProductQuantity_Chart } from '@/components/custom/productsMetrics/TotalProductQuantity_Chart';
+import { TotalProductRevenueChart } from '@/components/custom/productsMetrics/TotalProductRevenueChart';
 import { TotalSalesChart } from '@/components/custom/productsMetrics/TotalSalesChart';
 import { OrdersGoalChart } from '@/components/custom/productsMetrics/OrdersGoalChart';
 import { SellGoalChart } from '@/components/custom/productsMetrics/SellGoalChart';
@@ -42,10 +42,11 @@ export default function Page() {
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-6">
-                <TotalSalesChart />
+              <div className="lg:col-span-2">
                 <TotalProductQuantityChart />
-                <SalesAgentSharesChart />
-                <TotalProductQuantity_Chart />
+              </div>
+                <TopTenProductRevenue />
+                <TotalProductRevenueChart />
               </div>
 
               <h1 className="text-3xl font-bold ml-8 mt-7" id="sales-orders">Sales orders details</h1>

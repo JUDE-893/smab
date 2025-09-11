@@ -51,7 +51,6 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
       <DataTableColumnHeader column={column} title="Reference" />
     ),
     cell: ({ row }) => {
-      console.log("[ROW]", row);
 
       return (
         <>
@@ -111,9 +110,9 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
   // order_frequency
   {
     accessorKey: "order_frequency",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Order Frequency" />,
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Order Frequency - FMCG" />,
     cell: ({ row }) => (
-      <p className='ml-10'>
+      <p className='ml-20'>
         {row.original.order_frequency}
       </p>
     ),

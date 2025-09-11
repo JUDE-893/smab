@@ -79,11 +79,6 @@ export function HorizentalChartBar({
         <CardTitle>{chartMetaData.title}</CardTitle>
         <CardDescription>
           {chartMetaData.description}
-          {sortedData.length > itemsPerPage && (
-            <span className="block mt-1 text-xs text-muted-foreground">
-              Showing {startIndex + 1}-{Math.min(endIndex, sortedData.length)} of {sortedData.length} items
-            </span>
-          )}
         </CardDescription>
       </CardHeader>
       
@@ -144,9 +139,11 @@ export function HorizentalChartBar({
                   Previous
                 </Button>
                 
-                <span className="text-sm text-muted-foreground">
-                  Page {currentPage} of {totalPages}
-                </span>
+                {sortedData.length > itemsPerPage && (
+                  <span className="block mt-1 text-xs text-muted-foreground">
+                    Showing {startIndex + 1}-{Math.min(endIndex, sortedData.length)} of {sortedData.length} items
+                  </span>
+                )}
                 
                 <Button
                   variant="outline"

@@ -35,7 +35,7 @@ export function TotalProductQuantityChart() {
     async () => await getOrdersProducts(timeRange)
   );
 
-    console.log("[DATA]", data);
+    
 
 
     return (
@@ -43,6 +43,7 @@ export function TotalProductQuantityChart() {
         chartMetaData={{...chartMetaData, isLoading: isLoading, error}}
         chartConfig={chartConfig}
         chartData={data}
+        className='lg:px-[4%] lg:py-[3%]'
        />
     )
   }

@@ -49,7 +49,6 @@ export function HeaderMetrics() {
     )
 
     if (isLoading) return (<SectionCardsSkeleton />)
-    console.log("error", error);
 
     return (
         <SectionCards metrics={data} error={error} />

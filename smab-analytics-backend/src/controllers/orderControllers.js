@@ -146,7 +146,7 @@ export const createOrUpdateOrder = errorCatchingLayer(async (req, res, next) => 
     const paymentMethod = lead?.typedepaiement?.label ?? clientData?.typedepaiement?.label ?? null;
     const customerName = lead?.customer?.label ?? clientData?.customer?.label ?? null;
 
-    console.log("[client fields]", { prixttc, paymentMethod, customerName });
+ 
 
     const order = await insertOrUpdateOrder({ ...orderData, prixttc, paymentMethod, customerName });
 

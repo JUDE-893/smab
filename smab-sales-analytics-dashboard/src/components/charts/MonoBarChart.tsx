@@ -37,13 +37,15 @@ type ChartMetaData = {
 type MonoBarChartProps = {
   chartConfig: ChartConfig;
   chartMetaData: ChartMetaData;
-  chartData: unknown[]
+  chartData: unknown[];
+  className: string;
 };
 
 export function MonoChartBar({
   chartConfig,
   chartMetaData,
-  chartData
+  chartData,
+  className
 }: MonoBarChartProps) {
 
   if (chartMetaData?.isLoading) return <LargeCardSkeleton />
@@ -54,7 +56,7 @@ export function MonoChartBar({
     React.useState<keyof typeof chartConfig>(chartKeys?.[0] ?? 'default')
 
   return (
-    <Card className="py-0">
+    <Card className={"py-0 " + className}>
       <CardHeader className={`flex flex-col items-stretch !p-0 sm:flex-row h-20 ${chartKeys?.length > 1 ? "border-b" : ""}`}>
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 pt-4 pb-3 sm:!py-0">
           <CardTitle>{chartMetaData?.title}</CardTitle>

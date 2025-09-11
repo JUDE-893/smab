@@ -1,37 +1,34 @@
 "use client"
 
 import { HorizentalChartBar } from '@/components/charts/HorizentalBarChart';
-import { getTotalProductsQuantity } from '@/services/productServices'
+import { getOrdersProducts } from '@/services/productServices'
 import { useCustomQuery } from '@/hooks/useCustomQuery'
 import { useTimeRange } from '@/hooks/useTimeRange'
 
 let chartConfig = {
-  totalQuantity: {
-    label: "totalQuantity",
+  revenue: {
+    label: "Revenue",
   }
 }
 
 const chartMetaData = {
-  title: "Total Product Quantity",
-  description: 'Overview of total quantity for product sold',
-  dataKey:"totalQuantity",
+  title: "Total Product Revenue",
+  description: 'Overview of total revenue for product sold',
+  dataKey:"revenue",
   nameKey:"barcode",
   hideLabel: false,
   hideX: true,
   hideY: true,
 }
 
-export function TotalProductQuantity_Chart() {
+export function TotalProductRevenueChart() {
 
   const timeRange = useTimeRange();
 
   const { data, isLoading, error } = useCustomQuery(
-    ['products-total-quantity', timeRange],
-    async () => await getTotalProductsQuantity(timeRange)
+    ['orders-products', timeRange],
+    async () => await getOrdersProducts(timeRange)
   );
-
-
-
 
   let dataRec =  data?.map((agt) => {
     return {...agt, fill: `var(--chart-2)`}
@@ -41,16 +38,6 @@ export function TotalProductQuantity_Chart() {
     chartConfig[element?.barcode] = {label: `${element?.barcode} - ${element?.name}`}
   });
 
-
-
-
-    // return (
-    //   <HorizentalBarChartPage
-    //     chartMetaData={{...chartMetaData, isLoading: isLoading, error}}
-    //     chartConfig={chartConfig}
-    //     chartData={dataRec}
-    //    />
-    // )
 
     // In your TotalProductQuantity_Chart component:
     return (

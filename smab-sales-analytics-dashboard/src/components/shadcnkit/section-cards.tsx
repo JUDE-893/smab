@@ -25,7 +25,6 @@ type SectionCardsProps = {
 };
 
 export function SectionCards({metrics, error}: SectionCardsProps) {
-  console.log("errpr", error);
 
   let array = metrics ?? Array.from({ length: 4 }, (_, i) => i);
   return (

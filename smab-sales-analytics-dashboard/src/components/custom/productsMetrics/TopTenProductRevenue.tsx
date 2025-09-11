@@ -27,7 +27,7 @@ const chartMetaData = {
   nameKey:"barcode"
 }
 
-export function SalesAgentSharesChart() {
+export function TopTenProductRevenue() {
 
   const timeRange = useTimeRange();
 
@@ -37,10 +37,10 @@ export function SalesAgentSharesChart() {
   );
 
   let dataRec = data?.slice(0, 10);
-  console.log("[dataRec]", dataRec);
+
 
   dataRec?.forEach((element, i) => {
-   chartConfig[element?.barcode] = {label: `${element?.barcode} - ${element?.name}`, color: tenColor[i]}
+   chartConfig[element?.barcode] = {label: `#${i+1} : ${element?.barcode} - ${element?.name}`, color: tenColor[i]}
  });
 
   return (

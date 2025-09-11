@@ -237,7 +237,6 @@ export function ProductsDataTable() {
   ['orders-products', timeRange],
   async () => await getOrdersProducts(timeRange)
 );
-  console.log('[D]', d);
 
   let initialData = !(isLoading) ? d : Array.from({ length: 10 }, (_, i) => i).map((r) => skeletonRow )
 

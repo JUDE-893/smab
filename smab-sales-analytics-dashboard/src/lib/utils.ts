@@ -31,3 +31,36 @@ export function formatDateRange(range: DateRange): string {
 export function roundToTwo(num: number): number {
   return Math.round((num + Number.EPSILON) * 100) / 100;
 }
+
+/**
+ * Sorts an array of objects by a given property name.
+ * @param {Array} data - The array to sort.
+ * @param {string} prp - The property name to sort by.
+ * @param {string} [direction='desc'] - Sort direction: 'asc' or 'desc'.
+ * @returns {Array} - A new sorted array.
+ * @throws {Error} - If property name is invalid or direction is invalid.
+ */
+export function sortArrayByPrp(data, prp, direction = 'desc') {
+  if (!Array.isArray(data)) {
+    throw new Error("First argument must be an array");
+  }
+  if (typeof prp !== 'string' || prp.trim() === '') {
+    throw new Error("Property name must be a non-empty string");
+  }
+  if (!['asc', 'desc'].includes(direction.toLowerCase())) {
+    throw new Error("Direction must be either 'asc' or 'desc'");
+  }
+  if (data.length > 0 && !(prp in data[0])) {
+    throw new Error(`Property "${prp}" does not exist in array items`);
+  }
+
+  return [...data].sort((a, b) => {
+    const valA = a[prp];
+    const valB = b[prp];
+
+    if (valA < valB) return direction === 'asc' ? -1 : 1;
+    if (valA > valB) return direction === 'asc' ? 1 : -1;
+    return 0;
+  });
+}
+
