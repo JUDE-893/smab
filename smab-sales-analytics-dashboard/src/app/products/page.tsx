@@ -13,6 +13,8 @@ import { AvgConvertionRateGoal } from '@/components/custom/productsMetrics/AvgCo
 import { IconChartBar } from "@tabler/icons-react"
 import { Button } from "@/components/ui/button"
 import { HeaderMetrics } from "@/components/custom/productsMetrics/HeaderMetrics";
+import { PageToolBar } from "@/components/shadcnkit/PageToolBar";
+
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -30,16 +32,7 @@ export default function Page() {
 
               <h1 className="text-5xl font-bold ml-8 mt-12 mb-4">Sales Analytics</h1>
 
-              <div className="flex items-center justify-between px-4 w-full lg:px-6 @container/card">
-                <DateFilter />
-                <div className="flex items-center gap-2 mr-2">
-                  <Button variant="outline" size="sm" >
-                  <IconChartBar />
-                  <span className="hidden lg:inline">Generate Report</span>
-                  </Button>
-                  <TooltipDoc text={filterDocTltp}/>
-                </div>
-              </div>
+                <PageToolBar />
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-6">
               <div className="lg:col-span-2">
