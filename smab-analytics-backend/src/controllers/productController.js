@@ -270,6 +270,9 @@ export const getProductAnalytics = errorCatchingLayer(async (req, res, next) => 
   // Initialize FMCG data structure (will use a map for daily tracking)
   const fmcgMap = new Map();
 
+  // total sales
+  let totalSalesValue = 0;
+
   // Process each order
   orders.forEach(order => {
     // Find the product in this order
@@ -279,6 +282,8 @@ export const getProductAnalytics = errorCatchingLayer(async (req, res, next) => 
     const quantity = productInOrder.quantity;
     const revenue = productDetail.price_ttc * quantity;
     
+    totalSalesValue += revenue; 
+
     // Update monthly data
     const orderMonth = new Date(order.orderDate).getMonth();
     monthlyData[orderMonth].quantity += quantity;
@@ -306,7 +311,8 @@ export const getProductAnalytics = errorCatchingLayer(async (req, res, next) => 
     data: {
       barcode,
       name: productName,
-      price_ttc: productDetail.prix_ttc,
+      price_ttc: productDetail.price_ttc,
+      totalSalesValue,
       productActivity: monthlyData,
       fmcg: fmcgData
     }

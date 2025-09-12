@@ -220,3 +220,23 @@
   50% { background-color: rgba(255, 230, 0, 0.3); }
   100% { background-color: transparent; }
 }
+
+
+
+
+/* HEAT MAP */
+.heatmap-grid {
+  display: grid;
+  grid-template-columns: repeat(53, 1fr);
+  grid-template-rows: repeat(7, 1fr);
+  gap: 2px;
+  width: 100%;
+  height: 200px;
+}
+
+.heatmap-cell {
+  width: 100%;
+  height: 100%;
+  border-radius: 2px;
+  transition: background-color 0.2s ease;
+}

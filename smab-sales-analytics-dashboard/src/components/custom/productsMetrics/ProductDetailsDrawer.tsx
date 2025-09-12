@@ -24,9 +24,11 @@ export function ProductDetailsDrawer({ barcode, trigger }: ProductDetailsDrawerP
         <DrawerTrigger asChild onClick={() => setIsOpen(true)}>
           {trigger || <Button variant="outline">View Order Details</Button>}
         </DrawerTrigger>
-        <DrawerContent>
-          {isOpen && <ProductDetails barcode={barcode} />}
-        </DrawerContent>
+        <DrawerContent className="max-h-[95vh]">
+          <div className="overflow-y-auto">
+            {isOpen && <ProductDetails barcode={barcode} />}
+          </div>
+      </DrawerContent>
       </Drawer>
   )
 }
