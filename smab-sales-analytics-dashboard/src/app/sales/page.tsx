@@ -28,7 +28,7 @@ export default function Page() {
 
   return (
       <>
-        <PageDescriptions />
+        <PageDescriptions pageTitle='Sales Order Analytics Report' />
         <SiteHeader />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">

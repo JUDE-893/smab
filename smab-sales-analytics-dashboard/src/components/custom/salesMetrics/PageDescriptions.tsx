@@ -6,7 +6,7 @@ import { format } from 'date-fns'
 
 import favicon from '@/favicon.ico';
 
-export function PageDescriptions() {
+export function PageDescriptions({pageTitle}) {
 
   const { generatePDFMode } = useQueryParams();
   const dates = useTimeRange().split(",");
@@ -25,7 +25,7 @@ export function PageDescriptions() {
       alt="Logo"
     />
     <h1 className="border-l-4 border-white pl-5 text-white text-2xl font-bold">
-      Sales Order Analytics Report
+      {pageTitle}
     </h1>
   </div>
 

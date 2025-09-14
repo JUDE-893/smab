@@ -14,7 +14,7 @@ import { IconChartBar } from "@tabler/icons-react"
 import { Button } from "@/components/ui/button"
 import { HeaderMetrics } from "@/components/custom/productsMetrics/HeaderMetrics";
 import { PageToolBar } from "@/components/shadcnkit/PageToolBar";
-
+import { PageDescriptions } from '@/components/custom/salesMetrics/PageDescriptions';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -24,6 +24,7 @@ const filterDocTltp = `Note: any search, sort or filter operation are only apply
 export default function Page() {
   return (
       <>
+        <PageDescriptions pageTitle='Sales Products Analytics Report' />
         <SiteHeader />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">

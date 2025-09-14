@@ -28,7 +28,9 @@ type ChartMetaData = {
   title: string;
   description: string;
   dataKey: string;
-  nameKey?: string
+  nameKey?: string;
+  cx?: number
+  cy?: number
 };
 
 type PieChartInteractiveProps = {
@@ -69,8 +71,8 @@ export function MonoPieChart({
                   data={chartData}
                   dataKey={chartMetaData.dataKey}
                   nameKey={chartMetaData.nameKey}
-                  cx="50%"
-                  cy="48%"
+                  cx={`${chartMetaData?.cx ?? 50}%`}
+                  cy={`${chartMetaData?.cy ?? 60}%`}
                   innerRadius={70}
                   outerRadius={90}
                   strokeWidth={2}

@@ -43,7 +43,8 @@ const chartMetaData = {
   title: "Sales Shares",
   description: 'Percentage of total sales attributed to an agent',
   dataKey:"sales",
-  nameKey:"agent"
+  nameKey:"agent",
+  cy:50
 }
 
 export function SalesAgentSharesChart() {
