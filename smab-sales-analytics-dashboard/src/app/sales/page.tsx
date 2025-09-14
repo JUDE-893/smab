@@ -11,6 +11,7 @@ import { SellGoalChart } from '@/components/custom/salesMetrics/SellGoalChart';
 import { SalesOrdersDataTable } from '@/components/custom/salesMetrics/SalesOrdersDataTable';
 import { DateFilter } from '@/components/shadcnkit/DateFilter';
 import { AvgConvertionRateGoal } from '@/components/custom/salesMetrics/AvgConvertionRateGoal2';
+import { PageDescriptions } from '@/components/custom/salesMetrics/PageDescriptions';
 import { IconChartBar } from "@tabler/icons-react"
 import { Button } from "@/components/ui/button"
 import { HeaderMetrics } from "@/components/custom/salesMetrics/HeaderMetrics";
@@ -27,6 +28,7 @@ export default function Page() {
 
   return (
       <>
+        <PageDescriptions />
         <SiteHeader />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
@@ -35,9 +37,7 @@ export default function Page() {
               <h1 className="text-5xl font-bold ml-8 mt-12 mb-4">Sales Analytics</h1>
               <PageToolBar />
 
-              <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card
-                grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs
-                lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-3">
+              <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow- lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-3 mb-6 mt-4">
                <OrdersGoalChart />
                <SellGoalChart />
                <AvgConvertionRateGoal />

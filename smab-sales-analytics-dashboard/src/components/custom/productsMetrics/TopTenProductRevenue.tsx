@@ -24,7 +24,8 @@ const chartMetaData = {
   title: "Best Sellers Products",
   description: 'Top #10 Best selling products with heightest revenue',
   dataKey:"revenue",
-  nameKey:"barcode"
+  nameKey:"barcode",
+  pieLabel: false
 }
 
 export function TopTenProductRevenue() {

@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react"
 import { TrendingUp } from "lucide-react"
-import { Bar, BarChart, XAxis, YAxis } from "recharts"
+import { Bar, BarChart, XAxis, YAxis, LabelList } from "recharts"
 import {
   Card,
   CardContent,
@@ -32,6 +32,8 @@ type ChartMetaData = {
   hideLabel?: boolean;
   hideX?: boolean;
   hideY?: boolean;
+  innerRightLabelFormatter?: () => void;
+  innerLeftLabelFormatter?: () => void;
 };
 
 type HorizentalChartBarProps = {
@@ -52,7 +54,7 @@ export function HorizentalChartBar({
   // Sort data by dataKey in descending order (biggest first)
   const sortedData = useMemo(() => {
     if (!chartData || !chartMetaData.dataKey) return []
-    return [...chartData].sort((a: any, b: any) => 
+    return [...chartData].sort((a: any, b: any) =>
       b[chartMetaData.dataKey] - a[chartMetaData.dataKey]
     )
   }, [chartData, chartMetaData.dataKey])
@@ -74,27 +76,27 @@ export function HorizentalChartBar({
   if (chartMetaData?.isLoading) return <LargeCardSkeleton />
 
   return (
-    <Card className="@container/card">
+    <Card className="@container/card flex">
       <CardHeader>
         <CardTitle>{chartMetaData.title}</CardTitle>
         <CardDescription>
           {chartMetaData.description}
         </CardDescription>
       </CardHeader>
-      
+
       {!chartMetaData?.error ? (
         <>
           <CardContent>
-            <ChartContainer 
-              config={chartConfig} 
-              className="flex flex-row aspect-auto h-[340px] w-full"
+            <ChartContainer
+              config={chartConfig}
+              className="flex flex-row aspect-auto h-[260px] w-full"
             >
               <BarChart
                 accessibilityLayer
                 data={paginatedData}
                 layout="vertical"
                 margin={{ left: 0 }}
-                maxBarSize={60}
+
               >
                 <YAxis
                   dataKey={chartMetaData.nameKey}
@@ -107,24 +109,43 @@ export function HorizentalChartBar({
                     chartConfig[value as keyof typeof chartConfig]?.label || value
                   }
                 />
-                <XAxis 
-                  dataKey={chartMetaData.dataKey} 
-                  type="number" 
-                  hide={chartMetaData?.hideX ?? true} 
+                <XAxis
+                  dataKey={chartMetaData.dataKey}
+                  type="number"
+                  hide={chartMetaData?.hideX ?? true}
                 />
                 <ChartTooltip
                   cursor={false}
                   content={<ChartTooltipContent hideLabel={chartMetaData?.hideLabel ?? false} />}
                 />
-                <Bar 
-                  dataKey={chartMetaData.dataKey} 
-                  layout="vertical" 
-                  radius={0} 
-                />
+                <Bar
+                  dataKey={chartMetaData.dataKey}
+                  layout="vertical"
+                  radius={0}
+                >
+
+                   <LabelList
+                    dataKey={chartMetaData.nameKey}
+                    position="insideLeft"
+                    offset={8}
+                    className="fill-(--color-label)"
+                    fontSize={12}
+                    formatter={chartMetaData?.innerLeftLabelFormatter ?? ((value) => null)}
+                  />
+                  <LabelList
+                    dataKey={chartMetaData.dataKey}
+                    position="insideRight"
+                    offset={8}
+                    className="fill-(--color-label)"
+                    fontSize={12}
+                    formatter={chartMetaData?.innerRightLabelFormatter ?? ((value) => value)}
+                  />
+
+                </Bar>
               </BarChart>
             </ChartContainer>
           </CardContent>
-          
+
           <CardFooter className="flex-col items-start gap-2 text-sm">
             {/* Pagination controls */}
             {sortedData.length > itemsPerPage && (
@@ -138,13 +159,13 @@ export function HorizentalChartBar({
                   <ChevronLeft className="h-4 w-4 mr-1" />
                   Previous
                 </Button>
-                
+
                 {sortedData.length > itemsPerPage && (
                   <span className="block mt-1 text-xs text-muted-foreground">
                     Showing {startIndex + 1}-{Math.min(endIndex, sortedData.length)} of {sortedData.length} items
                   </span>
                 )}
-                
+
                 <Button
                   variant="outline"
                   size="sm"
@@ -156,7 +177,7 @@ export function HorizentalChartBar({
                 </Button>
               </div>
             )}
-            
+
             <div className="flex gap-2 leading-none font-medium">
               Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
             </div>

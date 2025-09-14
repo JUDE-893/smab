@@ -12,8 +12,8 @@ const filterDocTltp = `Note: any search, sort or filter operation are only apply
 export function PageToolBar() {
 
     const { generatePDFMode } = useQueryParams();
-  
-    if (generatePDFMode) return <div className="h-4"></div>
+
+    if (generatePDFMode) return <></>
 
     return (
         <div className="flex items-center justify-between px-4 w-full lg:px-6 @container/card">

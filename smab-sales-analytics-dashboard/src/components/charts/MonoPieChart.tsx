@@ -58,7 +58,7 @@ export function MonoPieChart({
           <CardContent className="flex-1 pb-0">
             <ChartContainer
               config={chartConfig}
-              className="mx-auto w-full max-h-[250px]"
+              className="mx-auto w-full sm:max-h-[250px] md:max-h-[220px]"
             >
               <PieChart>
                 <ChartTooltip
@@ -70,12 +70,12 @@ export function MonoPieChart({
                   dataKey={chartMetaData.dataKey}
                   nameKey={chartMetaData.nameKey}
                   cx="50%"
-                  cy="60%"
+                  cy="48%"
                   innerRadius={70}
                   outerRadius={90}
                   strokeWidth={2}
                   paddingAngle={5}
-
+                  label={chartMetaData.pieLabel ?? true}
                   activeShape={({
                     outerRadius = 0,
                     ...props

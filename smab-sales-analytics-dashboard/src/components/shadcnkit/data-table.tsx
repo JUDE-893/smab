@@ -63,6 +63,8 @@ import { Tabs, TabsContent } from "@/components/ui/tabs"
 import { DataTableToolbar } from './data-table-toolbar'
 import { DataTableViewOptions } from "./data-table-view-options"
 import { DataExportButtons } from './DataExportButtons'
+import { useQueryParams } from "@/hooks/useQueryParams";
+
 
 function DraggableRow({ row }) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
@@ -108,6 +110,12 @@ export function DataTable({ initialData, columns, tableFilterConfig, exportDataC
     useSensor(TouchSensor, {}),
     useSensor(KeyboardSensor, {})
   )
+  const { generatePDFMode } = useQueryParams();
+
+  // Conditionally set pageSize to show all rows when in PDF mode
+  const effectivePagination = generatePDFMode
+    ? { ...pagination, pageSize: initialData.length }
+    : pagination;
 
   // update the data state with the fetched data
   React.useEffect(() => {
@@ -127,7 +135,7 @@ export function DataTable({ initialData, columns, tableFilterConfig, exportDataC
       columnVisibility,
       rowSelection,
       columnFilters,
-      pagination,
+      pagination: effectivePagination,
     },
     getRowId: (row) => row.orderNumber,
     enableRowSelection: true,
@@ -161,13 +169,13 @@ export function DataTable({ initialData, columns, tableFilterConfig, exportDataC
       defaultValue="outline"
       className="w-full flex-col justify-start gap-6"
     >
-      <div className="flex items-center justify-between px-4 lg:px-6">
+      {!generatePDFMode && <div className="flex items-center justify-between px-4 lg:px-6">
         <DataTableToolbar table={table} filterConfig={tableFilterConfig} />
         <div className="flex items-center gap-2">
           <DataTableViewOptions table={table} />
           <DataExportButtons data={initialData} exportDataConfig={exportDataConfig} />
         </div>
-      </div>
+      </div>}
       <TabsContent
         value="outline"
         className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6 "
@@ -223,7 +231,7 @@ export function DataTable({ initialData, columns, tableFilterConfig, exportDataC
             </Table>
           </DndContext>
         </div>
-        <div className="flex items-center justify-between px-4">
+        {!generatePDFMode && <div className="flex items-center justify-between px-4">
           <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
             {table.getFilteredSelectedRowModel().rows.length} of{" "}
             {table.getFilteredRowModel().rows.length} row(s) selected.
@@ -299,7 +307,7 @@ export function DataTable({ initialData, columns, tableFilterConfig, exportDataC
               </Button>
             </div>
           </div>
-        </div>
+        </div>}
       </TabsContent>
       <TabsContent
         value="past-performance"

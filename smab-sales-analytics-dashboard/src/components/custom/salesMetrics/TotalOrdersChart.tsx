@@ -4,7 +4,7 @@ import { MonoChartBar } from '@/components/charts/MonoBarChart';
 import { getOrderMetricsPerDay } from '@/services/salesServices'
 import { useCustomQuery } from '@/hooks/useCustomQuery'
 import { useTimeRange } from '@/hooks/useTimeRange'
-
+import { useQueryParams } from "@/hooks/useQueryParams"
 
 const chartData = [
     { date: "2024-04-01", desktop: 222, mobile: 150 },
@@ -118,6 +118,9 @@ export function TotalOrdersChart() {
 
   const timeRange = useTimeRange();
 
+  const { generatePDFMode } = useQueryParams();
+
+  chartMetaData.hideY = generatePDFMode ? false : true;
 
   const { data, isLoading, error } = useCustomQuery(
     ['total-orders-metrics-per-day',timeRange],

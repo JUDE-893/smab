@@ -4,6 +4,9 @@ import { ChartAreaInteractive } from "@/components/charts/chart-area-interactive
 import { getSalesMetricsPerDay } from '@/services/salesServices'
 import { useCustomQuery } from '@/hooks/useCustomQuery'
 import { useTimeRange } from '@/hooks/useTimeRange'
+import { useQueryParams } from "@/hooks/useQueryParams"
+import { exportDataConfig } from "@/components/config/salesCompos/areaChartConfig"
+
 
 const chartData = [
     { date: "2024-04-01", sales: 222 },
@@ -110,22 +113,28 @@ const chartConfig = {
 
 }
 
-const chartMetaData = {
+let chartMetaData = {
     title : "Total Sales",
-    description: 'metrics of total sales values',
-    dataKey: "date"
+    description: 'metrics of totale sales values',
+    dataKey: "date",
+    exportDataConfig
   }
 
 export function TotalSalesChart() {
 
   const timeRange = useTimeRange();
 
+  const { generatePDFMode } = useQueryParams();
+
+   if (generatePDFMode) {
+     chartMetaData.hideY = false;
+     chartMetaData.exportDataConfig = null;
+   };
 
   const { data, isLoading, error } = useCustomQuery(
     ['total-sales-metrics-per-day',timeRange],
     async () => await getSalesMetricsPerDay(timeRange)
   )
-
 
     return (
       <ChartAreaInteractive

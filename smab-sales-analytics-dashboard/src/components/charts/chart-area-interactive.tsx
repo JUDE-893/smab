@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
 
 import {
   Card,
@@ -29,7 +29,6 @@ import {
   ToggleGroupItem,
 } from "@/components/ui/toggle-group"
 import { DataExportButtons } from "@/components/shadcnkit/DataExportButtons"
-import { exportDataConfig } from "@/components/config/salesCompos/areaChartConfig"
 import { LargeCardSkeleton } from '@/components/shadcnkit/large-card-skeleton'
 import { DisplayErrorMessage } from '@/components/shadcnkit/error-message-display'
 
@@ -38,7 +37,10 @@ type ChartMetaData = {
   title: string;
   description: string;
   dataKey: string;
-  nameKey?: string
+  nameKey?: string;
+  hideX?: boolean,
+  hideY?: boolean,
+  exportDataConfig: Any
 };
 
 type PieChartInteractiveProps = {
@@ -68,9 +70,9 @@ export function ChartAreaInteractive({
           </span>
           <span className="@[540px]/card:hidden">Last 3 months</span>
         </CardDescription>
-        <CardAction>
-          <DataExportButtons data={chartData} exportDataConfig={exportDataConfig} />
-        </CardAction>
+        {chartMetaData?.exportDataConfig && <CardAction>
+          <DataExportButtons data={chartData} exportDataConfig={chartMetaData?.exportDataConfig} />
+        </CardAction>}
       </CardHeader>
       {!chartMetaData?.error
         ? <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
@@ -105,6 +107,7 @@ export function ChartAreaInteractive({
               axisLine={false}
               tickMargin={8}
               minTickGap={32}
+              hide={chartMetaData?.hideX ?? false}
               tickFormatter={(value) => {
                 const date = new Date(value)
                 return date.toLocaleDateString("en-US", {
@@ -112,6 +115,14 @@ export function ChartAreaInteractive({
                   day: "numeric",
                 })
               }}
+            />
+            <YAxis
+              dataKey={chartMetaData?.nameKey}
+              tickLine={true}
+              axisLine={true}
+              tickMargin={8}
+              minTickGap={32}
+              hide={chartMetaData?.hideY ?? true}
             />
             <ChartTooltip
               cursor={false}

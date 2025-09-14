@@ -391,7 +391,7 @@ export function SalesOrdersDataTable() {
     async () => await getAllOrders(timeRange)
   );
 
-
+  // if loading create 10 table records where each cell is a skeleoton
   let initialData = !(isLoading) ? d?.orders : Array.from({ length: 10 }, (_, i) => i).map((r) => skeletonRow )
 
     return (
@@ -400,6 +400,7 @@ export function SalesOrdersDataTable() {
             columns={columns}
             tableFilterConfig={tableFilterConfig}
             exportDataConfig={exportDataConfig}
+            key={initialData?.length}
         />
     )
 }

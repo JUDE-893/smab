@@ -1,9 +1,10 @@
 "use client"
 
 import { HorizentalChartBar } from '@/components/charts/HorizentalBarChart';
-import { getOrdersProducts } from '@/services/productServices'
-import { useCustomQuery } from '@/hooks/useCustomQuery'
-import { useTimeRange } from '@/hooks/useTimeRange'
+import { getOrdersProducts } from '@/services/productServices';
+import { useCustomQuery } from '@/hooks/useCustomQuery';
+import { useTimeRange } from '@/hooks/useTimeRange';
+import { formatPrice } from "@/lib/utils";
 
 let chartConfig = {
   revenue: {
@@ -19,6 +20,8 @@ const chartMetaData = {
   hideLabel: false,
   hideX: true,
   hideY: true,
+  innerLeftLabelFormatter: (value) => value,
+  innerRightLabelFormatter: (value) => formatPrice(value)
 }
 
 export function TotalProductRevenueChart() {

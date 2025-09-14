@@ -36,7 +36,7 @@ import {
 } from "@/components/ui/sidebar"
 import { Modal } from '@/components/shadcnkit/modal'
 import SearchBox from '@/components/shadcnkit/page-content-searchBox'
-
+import { useQueryParams } from "@/hooks/useQueryParams"
 
 const data = {
   user: {
@@ -175,6 +175,11 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+
+  const { generatePDFMode } = useQueryParams();
+
+  if (generatePDFMode) return <></>
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
