@@ -34,6 +34,7 @@ type ChartMetaData = {
   hideY?: boolean;
   innerRightLabelFormatter?: () => void;
   innerLeftLabelFormatter?: () => void;
+  YaWidth: number
 };
 
 type HorizentalChartBarProps = {
@@ -102,9 +103,10 @@ export function HorizentalChartBar({
                   dataKey={chartMetaData.nameKey}
                   type="category"
                   tickLine={false}
-                  tickMargin={10}
+                  tickMargin={5}
                   axisLine={false}
                   hide={chartMetaData?.hideY ?? false}
+                  width={chartMetaData?.YaWidth ?? 75}
                   tickFormatter={(value) =>
                     chartConfig[value as keyof typeof chartConfig]?.label || value
                   }

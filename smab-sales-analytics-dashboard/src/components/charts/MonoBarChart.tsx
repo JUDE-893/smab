@@ -31,7 +31,8 @@ type ChartMetaData = {
   nameKey?: string;
   hideX: boolean;
   hideY: boolean;
-  toolTipLabel: () => void
+  toolTipLabel: () => void;
+  YaWidth: number
 };
 
 type MonoBarChartProps = {
@@ -120,7 +121,7 @@ export function MonoChartBar({
               tickMargin={8}
               minTickGap={32}
               hide={chartMetaData?.hideY ?? true}
-              width={20}
+              width={chartMetaData?.YaWidth ?? 20}
             />
             <ChartTooltip
               content={
