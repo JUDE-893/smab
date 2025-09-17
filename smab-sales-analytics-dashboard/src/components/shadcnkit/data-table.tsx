@@ -65,6 +65,7 @@ import { DataTableViewOptions } from "./data-table-view-options"
 import { DataExportButtons } from './DataExportButtons'
 import { useQueryParams } from "@/hooks/useQueryParams";
 
+export const dynamic = 'force-dynamic'
 
 function DraggableRow({ row }) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({

@@ -1,0 +1,57 @@
+version: "3.9"
+
+services:
+  backend:
+    image: 89300/smab-analytics:backEnd
+    container_name: smab-analytics-backend
+    ports:
+    - "5002:5002"
+    restart: unless-stopped
+    env_file:
+      - ./smab-analytics-backend/.env
+    environment:
+      - MONGODB_HOST_SCHEME=mongodb://mongo
+      - MONGODB_PORT=27017
+      - MONGODB_AUTH_DB=admin
+      - MONGODB_USERNAME=admin
+      - MONGODB_PASSWORD=Of99xL!e-VmZt!eQ7@r€#2xL<Y]pZt$1_r!eQ$!e*Q7@?
+    depends_on:
+      - mongo
+    networks: [web]
+
+  dashboard:
+    image: 89300/smab-analytics:frontEnd
+    container_name: smab-sales-analytics-dashboard
+    ports:
+      - "3004:3004"
+    restart: unless-stopped
+    env_file:
+      - ./smab-sales-analytics-dashboard/.env
+    environment:
+      - NEXT_PUBLIC_BACKEND_API_BASE_URL=https://217.65.146.240/:5002/smab-analytics/api/
+    depends_on:
+      - backend
+    networks: [web]
+
+  mongo:
+    image: mongo:6
+    container_name: smab-mongo
+    ports:
+      - "37077:27017"
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=Of99xL!e-VmZt!eQ7@r€#2xL<Y]pZt$1_r!eQ$!e*Q7@?
+    networks: [web]
+
+
+volumes:
+  mongo_data:
+
+networks:
+  web:
+    driver: bridge
+
+                                                                                                     ~                               

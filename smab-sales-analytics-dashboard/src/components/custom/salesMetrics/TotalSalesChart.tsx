@@ -102,6 +102,8 @@ const chartData = [
     { date: "2024-06-30", sales: 446 },
   ]
 
+export const dynamic = 'force-dynamic'
+
 const chartConfig = {
   visitors : {
     label: "Sales",
@@ -119,6 +121,8 @@ let chartMetaData = {
     dataKey: "date",
     exportDataConfig
   }
+
+
 
 export function TotalSalesChart() {
 

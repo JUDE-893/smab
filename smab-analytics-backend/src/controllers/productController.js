@@ -1,11 +1,8 @@
 import { errorCatchingLayer } from '../utils/helpers.js';
 import Order from '../models/orderModel.js';
-import { ProductDetails } from '../models/productModel.js';
-import MetricsPlans from '../models/metricsPlanModel.js';
-import logger from '../utils/logger.js';
-import { getDateRange } from '../utils/helpers.js';
+import { ProductDetails } from '../models/ProductModel.js';
 import { format } from 'date-fns';
-// import { log } from 'winston';
+
 
 
 export const getProductsQuantity = errorCatchingLayer(async (req, res, next) => {

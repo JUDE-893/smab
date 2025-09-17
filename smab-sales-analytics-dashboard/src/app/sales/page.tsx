@@ -29,13 +29,17 @@ export default function Page() {
   return (
       <>
         <PageDescriptions pageTitle='Sales Order Analytics Report' />
-        <SiteHeader />
+        <SiteHeader pageTitle="Sales Metrics" />
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <HeaderMetrics />
               <h1 className="text-5xl font-bold ml-8 mt-12 mb-4">Sales Analytics</h1>
-              <PageToolBar />
+              <PageToolBar reportMetadate={{
+                  fileName: 'sales-activity-report',
+                  filePageWidth: 480,
+                  filePageHeight: 320
+                }} />
 
               <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow- lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-3 mb-6 mt-4">
                <OrdersGoalChart />

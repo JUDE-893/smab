@@ -1,5 +1,7 @@
 "use client"
 
+import { Suspense } from 'react'
+import Image from 'next/image';
 import * as React from "react"
 import {
   IconCamera,
@@ -40,14 +42,14 @@ import { useQueryParams } from "@/hooks/useQueryParams"
 
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
+    name: "John Deer",
+    email: "JD@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
   navMain: [
     {
       title: "Dashboard",
-      url: "/",
+      url: "/sales",
       icon: IconDashboard,
     },
     {
@@ -66,25 +68,25 @@ const data = {
       icon: IconShoppingCartBolt,
     },
     {
-      title: "Lifecycle",
-      url: "#",
-      icon: IconListDetails,
+      title: "Customers Activities",
+      url: "/customers",
+      icon: IconUsers,
     },
+    // {
+    //   title: "Lifecycle",
+    //   url: "#",
+    //   icon: IconListDetails,
+    // },
     // {
     //   title: "Analytics",
     //   url: "#",
     //   icon: IconChartBar,
     // },
-    {
-      title: "Projects",
-      url: "#",
-      icon: IconFolder,
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: IconUsers,
-    },
+    // {
+    //   title: "Projects",
+    //   url: "#",
+    //   icon: IconFolder,
+    // }
   ],
   navClouds: [
     {
@@ -156,26 +158,41 @@ const data = {
     },
   ],
   documents: [
-    {
-      name: "Data Library",
-      url: "#",
-      icon: IconDatabase,
-    },
+    // {
+    //   name: "Data Library",
+    //   url: "#",
+    //   icon: IconDatabase,
+    // },
     {
       name: "Reports",
       url: "#",
       icon: IconReport,
     },
-    {
-      name: "Word Assistant",
-      url: "#",
-      icon: IconFileWord,
-    },
+    // {
+    //   name: "Word Assistant",
+    //   url: "#",
+    //   icon: IconFileWord,
+    // },
   ],
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+function SidebarLoading() {
+  return (
+    <div className="w-64 h-screen bg-sidebar animate-pulse">
+      {/* Simple loading state that matches your sidebar style */}
+      <div className="p-4">
+        <div className="h-14 bg-gray-300 rounded mb-11"></div>
+        <div className="space-y-2">
+          <div className="h-8 bg-gray-300 rounded"></div>
+          <div className="h-8 bg-gray-300 rounded"></div>
+          <div className="h-8 bg-gray-300 rounded"></div>
+        </div>
+      </div>
+    </div>
+  )
+}
 
+function AppSidebarContent({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { generatePDFMode } = useQueryParams();
 
   if (generatePDFMode) return <></>
@@ -187,11 +204,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5"
+              className="data-[slot=sidebar-menu-button]:!p-1.5 hover:bg-orange-700 mb-11"
             >
-              <a href="#">
-                <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
+              <a href="/sales" className=' flex items-center justify-center bg-orange-700 h-14'>
+                <Image
+                  src="/LOGO-SMAB-CROP-1white.png"
+                  width="120"
+                  height="5000"
+                  alt="Logo"
+                />
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -206,5 +227,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavUser user={data.user} />
       </SidebarFooter>
     </Sidebar>
+  )
+}
+
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  return (
+    <Suspense fallback={<SidebarLoading />}>
+      <AppSidebarContent {...props} />
+    </Suspense>
   )
 }

@@ -2,12 +2,11 @@
 
 import { SectionCardsSkeleton } from "@/components/shadcnkit/section-cards-skeleton"
 import { SectionCards } from "@/components/shadcnkit/section-cards"
-import { getOrdersProducts } from '@/services/productServices'
+import { getCustomersMetrics } from '@/services/customersServices'
 import { useCustomQuery } from '@/hooks/useCustomQuery'
 import { useTimeRange } from '@/hooks/useTimeRange'
 import { roundToTwo, sortArrayByPrp } from "@/lib/utils";
 import { useMemo } from "react"
-import { log } from "console"
 
 // const metrics = [
 //     {
@@ -47,8 +46,8 @@ export function HeaderMetrics() {
 
 
     const { data, isLoading, error } = useCustomQuery(
-      ['orders-products', timeRange],
-      async () => await getOrdersProducts(timeRange)
+      ['customers-metrics', timeRange],
+      async () => await getCustomersMetrics(timeRange)
     );
 
     const metrics = useMemo(() => {
@@ -60,37 +59,37 @@ export function HeaderMetrics() {
         description: "Best Selling Record",
         trendValue: 0,
         trendDirection: "up" as const,
-        metricMessage: `${data?.[0]?.barcode} - ${data?.[0]?.name}`,
+        metricMessage: `Made with ${data?.[0]?.customer_name}`,
       },
       // top quantity
       {
-        title: `${sortArrayByPrp(data ?? [], "quantity")?.[0]?.quantity ?? 0 }`,
-        description: "Most Selled Product",
+        title: `${data?.length ?? 0}`,
+        description: "Customers Number",
         trendValue: 0,
         trendDirection: "up" as const,
-        metricMessage: (() => {
-          const {name , barcode} = sortArrayByPrp(data ?? [], "quantity")?.[0] ?? {};
-          return `${barcode} - ${name}`
-        })(),
+        metricMessage: 'Number of customer this periode',
       },
       // top fast moving
       {
-        title: `${sortArrayByPrp(data ?? [], "order_frequency")?.[0]?.order_frequency ?? 0 }`,
-        description: "Fastest Moving Product",
+        title: `${sortArrayByPrp(data ?? [], "order_count")?.[0]?.order_count ?? 0 }`,
+        description: "Frequant Customer",
         trendValue: 0,
         trendDirection: "up" as const,
         metricMessage: (() => {
-          const {name, barcode} = sortArrayByPrp(data ?? [], "order_frequency")?.[0] ?? {};
-          return `${barcode} - ${name}`
+          const {customer_name} = sortArrayByPrp(data ?? [], "order_count")?.[0] ?? {};
+          return `${customer_name}`
         })(),
       },
       // total product sold
       {
-        title: `${roundToTwo(data?.length ?? 0)}`,
-        description: "Total Products",
+        title: `${sortArrayByPrp(data ?? [], "quantity")?.[0]?.quantity ?? 0 }`,
+        description: "Mass Consuming Customer",
         trendValue: 0,
         trendDirection: "up" as const,
-        metricMessage: `Total Products Quantity Sold`,
+        metricMessage: (() => {
+          const {customer_name} = sortArrayByPrp(data ?? [], "quantity")?.[0] ?? {};
+          return `${customer_name} - most product quantity`
+        })(),
       },
     ]}, [timeRange, data?.length])
     

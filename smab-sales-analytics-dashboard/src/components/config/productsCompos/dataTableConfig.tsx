@@ -3,7 +3,7 @@ import { z } from "zod";
 import { useSortable } from "@dnd-kit/sortable";
 import { type ColumnDef } from "@tanstack/react-table";
 import { roundToTwo } from '@/lib/utils'
-import { exportOrdersToExcel } from '@/services/exportDataServices/exportOrdersToExcel'
+import { exportArrayToExcel } from '@/services/exportDataServices/exportArrayToExcel'
 
 import {
     ArrowDown,
@@ -202,7 +202,7 @@ export const exportDataConfig = {
   config : [
   {
     label: "Export as Excel",
-    action: exportOrdersToExcel,
+    action: (data, timeRange) => exportArrayToExcel(data, timeRange, 'sales-products-data'),
     icon: IconTableImport,
   }
 ]}

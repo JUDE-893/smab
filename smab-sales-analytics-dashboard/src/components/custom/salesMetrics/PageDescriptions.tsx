@@ -6,6 +6,8 @@ import { format } from 'date-fns'
 
 import favicon from '@/favicon.ico';
 
+export const dynamic = 'force-dynamic';
+
 export function PageDescriptions({pageTitle}) {
 
   const { generatePDFMode } = useQueryParams();

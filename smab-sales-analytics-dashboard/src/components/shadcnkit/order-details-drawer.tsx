@@ -66,7 +66,7 @@ export function OrderDetailsDrawer({ order, trigger }: OrderDetailsDrawerProps) 
     <Drawer>
       <DrawerTrigger asChild>{trigger || <Button variant="outline">View Order Details</Button>}</DrawerTrigger>
       <DrawerContent>
-        <div className="mx-auto w-full max-w-2xl">
+        <div className="mx-auto w-full max-w-2xl overflow-y-auto">
           <DrawerHeader className="text-center">
             <DrawerTitle className="text-2xl font-bold">Order #{order.orderNumber}</DrawerTitle>
             <DrawerDescription className="flex items-center justify-center gap-2 mt-2">

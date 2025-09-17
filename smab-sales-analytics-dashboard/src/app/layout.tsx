@@ -1,19 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from '@/components/Providers'
 import { SidebarInset } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/shadcnkit/app-sidebar"
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+// Google Fonts fetching via next/font/google is removed to avoid
+// network access during Docker builds. Using system fonts instead.
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -27,9 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className="antialiased">
         <Providers>
           <AppSidebar variant="inset" />
           <SidebarInset>

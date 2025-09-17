@@ -1,0 +1,6 @@
+[MongoDB URI] mongodb://admin:Of99xL!e-VmZt!eQ7%40r%E2%82%AC%232xL%3CY%5DpZt%241_r!eQ%24!e*Q7%40%3F@mongo:27017/myDatabase?authSource=admin
+(node:1) [MONGODB DRIVER] Warning: useNewUrlParser is a deprecated option: useNewUrlParser has no effect since Node.js Driver version 4.0.0 and will be removed in the next major version
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:1) [MONGODB DRIVER] Warning: useUnifiedTopology is a deprecated option: useUnifiedTopology has no effect since Node.js Driver version 4.0.0 and will be removed in the next major version
+[INFO] 2025-09-04T11:18:57.756Z - Server running on port 5002
+❌ MongoDB connection error: Authentication failed.

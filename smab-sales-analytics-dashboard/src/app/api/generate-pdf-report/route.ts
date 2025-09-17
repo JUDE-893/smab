@@ -18,27 +18,17 @@ export async function GET(req: Request) {
 
   let browser: Browser | CoreBrowser;
 
-  if (process.env.NODE_ENV === "production") {
-    const puppeteer = await import("puppeteer-core");
-    browser = await puppeteer.launch({
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath(),
-      headless: chromium.headless,
-    });
-  } else {
-    const puppeteer = await import("puppeteer");
-    browser = await puppeteer.launch({
-      headless: "new",
-      executablePath: process.env.BROWSER_PATH,
-    });
-  }
-
+  const puppeteer = await import("puppeteer");
+  browser = await puppeteer.launch({
+    headless: "new",
+    executablePath: process.env.BROWSER_PATH,
+  });
+  
   const page = await browser.newPage();
   await page.goto(pageUrl, { waitUntil: "networkidle0" });
 
   // Wait for animations/data to finish
-  await new Promise(resolve => setTimeout(resolve, 3000));
+  await new Promise(resolve => setTimeout(resolve, 0));
 
 
   const pdfBuffer = await page.pdf({
