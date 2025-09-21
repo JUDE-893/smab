@@ -1,5 +1,7 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import { AuthError } from "next-auth";
+import { headersToObject } from '@/lib/requestHelpers';
+
 
 export const credentialOption = CredentialsProvider({
       name: 'Credentials',
@@ -7,8 +9,11 @@ export const credentialOption = CredentialsProvider({
         email: {label: 'email', type: 'text'}
       },
       async authorize(credis, req) {
+        // SET UP CLIENT HEADERS
+        const headersObj = headersToObject(req);
+        headersObj.cookie = undefined;
+        console.log('{headersObj}', headersObj);
         try {
-
 
           // prepare the payload
           let payload = {email: credis.email, password: credis.password},
@@ -20,9 +25,10 @@ export const credentialOption = CredentialsProvider({
           }
 
           // make auth request
-          let response = await fetch(process.env.NEXT_PUBLIC_API_BASE_URL+"/auth"+url, {
+          let response = await fetch(process.env.BACKEND_API_BASE_URL+"/auth"+url, {
             method: 'POST',
             headers: {
+              ...headersObj,
               "content-type": 'application/json'
             },
             body: JSON.stringify(payload)

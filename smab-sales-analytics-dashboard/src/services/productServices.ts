@@ -8,13 +8,14 @@ export async function getTotalProductsQuantity(dateRange) {
 }
 
 export async function getOrdersProducts(dateRange) {
-  const { data } = await axiosClient.get(`product/all?timeRange=${dateRange}`);
+  const { data } = await axiosClient.post('/protected', { target: `product/all?timeRange=${dateRange}` });
 
   return data.data
 }
 
+
 export async function getProductDetails(barcode, year) {
-  const { data } = await axiosClient.get(`product/analytics?barcode=${barcode}${year ? `&year=${year}` : ''}`);
+  const { data } = await axiosClient.post('/protected', { target: `product/analytics?barcode=${barcode}${year ? `&year=${year}` : ''}` });
 
   return data.data
 }

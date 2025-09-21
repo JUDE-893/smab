@@ -55,10 +55,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: null
   },
-  coverPic: {
-    type: String,
-    default: null
-  },
   color: {
     type: String,
     default: null
@@ -66,37 +62,6 @@ const userSchema = new mongoose.Schema({
   accountSlag: {
     type: String,
     default: null
-  },
-  bthDay: {
-    type: Date,
-    validate: [
-      { // min birth year
-        validator: (val) => {
-          let minDate = subYears(new Date(), 7);
-          return minDate >= val
-        },
-        message: (props) => {
-          let minDate = subYears(new Date(), 7);
-          return `the minimum birth year allowed is ${minDate.getFullYear()}`
-        }
-      },
-      { // max birth year
-        validator: (val) => {
-          let maxDate = subYears(new Date(), 100);
-          return maxDate <= val
-        },
-        message: (props) => {
-          let maxDate = subYears(new Date(), 100);
-          return `the minimum birth year allowed is ${maxDate.getFullYear()}`
-        }
-      }
-    ],
-    default : null
-  },
-  active: {
-    type: Boolean,
-    select:false,
-    default:true
   },
   createdAt: {
     type: Date,
@@ -155,13 +120,6 @@ userSchema.pre('save', async function(next) {
   this.passwordConfirm = undefined;
   return next()
 });
-
-//  filter out the inactive users
-userSchema.pre(/^find/, function(next) {
-  this.find({active: true});
-  next()
-});
-
 
 /* METHODS */
 

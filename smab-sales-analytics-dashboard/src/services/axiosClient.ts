@@ -3,7 +3,7 @@ import axios from 'axios';
 
 console.log("process.env.NEXT_PUBLIC_BACKEND_API_BASE_URL", process.env.NEXT_PUBLIC_BACKEND_API_BASE_URL);
 const axiosClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BACKEND_API_BASE_URL || 'http://217.65.146.240:5002/smab-analytics/api/', // Use env for flexibility
+  baseURL: process.env.NEXT_PUBLIC_BACKEND_API_BASE_URL || 'http://217.65.146.240:3004/api/proxy', // Use env for flexibility
   timeout: 0,
   headers: {
     'Content-Type': 'application/json',

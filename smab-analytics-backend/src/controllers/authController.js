@@ -189,14 +189,16 @@ export const activateAccount = errorCatchingLayer(async (req, res, next) => {
   });
 
   // response
-  return res.redirect(`${process.env.CLIENT_SCHEME}/chat`);
+  return res.redirect(`${process.env.CLIENT_SCHEME}/sales`);
 
 })
 
 export const reSendVerificationToken = errorCatchingLayer(async (req, res, next) => {
 
   const user = req.user;
-
+  console.log("p-----------------", req.params);
+  console.log("b-----------------", req.body);
+  console.log("H-----------------", req.headers);
   await sendAccountVerificationMail(req, user);
 
   return res.status(200).json({status: 'success', message: 'verification mail was sent to this email address', mailTo: user.email})

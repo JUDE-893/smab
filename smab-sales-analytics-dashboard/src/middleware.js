@@ -5,6 +5,7 @@ import { middlewarePipline } from '@/lib/middleware';
 import { geoRestrict } from '@/middlewares/geoRestrict';
 import { verifiedRestrict } from '@/middlewares/verifiedRestrict';
 import { withAuth } from '@/middlewares/auth';
+import { forwardUserIdentity } from '@/middlewares/forwardUserIdentity';
 
 
 const publicRoutes = [
@@ -24,12 +25,21 @@ export const middleware = async (request) => {
 
   // public routes middleware
   if (publicRoutes.some((ppath) => pathname.startsWith(ppath))) {
-    return middlewarePipline([geoRestrict/*, guest*/]) (request)
+    return middlewarePipline([geoRestrict, forwardUserIdentity/*, guest*/]) (request)
+  }
+
+  if (pathname.startsWith('/api/test')) {
+    return middlewarePipline([geoRestrict, forwardUserIdentity]) (request)
+  }
+
+  if (pathname.startsWith('/api/proxy/protected')) {
+    return middlewarePipline([withAuth, geoRestrict, verifiedRestrict, forwardUserIdentity]) (request)
   }
 
   if (pathname.startsWith('/api')) {
     return middlewarePipline([geoRestrict/*, guest*/]) (request)
   }
+
 
   // protected routes
   return middlewarePipline([withAuth, geoRestrict, verifiedRestrict]) (request)
