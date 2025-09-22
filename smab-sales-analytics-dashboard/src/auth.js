@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth'
 import { NextResponse } from 'next/server';
 import {credentialOption} from '@/lib/authProviders'
-
+import { encryptJWT } from '@/lib/cryptoHelpers'
 
 export const {handlers:{GET, POST}, auth} =  NextAuth({
   providers: [
@@ -53,7 +53,8 @@ export const {handlers:{GET, POST}, auth} =  NextAuth({
 
   async jwt({ token, user }) {
     if (token) {
-      token = { ...token, ...user };
+      token.data.token = await encryptJWT(token.data?.token, process.env.JWT_ENCRYPTION_SECRET);
+      token = { ...token, ...user};
       return token
     }
     return token.error;

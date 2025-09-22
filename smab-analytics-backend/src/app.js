@@ -10,26 +10,25 @@ import customerRoutes from './routes/customerRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 
 // DOMESTIC IP ADDRESSES (e.g; NextJs server, listening services ...)
-const allowedIps = ['127.0.0.1', 'localhost', '::1'];
+const allowedIps = process.env.DOMESTIC_IP_ADDRESSES.split(',') || [];;
 
-const proxiedIPs = ['127.0.0.1', 'localhost', '::1']; // ip addresses that are using proxy network (e.g; Dashboard clients)
+const proxiedIPs = process.env.PROXIED_IP_ADDRESSES.split(',') || []; // ip addresses that are using proxy network (e.g; Dashboard clients)
 
 const app = express();
 
 // PROTECT AGAINST FOREIGN IP ADDRESSES | Allow onlly domestic ip addresses from accessing our app
-// app.use((req, res, next) => {
-//   const clientIp = req.ip;
-//   const timestamp = new Date().toISOString();
-//   logger.info(`[REQUEST] ${timestamp} ${req.method} ${req.originalUrl} | ip ${clientIp}`);
-//   console.log(`[REQUEST] ${timestamp} ${req.method} ${req.originalUrl} | ip ${clientIp}`);
-//   if (!allowedIps.includes(clientIp)) {
-//     logger.info(`[REQUEST FORBIDEN] ip ${clientIp}`);
-//     console.log(`[REQUEST FORBIDEN] ip ${clientIp}`);
-//     return res.status(403).json({ error: 'Forbidden' });
-//   }
-//   next();
-// });
-
+app.use((req, res, next) => {
+  const clientIp = req.ip;
+  const timestamp = new Date().toISOString();
+  logger.info(`[REQUEST] ${timestamp} ${req.method} ${req.originalUrl} | ip ${clientIp}`);
+  console.log(`[REQUEST] ${timestamp} ${req.method} ${req.originalUrl} | ip ${clientIp}`);
+  if (!allowedIps.includes(clientIp)) {
+    logger.info(`[REQUEST FORBIDEN] ip ${clientIp}`);
+    console.log(`[REQUEST FORBIDEN] ip ${clientIp}`);
+    return res.status(403).json({ error: 'Forbidden' });
+  }
+  next();
+});
 
 // SECURITY HEADERS
 app.use(helmet());
@@ -48,8 +47,8 @@ const corsOptionsDelegate = (req, callback) => {
   }
 };
 
-// app.use(cors(corsOptionsDelegate));
-app.use(cors());
+app.use(cors(corsOptionsDelegate));
+// app.use(cors());
 
 // JSON PARSER
 app.use(express.json());
