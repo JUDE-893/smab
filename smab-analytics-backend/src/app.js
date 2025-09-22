@@ -17,18 +17,18 @@ const proxiedIPs = ['127.0.0.1', 'localhost', '::1']; // ip addresses that are u
 const app = express();
 
 // PROTECT AGAINST FOREIGN IP ADDRESSES | Allow onlly domestic ip addresses from accessing our app
-app.use((req, res, next) => {
-  const clientIp = req.ip;
-  const timestamp = new Date().toISOString();
-  logger.info(`[REQUEST] ${timestamp} ${req.method} ${req.originalUrl} | ip ${clientIp}`);
-  console.log(`[REQUEST] ${timestamp} ${req.method} ${req.originalUrl} | ip ${clientIp}`);
-  if (!allowedIps.includes(clientIp)) {
-    logger.info(`[REQUEST FORBIDEN] ip ${clientIp}`);
-    console.log(`[REQUEST FORBIDEN] ip ${clientIp}`);
-    return res.status(403).json({ error: 'Forbidden' });
-  }
-  next();
-});
+// app.use((req, res, next) => {
+//   const clientIp = req.ip;
+//   const timestamp = new Date().toISOString();
+//   logger.info(`[REQUEST] ${timestamp} ${req.method} ${req.originalUrl} | ip ${clientIp}`);
+//   console.log(`[REQUEST] ${timestamp} ${req.method} ${req.originalUrl} | ip ${clientIp}`);
+//   if (!allowedIps.includes(clientIp)) {
+//     logger.info(`[REQUEST FORBIDEN] ip ${clientIp}`);
+//     console.log(`[REQUEST FORBIDEN] ip ${clientIp}`);
+//     return res.status(403).json({ error: 'Forbidden' });
+//   }
+//   next();
+// });
 
 
 // SECURITY HEADERS
@@ -48,7 +48,8 @@ const corsOptionsDelegate = (req, callback) => {
   }
 };
 
-app.use(cors(corsOptionsDelegate));
+// app.use(cors(corsOptionsDelegate));
+app.use(cors());
 
 // JSON PARSER
 app.use(express.json());

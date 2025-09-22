@@ -1,3 +1,6 @@
+
+import axios from 'axios';
+import { ProductDetails } from '../models/ProductModel.js';
 import { errorCatchingLayer } from '../utils/helpers.js';
 import Order from '../models/orderModel.js';
 import logger from '../utils/logger.js';
@@ -30,6 +33,9 @@ async function insertOrUpdateOrder(orderInfo) {
   
         if (!order) {
           // INSERT
+          const populatedProducts = await enrichProductsWithDetailsBatched(orderInfo.products)
+          console.log("populatedProducts----------------------", populatedProducts);
+          orderInfo.products = populatedProducts;
           let newOrder = await Order.create(orderInfo);
           logger.info('🎉 Order created:', orderInfo?.orderNumber);
           // UPDATE STOCK
@@ -41,13 +47,17 @@ async function insertOrUpdateOrder(orderInfo) {
           const now = new Date();
           // let reconciliedProducts = mergeProducts(order.products, orderInfo.products)
           let reconciliedProducts = [...orderInfo.products, ...filterOutWarehouseProducts(order.products,orderInfo.products[0]?.warehouse)];
-  
+          
+          // populate the produncts details
+          const populatedProducts = await enrichProductsWithDetailsBatched(reconciliedProducts)
+          console.log("populatedProducts----------------------", populatedProducts);
+          
           // update query
           const update = {
             $set: {
               // mutable fields that should be updated each time
               updatedAt: now,
-              products : reconciliedProducts
+              products : populatedProducts
             }
           };
           // update request
@@ -155,4 +165,117 @@ export const createOrUpdateOrder = errorCatchingLayer(async (req, res, next) => 
         data: order
     });
 });
+
+
+
+/**
+ * Enriches products with details from database or external API
+ * @param {Array} products - Array of product objects with barcode field
+ * @returns {Promise<Array>} - Updated products array with details _id
+ */
+async function enrichProductsWithDetails(products) {
+  try {
+    // Step 1: Extract all barcodes from products
+    const barcodes = products.map(product => product.barcode);
+    
+    // Step 2: Batch search for existing product details
+    const existingDetails = await ProductDetails.find({
+      ref: { $in: barcodes }
+    });
+    
+    // Create a map for quick lookup: ref -> productDetails document
+    const detailsMap = new Map();
+    existingDetails.forEach(detail => {
+      detailsMap.set(detail.ref, detail);
+    });
+    
+    // Step 3: Separate found and not found products
+    const productsWithDetails = [];
+    const productsWithoutDetails = [];
+    const missingBarcodes = new Set();
+    
+    products.forEach(product => {
+      const detailDoc = detailsMap.get(product.barcode);
+      if (detailDoc) {
+        // Product found in database - assign the _id
+        product.details = detailDoc._id;
+        productsWithDetails.push(product);
+      } else {
+        // Product not found - mark for API call
+        productsWithoutDetails.push(product);
+        missingBarcodes.add(product.barcode);
+      }
+    });
+    
+    // Step 4: If there are missing products, fetch from API
+    if (productsWithoutDetails.length > 0) {
+      const missingBarcodesArray = Array.from(missingBarcodes);
+      
+      console.log("[URL INVALID]", process.env.PRODUCTDETAILS_URL);
+      try {
+        // Step 5: Make POST request to external API
+        const response = await axios.post(process.env.PRODUCTDETAILS_URL, {
+          barcodes: missingBarcodesArray
+        });
+        
+        const apiProducts = response?.data?.data; // Expected format: [{ref: 'p345345', prix_ttc: 100}, ...]
+
+        console.log('[apiProducts]', apiProducts);
+        
+        
+        // Step 6: Save new product details to database
+        const newDetails = await ProductDetails.insertMany(apiProducts, {
+          ordered: false // Continue even if there are duplicates (though ref is unique)
+        });
+        
+        // Create a map for the newly created details
+        const newDetailsMap = new Map();
+        newDetails.forEach(detail => {
+          newDetailsMap.set(detail.ref, detail);
+        });
+        
+        // Step 7: Update the products without details
+        productsWithoutDetails.forEach(product => {
+          const newDetail = newDetailsMap.get(product.barcode);
+          if (newDetail) {
+            product.details = newDetail._id;
+            productsWithDetails.push(product);
+          } else {
+            // Handle case where API didn't return details for this barcode
+            console.warn(`No details found for barcode: ${product.barcode}`);
+            // You might want to handle this differently based on your requirements
+            productsWithDetails.push(product); // Keep product even without details
+          }
+        });
+        
+      } catch (apiError) {
+        console.error('Error fetching product details from API:', apiError);
+        // If API fails, you might want to handle this differently
+        // For now, we'll return products with only the ones that had existing details
+        throw new Error(`Failed to fetch product details from API: ${apiError.message}`);
+      }
+    }
+    
+    // Step 8: Return the final products array
+    return productsWithDetails;
+    
+  } catch (error) {
+    console.error('Error in enrichProductsWithDetails:', error);
+    throw error;
+  }
+}
+
+// Alternative version with better error handling and batching for large arrays
+async function enrichProductsWithDetailsBatched(products, batchSize = 50) {
+  const results = [];
+  
+  // Process products in batches to avoid overwhelming the API/database
+  for (let i = 0; i < products.length; i += batchSize) {
+    const batch = products.slice(i, i + batchSize);
+    const enrichedBatch = await enrichProductsWithDetails(batch);
+    results.push(...enrichedBatch);
+  }
+  
+  return results;
+}
 

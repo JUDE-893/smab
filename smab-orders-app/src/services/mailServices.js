@@ -3,12 +3,10 @@ import { authorize } from "./googleService.js";
 // import { printPDF, process.env. } from "./printService";
 import { generatePdf, printPDF } from "./printerServices.js";
 import * as cheerio from "cheerio";
-import Order from '../models/orderModel.js';
-import pool from '../config/db/createMysqlConnectionPool.js';
 import logger from "../utils/logger.js";
 import fs from "fs/promises";
-import { format } from 'date-fns';
 import { log } from "console";
+
 
 
 
@@ -358,12 +356,17 @@ function mergeProducts(existingProducts, incomingProducts) {
 
 // Redirect data to Backend
 async function redirectDataToBackend(rOrder) {
+  console.log("vvv", JSON.stringify(rOrder), `${process.env.BACKEND_URL}/orders/new`);
   const response = await fetch(`${process.env.BACKEND_URL}/orders/new`, {
+
+    
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(rOrder)
   });
+  console.log("OOOO_______________", response);
+  
   return response.json();
 }
