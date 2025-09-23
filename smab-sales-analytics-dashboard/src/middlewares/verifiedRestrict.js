@@ -4,11 +4,17 @@ import { cookies } from "next/headers";
 
 export async function verifiedRestrict(req) {
 
+  
   const verifiedCookie = cookies().get("vertkn");
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  let tverified = verifiedCookie?.value === token.data?.token?.slice(0,32);
+  let tverified = verifiedCookie?.value === token?.accessToken.slice(0,32);
+  console.log('tverified', tverified);
+  console.log('_______________________________________________')
+  console.log('token', token);
+  console.log('_______________________________________________')
+  console.log('verifiedCookie', verifiedCookie)
 
-  if (!token || !token?.data?.user?.verifiedAt) {
+  if (!token || !token?.verifiedAt) {
     return !tverified ? NextResponse.redirect(new URL('/unverified-account', req.url), {status: 307}) : null;
   }
 }

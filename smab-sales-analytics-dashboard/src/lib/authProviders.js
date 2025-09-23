@@ -1,7 +1,7 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import { AuthError } from "next-auth";
 import { headersToObject } from '@/lib/requestHelpers';
-
+import { encryptJWT } from '@/lib/cryptoHelpers';
 
 export const credentialOption = CredentialsProvider({
       name: 'Credentials',
@@ -36,15 +36,20 @@ export const credentialOption = CredentialsProvider({
 
           // response
           const data = await response.json();
-          console.log(data);
-          // if (!response.ok) {
-          //   // Create a custom error object that NextAuth won't override
-          //   const error = new AuthError(JSON.stringify(data));
-          //   error.name = 'ApiError'; // Custom error type
-          //   throw error;
-          // }
-
-          return {response, data}
+          // ✅ CORRECT: Return only serializable data
+          if (response.ok && data.status === 'success') {
+            const token = await encryptJWT(data?.token, process.env.JWT_ENCRYPTION_SECRET);
+            
+            return {
+              id: data.user.id,
+              email: data.user.email,
+              name: data.user.name,
+              verifiedAt: data.user.verifiedAt,
+              token: token ?? null,
+            }
+          } else {
+            return null;
+          }
         } catch (error) {
           // Preserve API errors, only fallback for unexpected errors
           // if (error?.name === 'ApiError') throw error;

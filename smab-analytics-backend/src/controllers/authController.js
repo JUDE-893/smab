@@ -86,12 +86,6 @@ export const veryfyAuthToken = async (token) => {
     throw e;
   }
 
-  // check for unverified user
-  if(!user.verifiedAt){
-    let e = new AppError('Your account is yet inactive. Please check your mail inbox to verify your account', 403);
-    e.name = 'UnverifiedAccountError';
-    throw e;
-  }
 
   return user
 }
@@ -103,6 +97,19 @@ export const protect = errorCatchingLayer(async (req,res,next) => {
 
   // success
   req.user = user;
+  next()
+})
+
+export const verifiedAccess = errorCatchingLayer(async (req,res,next) => {
+  const user = req.user;
+
+  // check for unverified user
+  if(!user.verifiedAt){
+    let e = new AppError('Your account is yet inactive. Please check your mail inbox to verify your account', 403);
+    e.name = 'UnverifiedAccountError';
+    throw e;
+  }
+  
   next()
 })
 
@@ -196,6 +203,7 @@ export const activateAccount = errorCatchingLayer(async (req, res, next) => {
 export const reSendVerificationToken = errorCatchingLayer(async (req, res, next) => {
 
   const user = req.user;
+  console.log("u-----------------", req.user);
   console.log("p-----------------", req.params);
   console.log("b-----------------", req.body);
   console.log("H-----------------", req.headers);

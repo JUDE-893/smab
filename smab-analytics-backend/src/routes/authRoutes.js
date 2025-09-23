@@ -1,5 +1,5 @@
 import express from 'express';
-import {register, login, forgotPassword, resetPassword, activateAccount, reSendVerificationToken}  from '../controllers/authController.js';
+import {register, login, forgotPassword, resetPassword, activateAccount, reSendVerificationToken, protect}  from '../controllers/authController.js';
 
 const router = express.Router();
 
@@ -18,6 +18,7 @@ router.route('/resetPassword/:resetToken')
 router.route('/verify-Account/:token')
       .get(activateAccount);
 
+router.use(protect)
 router.route('/resend-verification-mail')
       .get(reSendVerificationToken);
 
