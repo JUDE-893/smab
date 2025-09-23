@@ -1,9 +1,20 @@
 import { NextResponse } from 'next/server';
 import { headersToObject } from '@/lib/requestHelpers';
+import { auth } from "@/auth";
+import { decryptJWT } from '@/lib/cryptoHelpers'
 
 export async function POST(request: Request) {
   const headersObj = headersToObject(request);
   const { target, data } = await request.json();
+
+  const session = await auth();
+
+  // decrypt token back
+  console.log("RRRR____________________", session.user.data.token);
+  const jwt = await decryptJWT('session', session.user.data.token, process.env.JWT_ENCRYPTION_SECRET);
+
+  console.log("TTTT____________________", jwt);
+
 
   const fetchOptions: RequestInit = {
     method: data ? 'POST' : 'GET',
