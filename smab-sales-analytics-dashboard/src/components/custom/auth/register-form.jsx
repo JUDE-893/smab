@@ -28,11 +28,11 @@ export function RegisterForm({
 
 
   useEffect(()=> {
-    console.log("authError", authError);
-    Boolean(authError) && toast(JSON.parse(authError.message).status === 'fails' ? "Validation Failed": "Oops! something went wrong.. Try again.", {
-       variant: "destructive",
-       description: <p className='text-secondary text-xs'>{JSON.parse(authError.message).message}</p>
-    })
+    // console.log("authError", authError);
+    // Boolean(authError) && toast(JSON.parse(authError.message).status === 'fails' ? "Validation Failed": "Oops! something went wrong.. Try again.", {
+    //    variant: "destructive",
+    //    description: <p className='text-secondary text-xs'>{JSON.parse(authError.message).message}</p>
+    // })
   },[authError])
 
 
@@ -49,7 +49,7 @@ export function RegisterForm({
             className="p-6 md:p-8">
             <div className="flex flex-col gap-6" >
               <div className="flex flex-col items-center text-center">
-                <h1 className="text-2xl font-bold">Register to Huginn</h1>
+                <h1 className="text-2xl font-bold">Register to SMAB</h1>
                 <p className="text-muted-foreground text-balance">
                   Where Memory Inspires, Thought Soars
                 </p>

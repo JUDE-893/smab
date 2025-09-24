@@ -2,6 +2,16 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { AuthError } from "next-auth";
 import { headersToObject } from '@/lib/requestHelpers';
 import { encryptJWT } from '@/lib/cryptoHelpers';
+import { CredentialsSignin } from "next-auth";
+
+
+class InvalidLoginError extends CredentialsSignin {
+  code = "custom";
+  constructor(message) {
+    super(message);
+    this.code = message;
+  }
+}
 
 export const credentialOption = CredentialsProvider({
       name: 'Credentials',
@@ -48,16 +58,21 @@ export const credentialOption = CredentialsProvider({
               token: token ?? null,
             }
           } else {
-            return null;
-          }
+              // ⚠️ AUTH FAILURE: Throw structured error that NextAuth can handle
+              const errorMessage = data.message || 'Authentication failed';
+              const errorStatus = response.status;
+              console.log("fff", data);
+              
+              // Create an error that NextAuth understands
+              throw new InvalidLoginError("fddddddddddddddddddddddddddddddddddddddddd");
+            }
+          
         } catch (error) {
-          // Preserve API errors, only fallback for unexpected errors
-          // if (error?.name === 'ApiError') throw error;
-          throw new AuthError(JSON.stringify({
-            statusCode: 500,
-            message: 'Authentication failed',
-            error: error.message
-          }));
+          console.log("_____________3RR0R________________", error);
+          
+          throw new InvalidLoginError((e).message);
         }
       }
     })
+
+

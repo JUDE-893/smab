@@ -49,7 +49,7 @@ export function ForgetPasswordForm({
               <div className="flex flex-col items-center text-center">
                 <h1 className="text-2xl font-bold">Enter Email</h1>
                 <p className="text-muted-foreground text-balance">
-                   used to create your Huginn account
+                   used to create your SMAB account
                 </p>
               </div>
               <div className="grid gap-3 mt-4">

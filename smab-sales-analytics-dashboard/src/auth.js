@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import {credentialOption} from '@/lib/authProviders'
 import { encryptJWT } from '@/lib/cryptoHelpers'
 
-export const {handlers:{GET, POST}, auth} =  NextAuth({
+export const {handlers:{GET, POST}, auth, signIn, signOut} =  NextAuth({
   providers: [
       credentialOption
     ],

@@ -11,9 +11,9 @@ async function sendAccountVerificationMail(req, user) {
   const mailtemp = accountVerificationMail({protocol: req.protocol, host: req.get('host'), user, token})
   // send email
   await sendMail({
-      from: `Huginn <ayoub.arif541@gmail.com>`,
+      from: `SMAB Analytics <ayoub.arif541@gmail.com>`,
       to: user.email,
-      subject: "Verify Your Huginn account",
+      subject: "Verify Your SMAB Analytics account",
       text: 'null',
       html: mailtemp
     })

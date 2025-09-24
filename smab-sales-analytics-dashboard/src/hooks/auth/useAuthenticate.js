@@ -2,6 +2,7 @@ import {useMutation} from '@tanstack/react-query';
 import { signIn } from "next-auth/react";
 import { sendVerificationMail } from '@/services/userServices';
 import { useRouter } from 'next/navigation';
+// import {signIn} from "@/auth";
 
 
 export function useAuthenticate(data) {
@@ -17,7 +18,7 @@ export function useAuthenticate(data) {
           throw new Error(response.error);
           return null
         }
-      router.push(`/sales`);
+      // router.push(`/sales`);
       return response
           },
     // onSuccess : (data) => console.log('Success',data),

@@ -32,11 +32,11 @@ export function LoginForm({
 
   useEffect(()=> {
     console.log(authError)
-    // auth error toast
-    Boolean(authError) && toast(JSON.parse(authError.message).status === 'fails' ? "Validation Failed": "Oops! something went wrong.. Try again.", {
-       variant: "destructive",
-       description: <p className='text-destructive text-xs'>{JSON.parse(authError.message).message}</p>
-    });
+    // // auth error toast
+    // Boolean(authError) && toast(JSON.parse(authError.message).status === 'fails' ? "Validation Failed": "Oops! something went wrong.. Try again.", {
+    //    variant: "destructive",
+    //    description: <p className='text-destructive text-xs'>{JSON.parse(authError.message).message}</p>
+    // });
 
   },[authError])
 
@@ -54,7 +54,7 @@ export function LoginForm({
               <div className="flex flex-col items-center text-center">
                 <h1 className="text-2xl font-bold">Welcome back</h1>
                 <p className="text-muted-foreground text-balance">
-                  Login to your Huginn account
+                  Login to your SMAB Analytics account
                 </p>
               </div>
               <div className="grid gap-3">

@@ -55,9 +55,10 @@ export function DateFilter() {
       variant="outline"
       className="hidden *:data-[slot=toggle-group-item]:!px-4 @[760px]/card:flex"
     >
+      <ToggleGroupItem value="1d">Today</ToggleGroupItem>
       <ToggleGroupItem value="7d">Last 7 days</ToggleGroupItem>
       <ToggleGroupItem value="30d">Last 30 days</ToggleGroupItem>
-      <ToggleGroupItem value="90d">Last 3 months</ToggleGroupItem>
+      <ToggleGroupItem value="365d">Last year</ToggleGroupItem>
       <ToggleGroupItem value="custom"><DatePickerButton title='Other' onDateChange={setCustomRange} /></ToggleGroupItem>
     </ToggleGroup>
     <Select value={timeRange} onValueChange={setTimeRange}>
@@ -75,8 +76,11 @@ export function DateFilter() {
         <SelectItem value="30d" className="rounded-lg">
           Last 30 days
         </SelectItem>
-        <SelectItem value="90d" className="rounded-lg">
-          Last 3 months
+        <SelectItem value="365d" className="rounded-lg">
+          Last year
+        </SelectItem>
+        <SelectItem value="custom" className="rounded-lg">
+        <DatePickerButton title='Other' onDateChange={setCustomRange} />
         </SelectItem>
       </SelectContent>
     </Select>
