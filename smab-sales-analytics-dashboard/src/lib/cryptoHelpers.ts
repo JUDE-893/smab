@@ -1,7 +1,6 @@
 
 
 const ALGO = "AES-GCM";
-<<<<<<< HEAD
 const IV_LENGTH = 12;
 const KEY_LENGTH = 256; // Use 256-bit key for better security
 
@@ -25,17 +24,6 @@ async function getKey(secret: string) {
     },
     keyMaterial,
     { name: ALGO, length: KEY_LENGTH },
-=======
-const IV_LENGTH = 12; // GCM standard IV length
-
-async function getKey(secret: string) {
-  const enc = new TextEncoder();
-  const keyMaterial = enc.encode(secret);
-  return crypto.subtle.importKey(
-    "raw",
-    keyMaterial,
-    { name: ALGO },
->>>>>>> e48352c5110a953e9e2691c34ac4d8dbdba0cf7c
     false,
     ["encrypt", "decrypt"]
   );

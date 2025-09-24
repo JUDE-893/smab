@@ -52,19 +52,12 @@ callbacks: {
 },
 
   async jwt({ token, user }) {
-<<<<<<< HEAD
     if (user) {
       token.id = user.id;
       token.email = user.email;
       token.name = user.name;
       token.verifiedAt = user.verifiedAt;
       token.accessToken = user.token;
-=======
-    if (token) {
-      token.data.token = await encryptJWT(token.data?.token, process.env.JWT_ENCRYPTION_SECRET);
-      token = { ...token, ...user};
-      return token
->>>>>>> e48352c5110a953e9e2691c34ac4d8dbdba0cf7c
     }
     return token;
   },

@@ -8,6 +8,7 @@ import salesRoutes from './routes/salesRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import customerRoutes from './routes/customerRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import globalErrorCatcher from './controllers/globalErrorCatcher.js';
 
 // DOMESTIC IP ADDRESSES (e.g; NextJs server, listening services ...)
 const allowedIps = process.env.DOMESTIC_IP_ADDRESSES.split(',') || [];;
@@ -88,5 +89,7 @@ app.use('/smab-analytics/api/orders', orderRoutes);
 app.use('/smab-analytics/api/sales', salesRoutes);
 app.use('/smab-analytics/api/product', productRoutes);
 app.use('/smab-analytics/api/customers', customerRoutes);
+
+app.use(globalErrorCatcher);
 
 export default app;

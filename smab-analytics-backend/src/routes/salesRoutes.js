@@ -7,8 +7,11 @@ import { getHeaderMetrics,
         getAgentSales,
         getPlansMetrics }
         from '../controllers/salesControllers.js';
+import { protect, verifiedAccess}  from '../controllers/authController.js';
 
 const router = Router();
+
+router.use(protect, verifiedAccess)
 
 router.get('/header-metrics', getHeaderMetrics);
 

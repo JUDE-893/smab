@@ -1,8 +1,11 @@
 import { Router } from 'express';
 import { createOrUpdateOrder } from '../controllers/orderControllers.js';
+import { protect, verifiedAccess}  from '../controllers/authController.js';
 
 
 const router = Router();
+
+router.use(protect, verifiedAccess)
 
 router.post('/new', createOrUpdateOrder);
 

@@ -2,6 +2,8 @@ import AppError from '../utils/AppError.js';
 
 
 function serveDev(res, error) {
+  console.log('ffffffffffffffffffffffffff',error);
+  
   return res.status(error.statusCode || 500).json({...error,message:error.message})
 }
 
@@ -49,12 +51,10 @@ function handleJWTExpiryError() {
 }
 
 export default function globalErrorCatcher(err, req, res, next) {
-  console.log(err);
-  if(process.env.NODE_ENV === 'developpement') {
+  if(process.env.NODE_ENV === 'development') {
     serveDev(res,err);
   } else if(process.env.NODE_ENV === 'production'){
     let error = {...err};
-
     console.log('err........: ', Object.keys(err));
 
     if(err.name === 'ValidationError') {

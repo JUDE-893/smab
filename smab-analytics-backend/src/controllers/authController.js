@@ -91,13 +91,17 @@ export const veryfyAuthToken = async (token) => {
 }
 
 export const protect = errorCatchingLayer(async (req,res,next) => {
-  const token = (req.headers.authorization).split(' ')[1];
+  try {
+    const token = (req.headers.authorization)?.split(' ')?.[1];
 
-  const user = await veryfyAuthToken(token);
+    const user = await veryfyAuthToken(token);
 
-  // success
-  req.user = user;
-  next()
+    // success
+    req.user = user;
+    next()
+  } catch (error) {
+    next(new AppError(error?.message || "Unauthorized access. Jwt missing or invalid", 401))
+  }
 })
 
 export const verifiedAccess = errorCatchingLayer(async (req,res,next) => {

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { headersToObject } from '@/lib/requestHelpers';
-import { auth } from "@/auth";
-import { decryptJWT } from '@/lib/cryptoHelpers'
+import { auth } from '@/auth';
+import { decryptJWT } from '@/lib/cryptoHelpers';
 
 export async function POST(request: Request) {
   const headersObj = headersToObject(request);
@@ -9,18 +9,14 @@ export async function POST(request: Request) {
 
   const session = await auth();
 
-  // decrypt token back
-  console.log("RRRR____________________", session.user.data.token);
-  const jwt = await decryptJWT('session', session.user.data.token, process.env.JWT_ENCRYPTION_SECRET);
-
-  console.log("TTTT____________________", jwt);
-
-
+  const token = await await decryptJWT(session?.accessToken, process.env.JWT_ENCRYPTION_SECRET);
+ 
   const fetchOptions: RequestInit = {
     method: data ? 'POST' : 'GET',
     headers: {
       ...headersObj,
-      "content-type": 'application/json'
+      "content-type": 'application/json',
+      "authorization": `Bearier ${token}`
     }
   };
 
@@ -29,9 +25,11 @@ export async function POST(request: Request) {
     fetchOptions.body = JSON.stringify(data);
   }
 
-  let response = await fetch(`${process.env.BACKEND_API_BASE_URL}/${target}`, fetchOptions);
+  const response = await fetch(`${process.env.BACKEND_API_BASE_URL}/${target}`, fetchOptions);
+
+
   const responseData = await response.json();
-  console.log('[PR RESPONSE]', responseData);
+
 
   return NextResponse.json(responseData);
 }
