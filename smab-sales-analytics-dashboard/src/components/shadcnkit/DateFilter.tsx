@@ -18,6 +18,17 @@ import * as React from "react"
 import { DatePickerButton } from './DatePickerButton';
 import { formatDateRange } from '@/lib/utils';
 
+const filters = {
+  '1d': "Today",
+  '7d': "Last 7 days",
+  '30d': 'Last 30 days',
+  '90d': 'Last 3 months',
+  '180d': 'Last 6 months',
+  '365d': 'Last year',
+  'all': 'All time',
+}
+
+
 export function DateFilter() {
   const isMobile = useIsMobile()
   const router = useRouter();
@@ -55,12 +66,35 @@ export function DateFilter() {
       variant="outline"
       className="hidden *:data-[slot=toggle-group-item]:!px-4 @[760px]/card:flex"
     >
-      <ToggleGroupItem value="1d">Today</ToggleGroupItem>
-      <ToggleGroupItem value="7d">Last 7 days</ToggleGroupItem>
-      <ToggleGroupItem value="30d">Last 30 days</ToggleGroupItem>
-      <ToggleGroupItem value="365d">Last year</ToggleGroupItem>
-      <ToggleGroupItem value="custom"><DatePickerButton title='Other' onDateChange={setCustomRange} /></ToggleGroupItem>
+
+        {
+          Object.keys(filters)?.splice(0,3)?.map((flt) =>
+            <ToggleGroupItem value={flt}>{filters[flt]}</ToggleGroupItem>)
+        }
+
+        <ToggleGroupItem value="custom"><DatePickerButton title='Custom' onDateChange={setCustomRange} /></ToggleGroupItem>
+        <ToggleGroupItem className="w-60" >
+          <Select value={timeRange} onValueChange={(vl) => {Object.keys(filters)?.splice(3,).includes(vl) && setTimeRange(vl)}}>
+            <SelectTrigger
+              className="border-none w-30"
+              size="sm"
+              aria-label="Select a value"
+            >
+              {Object.keys(filters)?.splice(3,).includes(timeRange) ? filters[timeRange] : "Other"}
+              </SelectTrigger>
+              <SelectContent className="rounded-xl">
+                {
+                  Object.keys(filters)?.splice(3,).map((flt) =>
+                    <SelectItem value={flt} className="rounded-lg">{filters[flt]}</SelectItem>
+                )
+                }
+              </SelectContent>
+          </Select>
+        </ToggleGroupItem>
+
     </ToggleGroup>
+
+
     <Select value={timeRange} onValueChange={setTimeRange}>
       <SelectTrigger
         className="flex w-40 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate @[760px]/card:hidden"
@@ -70,17 +104,13 @@ export function DateFilter() {
         <SelectValue placeholder="Last 3 months" />
       </SelectTrigger>
       <SelectContent className="rounded-xl">
-        <SelectItem value="7d" className="rounded-lg">
-          Last 7 days
-        </SelectItem>
-        <SelectItem value="30d" className="rounded-lg">
-          Last 30 days
-        </SelectItem>
-        <SelectItem value="365d" className="rounded-lg">
-          Last year
-        </SelectItem>
+        {
+          Object.keys(filters).map((flt) =>
+            <SelectItem value={flt} className="rounded-lg">{filters[flt]}</SelectItem>
+        )
+        }
         <SelectItem value="custom" className="rounded-lg">
-        <DatePickerButton title='Other' onDateChange={setCustomRange} />
+          <DatePickerButton title='Other' onDateChange={setCustomRange} />
         </SelectItem>
       </SelectContent>
     </Select>

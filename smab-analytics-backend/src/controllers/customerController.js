@@ -1,37 +1,23 @@
 import { errorCatchingLayer } from '../utils/helpers.js';
 import Order from '../models/orderModel.js';
+import { getTimeRange } from '../utils/dateHelpers.js';
 import { format } from 'date-fns';
-
-
 
 export const getCustomerMetrics = errorCatchingLayer(async (req, res, next) => {
   const { timeRange } = req.query;
 
-  if (!timeRange) {
-    return res.status(400).json({ message: 'timeRange query param is required. Expected format: date1,date2 (YYYY-MM-DD,YYYY-MM-DD)' });
+  let orderDateFilter;
+  if (timeRange && timeRange !== "all") {
+    const { startDate, endDate } = getTimeRange(timeRange);
+    orderDateFilter = { orderDate: { $gte: startDate, $lte: endDate } };
+  } else {
+    orderDateFilter = {};
   }
-
-  const dates = String(timeRange).split(',').map((d) => d.trim());
-  if (dates.length !== 2 || !dates[0] || !dates[1]) {
-    return res.status(400).json({ message: 'Invalid timeRange. Expected two dates separated by a comma.' });
-  }
-
-  const startDate = new Date(dates[0]);
-  const endDate = new Date(dates[1]);
-
-  if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-    return res.status(400).json({ message: 'Invalid date format. Use YYYY-MM-DD.' });
-  }
-
-  startDate.setUTCHours(0, 0, 0, 0);
-  endDate.setUTCHours(23, 59, 59, 999);
 
   // Create aggregation pipeline
   const customerMetrics = await Order.aggregate([
     {
-      $match: {
-        orderDate: { $gte: startDate, $lte: endDate }
-      }
+      $match: orderDateFilter
     },
     {
       $addFields: {
@@ -99,7 +85,7 @@ export const getCustomerAnalytics = errorCatchingLayer(async (req, res, next) =>
 
   // Set default to current year if not provided
   const targetYear = year ? parseInt(year) : new Date().getFullYear();
-  
+
   // Create date range for the entire year
   const startDate = new Date(targetYear, 0, 1); // January 1st of the year
   const endDate = new Date(targetYear, 11, 31, 23, 59, 59, 999); // December 31st of the year
@@ -118,7 +104,7 @@ export const getCustomerAnalytics = errorCatchingLayer(async (req, res, next) =>
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
-  
+
   const monthlyData = monthNames.map(month => ({
     month,
     quantity: 0,
@@ -150,7 +136,7 @@ export const getCustomerAnalytics = errorCatchingLayer(async (req, res, next) =>
 
     const orderRevenue = parsePrice(order.prixttc);
     const orderQuantity = order.products.reduce((sum, p) => sum + p.quantity, 0);
-    
+
     totalRevenue += orderRevenue;
     totalQuantity += orderQuantity;
 

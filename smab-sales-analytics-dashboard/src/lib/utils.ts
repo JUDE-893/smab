@@ -74,10 +74,15 @@ export const formatDate = (dateString: string) => {
   })
 };
 
-export const formatPrice = (price: number | null) => {
+export const formatPrice = (price: number | null, currencyStyle) => {
   if (price === null) return "Unknown"
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(price)
+  try {
+    const formatted = new Intl.NumberFormat('fr-MA', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(price);
+    return `${formatted}`;
+  } catch {
+    return `${price ?? 0}`;
+  }
 };

@@ -50,7 +50,38 @@ export function HeaderMetrics() {
 
     if (isLoading) return (<SectionCardsSkeleton />)
 
+    const metrics = [
+                      {
+                        title: <>{data['total_sales_value']}<span className="text-sm ml-1 text-muted-foreground">MAD</span></>,
+                        description: 'Total Sales Value',
+                        trendValue: 0,
+                        trendDirection: 'up',
+                        metricMessage: 'Sales revenue in this periode'
+                      },
+                      {
+                        title: <>{data['best_selling_record']}<span className="text-sm ml-1 text-muted-foreground">MAD</span></>,
+                        description: 'Best Selling Record',
+                        trendValue: 0,
+                        trendDirection: 'up',
+                        metricMessage: data['best_selling_sgent'] ? `Top agent: ${data['best_selling_sgent']}` : 'Top agent: Unknown'
+                      },
+                      {
+                        title: data['total_orders'],
+                        description: 'Total Orders',
+                        trendValue: 0,
+                        trendDirection: 'up',
+                        metricMessage: 'Sales orders made'
+                      },
+                      {
+                        title: data['average_order_per_agent'],
+                        description: 'Average Order Per Agent',
+                        trendValue: 0,
+                        trendDirection: 'up',
+                        metricMessage: 'Order made by sales agent'
+                      }
+                    ];
+
     return (
-        <SectionCards metrics={data} error={error} />
+        <SectionCards metrics={metrics} error={error} />
     )
 }

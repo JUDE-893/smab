@@ -2,8 +2,9 @@
 import { z } from "zod";
 import { useSortable } from "@dnd-kit/sortable";
 import { type ColumnDef } from "@tanstack/react-table";
-import { roundToTwo } from '@/lib/utils'
+import { roundToTwo, formatPrice } from '@/lib/utils'
 import { exportArrayToExcel } from '@/services/exportDataServices/exportArrayToExcel'
+
 
 import {
     ArrowDown,
@@ -88,7 +89,7 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
       return (
          <div className="w-32">
           <p>
-            { row.original.revenue ? `${roundToTwo(row.original.revenue)} MAD` : "Unknown" }
+            { row.original.revenue ? <span>{formatPrice(roundToTwo(row.original.revenue))} <span className="text-xs">MAD</span></span> : "Unknown" }
           </p>
         </div>
       )

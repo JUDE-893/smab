@@ -1,90 +1,63 @@
 import { errorCatchingLayer } from '../utils/helpers.js';
 import Order from '../models/orderModel.js';
 import { ProductDetails } from '../models/ProductModel.js';
+import { getTimeRange } from '../utils/dateHelpers.js';
 import { format } from 'date-fns';
 
-
-
 export const getProductsQuantity = errorCatchingLayer(async (req, res, next) => {
-    const { timeRange } = req.query;
+  const { timeRange } = req.query;
 
-    if (!timeRange) {
-      return res.status(400).json({ message: 'timeRange query param is required. Expected format: date1,date2 (YYYY-MM-DD,YYYY-MM-DD)' });
-    }
+  let orderDateFilter;
+  if (timeRange && timeRange !== "all") {
+    const { startDate, endDate } = getTimeRange(timeRange);
+    orderDateFilter = { orderDate: { $gte: startDate, $lte: endDate } };
+  } else {
+    orderDateFilter = {};
+  }
 
-    const dates = String(timeRange).split(',').map((d) => d.trim());
-    if (dates.length !== 2 || !dates[0] || !dates[1]) {
-      return res.status(400).json({ message: 'Invalid timeRange. Expected two dates separated by a comma.' });
-    }
+  // Get orders in the date range
+  const orders = await Order.find(orderDateFilter).lean();
 
-    const startDate = new Date(dates[0]);
-    const endDate = new Date(dates[1]);
+  // Aggregate product quantities
+  const productQuantities = new Map();
 
-    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-      return res.status(400).json({ message: 'Invalid date format. Use YYYY-MM-DD.' });
-    }
+  orders.forEach(order => {
+    order.products.forEach(product => {
+      const key = `${product.barcode}-${product.name}`;
+      const existing = productQuantities.get(key) || {
+        name: product.name,
+        barcode: product.barcode,
+        totalQuantity: 0
+      };
 
-    startDate.setUTCHours(0, 0, 0, 0);
-    endDate.setUTCHours(23, 59, 59, 999);
-
-    // Get orders in the date range
-    const orders = await Order.find({
-      orderDate: { $gte: startDate, $lte: endDate }
-    }).lean();
-
-    // Aggregate product quantities
-    const productQuantities = new Map();
-
-    orders.forEach(order => {
-      order.products.forEach(product => {
-        const key = `${product.barcode}-${product.name}`;
-        const existing = productQuantities.get(key) || {
-          name: product.name,
-          barcode: product.barcode,
-          totalQuantity: 0
-        };
-
-        existing.totalQuantity += product.quantity;
-        productQuantities.set(key, existing);
-      });
-    });
-
-    // Convert to array and sort by quantity descending
-    const productsArray = Array.from(productQuantities.values());
-    const sortedProducts = productsArray.sort((a, b) => b.totalQuantity - a.totalQuantity);
-
-    return res.status(200).json({
-      message: 'Products quantity fetched successfully',
-      data: sortedProducts
+      existing.totalQuantity += product.quantity;
+      productQuantities.set(key, existing);
     });
   });
+
+  // Convert to array and sort by quantity descending
+  const productsArray = Array.from(productQuantities.values());
+  const sortedProducts = productsArray.sort((a, b) => b.totalQuantity - a.totalQuantity);
+
+  return res.status(200).json({
+    message: 'Products quantity fetched successfully',
+    data: sortedProducts
+  });
+});
 
 export const getProductsRevenue = errorCatchingLayer(async (req, res, next) => {
   const { timeRange } = req.query;
 
-  if (!timeRange) {
-    return res.status(400).json({ message: 'timeRange query param is required. Expected format: date1,date2 (YYYY-MM-DD,YYYY-MM-DD)' });
+  let orderDateFilter;
+  if (timeRange && timeRange !== "all") {
+    const { startDate, endDate } = getTimeRange(timeRange);
+    orderDateFilter = { orderDate: { $gte: startDate, $lte: endDate } };
+  } else {
+    orderDateFilter = {};
   }
-
-  const dates = String(timeRange).split(',').map((d) => d.trim());
-  if (dates.length !== 2 || !dates[0] || !dates[1]) {
-    return res.status(400).json({ message: 'Invalid timeRange. Expected two dates separated by a comma.' });
-  }
-
-  const startDate = new Date(dates[0]);
-  const endDate = new Date(dates[1]);
-
-  if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-    return res.status(400).json({ message: 'Invalid date format. Use YYYY-MM-DD.' });
-  }
-
-  startDate.setUTCHours(0, 0, 0, 0);
-  endDate.setUTCHours(23, 59, 59, 999);
 
   // Get orders in the date range
-  const orders = await Order.find({
-    orderDate: { $gte: startDate, $lte: endDate }
-  }).lean();
+  const orders = await Order.find(orderDateFilter).lean();
 
   // Get all unique product barcodes from orders
   const barcodes = [...new Set(
@@ -98,13 +71,11 @@ export const getProductsRevenue = errorCatchingLayer(async (req, res, next) => {
     ref: { $in: barcodes }
   }).lean();
 
-
   // Create a map of barcode to price
   const priceMap = new Map();
   productDetails.forEach(detail => {
     priceMap.set(detail.ref, detail.price_ttc);
   });
- 
 
   // Aggregate product revenue
   const productRevenue = new Map();
@@ -140,29 +111,16 @@ export const getProductsRevenue = errorCatchingLayer(async (req, res, next) => {
 export const getSalesProduct = errorCatchingLayer(async (req, res, next) => {
   const { timeRange } = req.query;
 
-  if (!timeRange) {
-    return res.status(400).json({ message: 'timeRange query param is required. Expected format: date1,date2 (YYYY-MM-DD,YYYY-MM-DD)' });
+  let orderDateFilter;
+  if (timeRange && timeRange !== "all") {
+    const { startDate, endDate } = getTimeRange(timeRange);
+    orderDateFilter = { orderDate: { $gte: startDate, $lte: endDate } };
+  } else {
+    orderDateFilter = {};
   }
-
-  const dates = String(timeRange).split(',').map((d) => d.trim());
-  if (dates.length !== 2 || !dates[0] || !dates[1]) {
-    return res.status(400).json({ message: 'Invalid timeRange. Expected two dates separated by a comma.' });
-  }
-
-  const startDate = new Date(dates[0]);
-  const endDate = new Date(dates[1]);
-
-  if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-    return res.status(400).json({ message: 'Invalid date format. Use YYYY-MM-DD.' });
-  }
-
-  startDate.setUTCHours(0, 0, 0, 0);
-  endDate.setUTCHours(23, 59, 59, 999);
 
   // Get orders in the date range
-  const orders = await Order.find({
-    orderDate: { $gte: startDate, $lte: endDate }
-  }).lean();
+  const orders = await Order.find(orderDateFilter).lean();
 
   // Get all unique product barcodes from orders
   const barcodes = [...new Set(
@@ -176,13 +134,11 @@ export const getSalesProduct = errorCatchingLayer(async (req, res, next) => {
     ref: { $in: barcodes }
   }).lean();
 
-
   // Create a map of barcode to price
   const priceMap = new Map();
   productDetails.forEach(detail => {
     priceMap.set(detail.ref, detail.price_ttc);
   });
-
 
   // Aggregate product revenue
   const productRevenue = new Map();
@@ -206,8 +162,6 @@ export const getSalesProduct = errorCatchingLayer(async (req, res, next) => {
       existing.quantity += product.quantity;
       existing.order_frequency += 1;
       productRevenue.set(key, existing);
-
-
     });
   });
 
@@ -230,7 +184,7 @@ export const getProductAnalytics = errorCatchingLayer(async (req, res, next) => 
 
   // Set default to current year if not provided
   const targetYear = year ? parseInt(year) : new Date().getFullYear();
-  
+
   // Create date range for the entire year
   const startDate = new Date(targetYear, 0, 1); // January 1st of the year
   const endDate = new Date(targetYear, 11, 31, 23, 59, 59, 999); // December 31st of the year
@@ -241,7 +195,7 @@ export const getProductAnalytics = errorCatchingLayer(async (req, res, next) => 
   // Get product details
   const productDetail = await ProductDetails.findOne({ ref: barcode }).lean();
   console.log("[PD]", productDetail);
-  
+
   if (!productDetail) {
     return res.status(404).json({ message: 'Product not found' });
   }
@@ -257,7 +211,7 @@ export const getProductAnalytics = errorCatchingLayer(async (req, res, next) => 
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
-  
+
   const monthlyData = monthNames.map(month => ({
     month,
     quantity: 0,
@@ -278,8 +232,8 @@ export const getProductAnalytics = errorCatchingLayer(async (req, res, next) => 
 
     const quantity = productInOrder.quantity;
     const revenue = productDetail.price_ttc * quantity;
-    
-    totalSalesValue += revenue; 
+
+    totalSalesValue += revenue;
 
     // Update monthly data
     const orderMonth = new Date(order.orderDate).getMonth();
@@ -299,8 +253,8 @@ export const getProductAnalytics = errorCatchingLayer(async (req, res, next) => 
   })).sort((a, b) => new Date(a.date) - new Date(b.date));
 
   // Get product name from any order that contains it
-  const productName = orders.length > 0 
-    ? orders[0].products.find(p => p.barcode === barcode).name 
+  const productName = orders.length > 0
+    ? orders[0].products.find(p => p.barcode === barcode).name
     : 'Unknown Product';
 
   return res.status(200).json({

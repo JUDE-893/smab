@@ -34,7 +34,11 @@ type ChartMetaData = {
   hideY?: boolean;
   innerRightLabelFormatter?: () => void;
   innerLeftLabelFormatter?: () => void;
-  YaWidth: number
+  YaWidth: number;
+  chartFooter?: {
+    title: string,
+    description: string
+  }
 };
 
 type HorizentalChartBarProps = {
@@ -180,12 +184,12 @@ export function HorizentalChartBar({
               </div>
             )}
 
-            <div className="flex gap-2 leading-none font-medium">
-              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+            {chartMetaData?.chartFooter && <><div className="flex gap-2 leading-none font-medium">
+              {chartMetaData?.chartFooter?.title}
             </div>
             <div className="text-muted-foreground leading-none">
-              Showing total visitors for the last 6 months
-            </div>
+              {chartMetaData?.chartFooter?.description}
+            </div></>}
           </CardFooter>
         </>
       ) : (

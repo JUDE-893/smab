@@ -1,9 +1,12 @@
 "use client"
 
-import { MonoPieChart } from '@/components/charts/MonoPieChart';
 import { getAgentSalesAndOrders } from '@/services/salesServices'
 import { useCustomQuery } from '@/hooks/useCustomQuery'
 import { useTimeRange } from '@/hooks/useTimeRange'
+import { MonoPieChart } from '@/components/charts/MonoPieChart';
+import { TrendingUp } from "lucide-react"
+import { formatPrice } from '@/lib/utils';
+
 
 const chartData = [
   { source: "chrome", leads: 275, fill: "var(--color-chrome)" },
@@ -55,6 +58,25 @@ export function SalesAgentSharesChart() {
     ['agent-sales-and-orders',timeRange],
     async () => await getAgentSalesAndOrders(timeRange)
   )
+
+  chartMetaData.chartFooter = {
+    title: ( <> <span className="text-md text-muted-foreground">#1</span> {data?.agentSales?.[0]?.agent?.replace("_", " ")}{" "} <TrendingUp className="h-4 w-4" /> </> ),
+    description: (
+      <>
+        Leading the sales revenue with{" "}
+        {data?.agentSales?.[0]?.sales ? (
+          <>
+            {formatPrice(data?.agentSales?.[0]?.sales)}{" "}
+            <span className="text-xs">MAD</span>
+          </>
+        ) : (
+          "Unknown"
+        )}
+      </>
+    )
+  };
+
+
 
 
   return (

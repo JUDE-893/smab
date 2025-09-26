@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/drawer"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-
+import { formatDate, formatPrice } from '@/lib/utils'
 interface Product {
   _id: { $oid: string }
   name: string
@@ -44,23 +44,7 @@ interface OrderDetailsDrawerProps {
 }
 
 export function OrderDetailsDrawer({ order, trigger }: OrderDetailsDrawerProps) {
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    })
-  }
 
-  const formatPrice = (price: number | null) => {
-    if (price === null) return "Unknown"
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-    }).format(price)
-  }
 
   return (
     <Drawer>
@@ -151,7 +135,7 @@ export function OrderDetailsDrawer({ order, trigger }: OrderDetailsDrawerProps) 
             <div className="space-y-2">
               <div className="flex justify-between items-center">
                 <span className="font-medium">Total Price:</span>
-                <span className="text-lg font-bold">{formatPrice(order.prixttc)}</span>
+                <span className="text-lg font-bold">{formatPrice(order.prixttc)} <span className='text-xs'>MAD</span></span>
               </div>
 
               <div className="flex justify-between items-center text-sm text-muted-foreground">

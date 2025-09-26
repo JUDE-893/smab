@@ -1,9 +1,12 @@
 "use client"
 
 import { HorizentalChartBar } from '@/components/charts/HorizentalBarChart';
+import { TrendingUp } from "lucide-react"
 import { getAgentSalesAndOrders } from '@/services/salesServices'
 import { useCustomQuery } from '@/hooks/useCustomQuery'
 import { useTimeRange } from '@/hooks/useTimeRange'
+import { sortArrayByPrp } from '@/lib/utils';
+
 
 
 const chartData = [
@@ -43,8 +46,9 @@ const chartConfig = {
 const chartMetaData = {
   title: "Orders Contributions",
   description: 'Percentage of total orders attributed to an agent',
-  dataKey:"sales",
-  nameKey:"agent"
+  dataKey:"orders_count",
+  nameKey:"agent",
+  YaWidth: 100
 }
 
 export function AgentOrdersSharesChart() {
@@ -60,6 +64,12 @@ export function AgentOrdersSharesChart() {
   let dataRec = data?.agentSales?.map((agt) => {
     return {...agt, fill: `var(--color-${agt?.agent})`}
   })
+
+  let sorted = sortArrayByPrp(data?.agentSales ?? [], 'orders_count');
+  chartMetaData.chartFooter = {
+  title: ( <> <span className="text-md text-muted-foreground">#1</span> {sorted?.[0]?.agent?.replace("_", " ")}{" "} <TrendingUp className="h-4 w-4" /> </> ),
+  description: `Leading with most orders assisted with ${sorted?.[0]?.orders_count ? sorted?.[0]?.orders_count : "Unknown"} `
+};
 
     return (
       <HorizentalChartBar

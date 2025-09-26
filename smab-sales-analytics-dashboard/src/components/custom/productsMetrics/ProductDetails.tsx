@@ -68,7 +68,7 @@ export function ProductDetails({ barcode, className }: ProductDetailsProps) {
                       <CreditCard className="h-5 w-5 text-muted-foreground" />
                       <div>
                         <p className="text-sm font-medium">Total Sales</p>
-                        <p className="text-sm text-muted-foreground">{formatPrice(data?.totalSalesValue) || "Unknown"}</p>
+                        <p className="text-sm text-muted-foreground">{data?.totalSalesValue ? <span> {formatPrice(data?.totalSalesValue)} <span className='text-xs'>MAD</span> </span> : "Unknown"}</p>
                       </div>
                     </div>
 

@@ -60,6 +60,9 @@ import { DataTable } from '@/components/shadcnkit/data-table'
 import { tableFilterConfig, exportDataConfig, skeletonRow } from "@/components/config/salesCompos/dataTableConfig"
 import { OrderDetailsDrawer } from '@/components/shadcnkit/order-details-drawer'
 import { DataTableColumnHeader } from "@/components/shadcnkit/data-table-column-header"
+import { CustomerDetailsDrawer } from '@/components/custom/customersMetrics/CustomerDetailsDrawer';
+import { formatPrice } from '@/lib/utils'
+
 
 export const schema = z.object({
     id: z.string,
@@ -112,7 +115,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
           {row?.original?.orderNumber
             ? <OrderDetailsDrawer
             order={row.original}
-            trigger={<p className="hover:underline">{row?.original?.orderNumber}</p>}
+            trigger={<p className="hover:underline cursor-pointer">{row?.original?.orderNumber}</p>}
           />
           : "Unknown"
         }
@@ -162,11 +165,20 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
   {
     accessorKey: "customerName",
     header: () => <div className="">Customer Name</div>,
-    cell: ({ row }) => (
-      <p>
-        {row.original.customerName}
-      </p>
-    ),
+    cell: ({ row }) => {
+      if (row.original.customerName?.props) return row.original.customerName
+      return (
+        <>
+          {row.original.customerName
+            ? <CustomerDetailsDrawer
+                customerName={row.original.customerName}
+                trigger={<p className="hover:underline">{row.original.customerName}</p>}
+          />
+          : "Unknown"
+        }
+        </>
+      )
+    }
   },
   // prixttc
   {
@@ -180,7 +192,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
       return (
          <div className="w-32">
           <p>
-            { row.original.prixttc ? `${row.original.prixttc} MAD` : "Unknown" }
+            {row.original.prixttc ? <span> {formatPrice(row.original.prixttc)} <span className='text-xs'>MAD</span> </span> : "Unknown"}
           </p>
         </div>
       )

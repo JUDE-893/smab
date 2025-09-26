@@ -27,7 +27,12 @@ export function useTimeRange(): string {
       return `${startDate},${formattedToday}`;
     }
 
-    // Fallback to default
+    // Case 3: timeRange is a string "all" || "null"
+    if (typeof timeRange === 'string' && ["all", "null"].includes(timeRange)) {
+      return "all";
+    }
+
+    // Fallback to default 30 day
     const startDate = format(subDays(today, 30), 'yyyy-MM-dd');
     return `${startDate},${formattedToday}`;
   }, [timeRange]);

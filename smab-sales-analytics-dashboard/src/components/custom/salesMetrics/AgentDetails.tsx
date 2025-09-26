@@ -22,12 +22,12 @@ interface ProductDetailsProps {
   className?: string
 }
 
-export function CustomerDetails({ customerName, className }: ProductDetailsProps) {
+export function CustomerDetails({ agentName, className }: ProductDetailsProps) {
 
-  if (typeof customerName !== "string") return <></>
+  if (typeof agentName !== "string") return <></>
   const { data, isLoading, error } = useCustomQuery(
-    ['customer', customerName],
-    async () => await getCustomerAnalysis(customerName)
+    ['agent', agentName],
+    async () => await getCustomerAnalysis(agentName)
   );
 
   console.log("{DATA}", data);
@@ -37,7 +37,7 @@ export function CustomerDetails({ customerName, className }: ProductDetailsProps
     {data ? (
             <div className="mx-auto w-full max-w-2xl scroll-auto">
               <DrawerHeader className="text-center">
-                <DrawerTitle className="text-2xl font-bold">About Customer</DrawerTitle>
+                <DrawerTitle className="text-2xl font-bold">About Sales Agent</DrawerTitle>
               </DrawerHeader>
 
               <div className="px-6 pb-6 space-y-6 md:ml-36 mt-8">
@@ -48,7 +48,7 @@ export function CustomerDetails({ customerName, className }: ProductDetailsProps
                       <User className="h-5 w-5 text-muted-foreground" />
                       <div>
                         <p className="text-sm font-medium">Name</p>
-                        <p className="text-sm text-muted-foreground">{data?.customer_name}</p>
+                        <p className="text-sm text-muted-foreground">{data?.agent_name}</p>
                       </div>
                     </div>
 

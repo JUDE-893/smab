@@ -4,6 +4,9 @@ import { MonoPieChart } from '@/components/charts/MonoPieChart';
 import { getOrdersProducts } from '@/services/productServices'
 import { useCustomQuery } from '@/hooks/useCustomQuery'
 import { useTimeRange } from '@/hooks/useTimeRange'
+import { TrendingUp } from "lucide-react"
+import { formatPrice } from '@/lib/utils';
+
 
 let tenColor = [
   `var(--chart-1)`,
@@ -43,6 +46,23 @@ export function TopTenProductRevenue() {
   dataRec?.forEach((element, i) => {
    chartConfig[element?.barcode] = {label: `#${i+1} : ${element?.barcode} - ${element?.name}`, color: tenColor[i]}
  });
+
+ chartMetaData.chartFooter = {
+   title: ( <> <span className="text-md text-muted-foreground">#1</span> {data?.[0]?.name}{" "} <TrendingUp className="h-4 w-4" /> </> ),
+   description: (
+     <>
+       {data?.[0]?.barcode}{" - "}Leading the purchase value with{" "}
+       {data?.[0]?.revenue ? (
+         <>
+           {formatPrice(data?.[0]?.revenue)}{" "}
+           <span className="text-xs">MAD</span>
+         </>
+       ) : (
+         "Unknown"
+       )}
+     </>
+   )
+ };
 
   return (
     <MonoPieChart

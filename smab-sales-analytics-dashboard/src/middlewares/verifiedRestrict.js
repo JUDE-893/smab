@@ -1,13 +1,15 @@
 import { NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 import { cookies } from "next/headers";
+import { decryptJWT } from '@/lib/cryptoHelpers';
 
 export async function verifiedRestrict(req) {
 
-  
+
   const verifiedCookie = cookies().get("vertkn");
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  let tverified = verifiedCookie?.value === token?.accessToken.slice(0,32);
+  const decryptedToken = await await decryptJWT(token?.accessToken, process.env.JWT_ENCRYPTION_SECRET);
+  let tverified = verifiedCookie?.value === decryptedToken?.slice(0,32);
   console.log('tverified', tverified);
   console.log('_______________________________________________')
   console.log('token', token);
