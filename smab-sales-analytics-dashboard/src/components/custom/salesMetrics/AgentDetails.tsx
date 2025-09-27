@@ -11,10 +11,10 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer"
 import { Separator } from "@/components/ui/separator"
-import { getCustomerAnalysis } from '@/services/customersServices'
+import { getAgentAnalysis } from '@/services/salesServices'
 import { useCustomQuery } from '@/hooks/useCustomQuery'
 import { PurchaseActivityChart } from './PurchaseActivityChart'
-import { CustomerOrdersHeatMapChart } from './CustomerOrdersHeatMapChart'
+import { AgentOrdersHeatMapChart } from './AgentOrdersHeatMapChart'
 import { formatPrice } from "@/lib/utils";
 
 interface ProductDetailsProps {
@@ -22,12 +22,12 @@ interface ProductDetailsProps {
   className?: string
 }
 
-export function CustomerDetails({ agentName, className }: ProductDetailsProps) {
+export function AgentDetails({ agentName, className }: ProductDetailsProps) {
 
   if (typeof agentName !== "string") return <></>
   const { data, isLoading, error } = useCustomQuery(
     ['agent', agentName],
-    async () => await getCustomerAnalysis(agentName)
+    async () => await getAgentAnalysis(agentName)
   );
 
   console.log("{DATA}", data);
@@ -48,7 +48,7 @@ export function CustomerDetails({ agentName, className }: ProductDetailsProps) {
                       <User className="h-5 w-5 text-muted-foreground" />
                       <div>
                         <p className="text-sm font-medium">Name</p>
-                        <p className="text-sm text-muted-foreground">{data?.agent_name}</p>
+                        <p className="text-sm text-muted-foreground">{data?.sales_agent}</p>
                       </div>
                     </div>
 
@@ -89,7 +89,7 @@ export function CustomerDetails({ agentName, className }: ProductDetailsProps) {
               <div className="space-y-4 mt-6">
                 <div className="flex items-center gap-2 text-primary">
                   <Package className="h-5 w-5" />
-                  <h3 className="text-lg font-semibold">Purchase Activity</h3>
+                  <h3 className="text-lg font-semibold">Sales Activity</h3>
                 </div>
                 <PurchaseActivityChart data={data?.monthlyAnalysis} isLoading={isLoading} error={error} />
               </div>
@@ -98,9 +98,9 @@ export function CustomerDetails({ agentName, className }: ProductDetailsProps) {
               <div className="space-y-4 my-11">
                 <div className="flex items-center gap-2 text-primary">
                   <IconShoppingCartBolt className="h-5 w-5" />
-                  <h3 className="text-lg font-semibold">Customer purchase Analysis</h3>
+                  <h3 className="text-lg font-semibold">Agent Contributions Overview</h3>
                 </div>
-                <CustomerOrdersHeatMapChart data={data?.dailyOrders} isLoading={isLoading} error={error} />
+                <AgentOrdersHeatMapChart data={data?.dailyOrders} isLoading={isLoading} error={error} />
               </div>
 
               <div className="px-6 pb-6">

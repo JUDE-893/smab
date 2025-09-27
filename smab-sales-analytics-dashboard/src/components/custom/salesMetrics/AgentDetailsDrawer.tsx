@@ -7,14 +7,14 @@ import {
   DrawerContent,
   DrawerTrigger,
 } from "@/components/ui/drawer"
-import { CustomerDetails } from './CustomerDetails'
+import { AgentDetails } from './AgentDetails'
 
-interface ProductDetailsDrawerProps {
-  customerName: string
+interface AgentDetailsDrawerProps {
+  agentName: string
   trigger?: React.ReactNode
 }
 
-export function CustomerDetailsDrawer({ customerName, trigger }: ProductDetailsDrawerProps) {
+export function AgentDetailsDrawer({ agentName, trigger }: AgentDetailsDrawerProps) {
 
   const [isOpen, setIsOpen] = React.useState(false);
 
@@ -26,7 +26,7 @@ export function CustomerDetailsDrawer({ customerName, trigger }: ProductDetailsD
         </DrawerTrigger>
         <DrawerContent className="max-h-[95vh]">
           <div className="overflow-y-auto">
-            {isOpen && <CustomerDetails customerName={customerName} />}
+            {isOpen && <AgentDetails agentName={agentName} />}
           </div>
       </DrawerContent>
       </Drawer>

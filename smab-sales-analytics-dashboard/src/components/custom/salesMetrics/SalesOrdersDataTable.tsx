@@ -61,6 +61,7 @@ import { tableFilterConfig, exportDataConfig, skeletonRow } from "@/components/c
 import { OrderDetailsDrawer } from '@/components/shadcnkit/order-details-drawer'
 import { DataTableColumnHeader } from "@/components/shadcnkit/data-table-column-header"
 import { CustomerDetailsDrawer } from '@/components/custom/customersMetrics/CustomerDetailsDrawer';
+import { AgentDetailsDrawer } from '@/components/custom/salesMetrics/AgentDetailsDrawer';
 import { formatPrice } from '@/lib/utils'
 
 
@@ -154,10 +155,11 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     header: () => <div className="">Sales Agent</div>,
     cell: ({ row }) => (
       <>
-      {row?.original?.salesAgent ? <Badge variant="outline" className="text-chart-3 px-1.5">
-      {row.original.salesAgent}
-      </Badge>
-      : "Unknown"}
+      {row?.original?.salesAgent ? <AgentDetailsDrawer agentName={row?.original?.salesAgent} trigger={<Badge variant="outline" className="text-chart-3 px-1.5">
+                                      {row.original.salesAgent}
+                                      </Badge>}>
+                                    </AgentDetailsDrawer>
+                                  : "Unknown"}
       </>
     ),
   },

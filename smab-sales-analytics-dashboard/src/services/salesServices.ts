@@ -35,3 +35,9 @@ export async function getMetricsPlans(plan) {
 
   return data.data
 }
+
+export async function getAgentAnalysis(salesAgent, year) {
+  const { data } = await axiosClient.post('/proxy/protected', { target: `sales/sales-agent-analytics?salesAgent=${salesAgent}${year ? `&year=${year}` : ""}` });
+
+  return data.data
+}

@@ -13,7 +13,7 @@ import { HeatMapChart } from '@/components/charts/HeatMapChart';
 
   const chartMetaData = {
     title : "Orders",
-    description: 'Number Orders made',
+    description: 'Number Orders assisted',
     dataKey: 'date',
     nameKey: 'order_count',
     hideX: false,
@@ -22,7 +22,7 @@ import { HeatMapChart } from '@/components/charts/HeatMapChart';
 
   }
 
-export function CustomerOrdersHeatMapChart({data, isLoading, error}) {
+export function AgentOrdersHeatMapChart({data, isLoading, error}) {
 
     return (
       <HeatMapChart
