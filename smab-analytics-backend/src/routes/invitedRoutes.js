@@ -1,13 +1,6 @@
 import { Router } from 'express';
-import { getHeaderMetrics,
-        getChartsAnalysis,
-        getOrders,
-        getSalesMetricsPerDay,
-        getOrderMetricsPerDay,
-        getAgentSales,
-        getPlansMetrics,
-        getSalesAgentAnalytics }
-        from '../controllers/salesControllers.js';
+import { redirectAuthorizedRegister, checkInvitationRedirect,   }
+        from '../controllers/inviteControllers.js';
 import { protect, verifiedAccess}  from '../controllers/authController.js';
 
 const router = Router();
