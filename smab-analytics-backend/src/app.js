@@ -17,33 +17,46 @@ const proxiedIPs = process.env.PROXIED_IP_ADDRESSES.split(',') || []; // ip addr
 
 const app = express();
 
-// PROTECT AGAINST FOREIGN IP ADDRESSES | Allow onlly domestic ip addresses from accessing our app
-app.use((req, res, next) => {
-  const clientIp = req.ip;
-  const timestamp = new Date().toISOString();
-  logger.info(`[REQUEST] ${timestamp} ${req.method} ${req.originalUrl} | ip ${clientIp}`);
-  console.log(`[REQUEST] ${timestamp} ${req.method} ${req.originalUrl} | ip ${clientIp}`);
-  if (!allowedIps.includes(clientIp)) {
-    logger.info(`[REQUEST FORBIDEN] ip ${clientIp}`);
-    console.log(`[REQUEST FORBIDEN] ip ${clientIp}`);
-    return res.status(403).json({ error: 'Forbidden' });
-  }
-  next();
-});
+// // PROTECT AGAINST FOREIGN IP ADDRESSES | Allow onlly domestic ip addresses from accessing our app
+// app.use((req, res, next) => {
+
+//   // DOMESTIC IP ADDRESSES (e.g; NextJs server, listening services ...)
+//   const allowedIps = process.env.DOMESTIC_IP_ADDRESSES.split(',') || [];;
+
+//   const proxiedIPs = process.env.PROXIED_IP_ADDRESSES.split(',') || []; // ip addresses that are using proxy network (e.g; Dashboard clients)
+
+
+//   const clientIp = req.ip;
+//   const timestamp = new Date().toISOString();
+//   logger.info(`[REQUEST] ${timestamp} ${req.method} ${req.originalUrl} | ip ${clientIp}`);
+//   console.log(`[REQUEST] ${timestamp} ${req.method} ${req.originalUrl} | ip ${clientIp}`);
+//   if (!allowedIps.includes(clientIp)) {
+//     logger.info(`[REQUEST FORBIDEN] ip ${clientIp}`);
+//     console.log(`[REQUEST FORBIDEN] ip ${clientIp}`);
+//     return res.status(403).json({ error: 'Forbidden' });
+//   }
+//   next();
+// });
 
 // SECURITY HEADERS
 app.use(helmet());
 
 // CORS SETTINGS
 const corsOptionsDelegate = (req, callback) => {
-  // req.ip will be the real client IP if trust proxy is set correctly
-  const clientIp = req.ip;
 
+  logger.info(`[CORS] ${req.path}`+ " | "+ req.ip);
+  // Always allow the verify-Account route
+  if (req.path?.startsWith('/smab-analytics/api/auth/verify-Account')) {
+    return callback(null, {
+      origin: process.env.CLIENT_SCHEME, 
+      credentials: true,
+    });
+  }
+
+  const clientIp = req.ip;
   if (allowedIps.includes(clientIp)) {
-    // Allow this IP
-    callback(null, { origin: true });
+    callback(null, { origin: true, credentials: true });
   } else {
-    // Block this IP from CORS
     callback(null, { origin: false });
   }
 };

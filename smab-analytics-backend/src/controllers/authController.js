@@ -172,6 +172,12 @@ export const resetPassword = errorCatchingLayer(async (req, res, next) => {
 
 export const activateAccount = errorCatchingLayer(async (req, res, next) => {
 
+  res.header("Access-Control-Allow-Origin", process.env.CLIENT_SCHEME); 
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+
   const cryptedToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
 
   const user = await User.findOne({verificationToken: cryptedToken, verificationTokenExpiresAt: {$gte: new Date()}})
@@ -180,7 +186,7 @@ export const activateAccount = errorCatchingLayer(async (req, res, next) => {
     return next(new AppError('Invalid verification token. Please try again'),400);
   }
 
-  // update password
+  // update user
   user.verifiedAt = Date.now();
   user.accountStatus = true;
   user.verificationToken= undefined;
@@ -193,11 +199,16 @@ export const activateAccount = errorCatchingLayer(async (req, res, next) => {
 
   let vertkn = token.slice(0,32)
 
+  const daysToMs = days => days * 24 * 60 * 60 * 1000;
+
   res.cookie("vertkn", vertkn, {
-    httpOnly: true,
-    secure: true,
-    maxAge: 31 * 24 * 60 * 60 * 1000 // 3Od
+    httpOnly: process.env.VERTK_HTTP_ONLY === 'true',
+    secure: process.env.VERTK_SECURE === 'true',
+    sameSite: process.env.VERTK_SAME_SITE,   // 'lax', 'strict', or 'none'
+    path: '/',
+    maxAge: daysToMs(Number(process.env.VERTK_MAX_AGE))
   });
+ 
 
   // response
   return res.redirect(`${process.env.CLIENT_SCHEME}/sales`);

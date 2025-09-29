@@ -9,10 +9,13 @@ import { getHeaderMetrics,
         getSalesAgentAnalytics }
         from '../controllers/salesControllers.js';
 import { protect, verifiedAccess}  from '../controllers/authController.js';
+import { restrictForIp }  from '../controllers/integrityController.js';
 
 const router = Router();
 
-// router.use(protect, verifiedAccess)
+router.use(restrictForIp)
+
+router.use(protect, verifiedAccess)
 
 router.get('/header-metrics', getHeaderMetrics);
 

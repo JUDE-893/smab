@@ -5,7 +5,7 @@ import { protect, verifiedAccess}  from '../controllers/authController.js';
 
 const router = Router();
 
-router.use(protect, verifiedAccess)
+// router.use(protect, verifiedAccess)
 
 router.post('/new', createOrUpdateOrder);
 

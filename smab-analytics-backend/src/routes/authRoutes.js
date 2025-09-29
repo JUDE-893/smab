@@ -1,7 +1,13 @@
 import express from 'express';
 import {register, login, forgotPassword, resetPassword, activateAccount, reSendVerificationToken, protect}  from '../controllers/authController.js';
+import { restrictForIp }  from '../controllers/integrityController.js';
 
 const router = express.Router();
+
+router.route('/verify-Account/:token')
+      .get(activateAccount);
+
+router.use(restrictForIp)
 
 router.route('/register')
       .post(register);
@@ -15,8 +21,6 @@ router.route('/forgot-password')
 router.route('/resetPassword/:resetToken')
       .post(resetPassword);
 
-router.route('/verify-Account/:token')
-      .get(activateAccount);
 
 router.use(protect)
 router.route('/resend-verification-mail')
