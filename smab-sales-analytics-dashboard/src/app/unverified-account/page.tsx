@@ -1,7 +1,7 @@
 "use client"
 
 import { useSendVerificationMail } from '@/hooks/auth/useAuthenticate';
-import ReportInterface from "@/components/shadcnKit/ReportInterface";
+import ReportInterface from "@/components/shadcnkit/ReportInterface";
 import { Loader } from "lucide-react"
 
 
