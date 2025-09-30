@@ -21,6 +21,7 @@ async function sendAccountInvitationMail(req, user) {
 // CONTROLLERS
 export const inviteUser = errorCatchingLayer(async (req, res, next) => {
 
+  const currentDate = new Date();
   let token = crypto.randomBytes(32).toString('hex');
   const timeoutMinutes = Number(process.env.AUTHORIZATION_TOKEN_TIMEOUT) || 21600,
   authorizationTokenExpiresAt = new Date(
@@ -28,7 +29,7 @@ export const inviteUser = errorCatchingLayer(async (req, res, next) => {
   );
   const invited = await Invited.create({
     issuer: req?.user?._id,
-    email: re.body.email,
+    email: req.body.email,
     authorizationToken: token,
     authorizationTokenExpiresAt
   })
@@ -38,7 +39,7 @@ export const inviteUser = errorCatchingLayer(async (req, res, next) => {
   res.status(201).json({message: 'Invitation mail was sent to invited user successfully'})
 })
 
-export const checkInvitationRedirect = errorCatchingLayer(async (req, res, next) => {
+export const checkInvitation = errorCatchingLayer(async (req, res, next) => {
 
   let token = req.params.authoToken;
 
