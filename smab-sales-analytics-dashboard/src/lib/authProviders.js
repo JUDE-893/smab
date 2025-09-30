@@ -3,6 +3,7 @@ import { AuthError } from "next-auth";
 import { headersToObject } from '@/lib/requestHelpers';
 import { encryptJWT } from '@/lib/cryptoHelpers';
 import { CredentialsSignin } from "next-auth";
+import { log } from "console";
 
 
 class InvalidLoginError extends CredentialsSignin {
@@ -46,6 +47,8 @@ export const credentialOption = CredentialsProvider({
 
           // response
           const data = await response.json();
+          console.log("[[data]]", data, '__ _ __', response);
+          
           // ✅ CORRECT: Return only serializable data
           if (response.ok && data.status === 'success') {
             const token = await encryptJWT(data?.token, process.env.JWT_ENCRYPTION_SECRET);
@@ -70,7 +73,7 @@ export const credentialOption = CredentialsProvider({
         } catch (error) {
           console.log("_____________3RR0R________________", error);
           
-          throw new InvalidLoginError((e).message);
+          throw new InvalidLoginError(error.message);
         }
       }
     })
