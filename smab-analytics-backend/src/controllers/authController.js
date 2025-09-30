@@ -104,6 +104,20 @@ export const protect = errorCatchingLayer(async (req,res,next) => {
   }
 })
 
+export const restrictTo = (roleArray) => errorCatchingLayer(async (req,res,next) => {
+  try {
+    const token = (req.headers.authorization)?.split(' ')?.[1];
+
+    const user = await veryfyAuthToken(token);
+
+    // success
+    req.user = user;
+    next()
+  } catch (error) {
+    next(new AppError(error?.message || "Unauthorized access. Jwt missing or invalid", 401))
+  }
+})
+
 export const verifiedAccess = errorCatchingLayer(async (req,res,next) => {
   const user = req.user;
 
@@ -113,7 +127,7 @@ export const verifiedAccess = errorCatchingLayer(async (req,res,next) => {
     e.name = 'UnverifiedAccountError';
     throw e;
   }
-  
+
   next()
 })
 
@@ -218,10 +232,6 @@ export const activateAccount = errorCatchingLayer(async (req, res, next) => {
 export const reSendVerificationToken = errorCatchingLayer(async (req, res, next) => {
 
   const user = req.user;
-  console.log("u-----------------", req.user);
-  console.log("p-----------------", req.params);
-  console.log("b-----------------", req.body);
-  console.log("H-----------------", req.headers);
   await sendAccountVerificationMail(req, user);
 
   return res.status(200).json({status: 'success', message: 'verification mail was sent to this email address', mailTo: user.email})

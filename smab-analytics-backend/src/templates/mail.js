@@ -15,3 +15,30 @@ export const accountVerificationMail = ({host, protocol, token, user}) => {
   `
   return text
 }
+export const accountInvitationMail = ({ host, protocol, token, user }) => {
+  const url = `${protocol}://${host}/smab-analytics/api/invite/invitation/${token}`;
+
+  const text = `
+    <strong>Hello,</strong><br><br
+    <p>
+      You have been invited to join <strong>SMAB Analytics</strong> by
+      <strong>${user.name}</strong> (<a href="mailto:${user.email}">${user.email}</a>).
+    </p>
+    <p>
+      SMAB Analytics is a powerful platform designed to help you unlock insights and make smarter, data‑driven decisions.
+      To get started, please verify your identity by clicking the link below:
+    </p>
+    <p>
+      <a href="${url}">Accept Invitation & Create Account</a>
+    </p>
+    <p>
+      If you did not expect this invitation, you can safely ignore this email.
+    </p>
+    <p>
+      We look forward to welcoming you on board.<br>
+      <strong>The SMAB Analytics Team</strong>
+    </p>
+  `;
+
+  return text;
+};

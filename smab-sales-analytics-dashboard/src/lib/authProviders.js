@@ -30,7 +30,7 @@ export const credentialOption = CredentialsProvider({
           url = '/login';
 
           if (credis.mode === 'register') {
-            payload = {...payload, name: credis.name, passwordConfirm: credis.passwordConfirm};
+            payload = {...payload, name: credis.name, passwordConfirm: credis.passwordConfirm, authoToken: credis.authoToken};
             url = '/register';
           }
 

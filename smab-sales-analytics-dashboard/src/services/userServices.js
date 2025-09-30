@@ -20,3 +20,9 @@ export const resetPassword = async function({ token, data }) {
 
   return result
 }
+
+export const inviteUser = async function({ data }) {
+  const result = await axiosClient.post('/proxy/protected', { target: 'invite', data })
+
+  return result
+}

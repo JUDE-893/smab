@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils"
 import { toast } from "sonner"
 import { useSession } from 'next-auth/react';
 import { useForm, Controller } from "react-hook-form"
+import { useParams } from "next/navigation";
 
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
@@ -24,8 +25,10 @@ export function RegisterForm({
     mode: 'register',
     }});
 
+  const { authoToken } = useParams(); 
   const {authonticate, Authenticating, authError} = useAuthenticate();
-
+    console.log('authToken', authoToken );
+    
 
   useEffect(()=> {
     // console.log("authError", authError);
@@ -43,7 +46,7 @@ export function RegisterForm({
       <Card className="overflow-hidden bg-background p-0 w-110">
         <CardContent className="grid p-0 ">
           <form onSubmit={handleSubmit((data) => {
-            let r = authonticate({...data,redirect: false, mode: 'register'});
+            let r = authonticate({...data, authoToken, redirect: false, mode: 'register'});
             console.log("r",r);
           })}
             className="p-6 md:p-8">

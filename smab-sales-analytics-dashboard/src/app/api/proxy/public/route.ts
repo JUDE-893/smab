@@ -19,7 +19,7 @@ export async function POST(request: Request) {
   }
 
   let response = await fetch(`${process.env.BACKEND_API_BASE_URL}/${target}`, fetchOptions);
-  console.log("[R]", response);
+  console.log("[R]", `${process.env.BACKEND_API_BASE_URL}/${target}`, fetchOptions.body,"____________", response);
 
   const responseData = await response.json();
   console.log('[PR RESPONSE]', responseData);

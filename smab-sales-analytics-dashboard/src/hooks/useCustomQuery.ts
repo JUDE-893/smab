@@ -1,5 +1,5 @@
 // hooks/useCustomQuery.ts
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 
 
 export function useCustomQuery(qKey, qFn) {
@@ -10,4 +10,10 @@ export function useCustomQuery(qKey, qFn) {
     cacheTime: 1000 * 60 * 10, // Optional: keep unused data for 10 minutes
     refetchOnWindowFocus: true, // Optional: disable refetch on focus
   });
+}
+
+export function useCustomMutation(mFn) {
+  return useMutation({
+    mutationFn: (data) => mFn(data)
+  })
 }

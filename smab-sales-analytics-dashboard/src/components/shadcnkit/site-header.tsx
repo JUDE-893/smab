@@ -1,9 +1,10 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
+
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { ModeToggle } from '@/components/shadcnkit/mode-toggle'
+import { InviteUserDialog } from '@/components/shadcnkit/InviteUserDialog'
 import { useQueryParams } from "@/hooks/useQueryParams"
 
 export const dynamic = 'force-dynamic'
@@ -24,16 +25,7 @@ export function SiteHeader({pageTitle}) {
         />
         <h1 className="text-base font-medium">{pageTitle}</h1>
         <div className="ml-auto flex items-center gap-2">
-          <Button variant="ghost" asChild size="sm" className="hidden sm:flex">
-            <a
-              href="https://github.com/shadcn-ui/ui/tree/main/apps/v4/app/(examples)/dashboard"
-              rel="noopener noreferrer"
-              target="_blank"
-              className="dark:text-foreground"
-            >
-              GitHub
-            </a>
-          </Button>
+          <InviteUserDialog />
           <ModeToggle />
         </div>
       </div>
