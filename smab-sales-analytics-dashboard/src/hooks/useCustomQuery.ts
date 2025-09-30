@@ -11,3 +11,9 @@ export function useCustomQuery(qKey, qFn) {
     refetchOnWindowFocus: true, // Optional: disable refetch on focus
   });
 }
+
+export function useCustomMutation() {
+  return useMutation({
+    mutationFn: () => sendPasswordResetRequest()
+  })
+}
