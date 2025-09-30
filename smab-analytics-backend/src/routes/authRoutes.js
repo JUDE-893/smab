@@ -1,10 +1,11 @@
 import express from 'express';
 import {register, login, forgotPassword, resetPassword, activateAccount, reSendVerificationToken, protect}  from '../controllers/authController.js';
-
+import { checkInvitation, getRegisterToken }
+        from '../controllers/inviteController.js';
 const router = express.Router();
 
 router.route('/register')
-      .post(register);
+      .post(getRegisterToken, checkInvitation, register);
 
 router.route('/login')
       .post(login);

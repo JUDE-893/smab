@@ -18,7 +18,7 @@ export function useAuthenticate(data) {
           throw new Error(response.error);
           return null
         }
-      // router.push(`/sales`);
+      router.push(`/sales`);
       return response
           },
     // onSuccess : (data) => console.log('Success',data),

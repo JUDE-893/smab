@@ -16,7 +16,7 @@ export const accountVerificationMail = ({host, protocol, token, user}) => {
   return text
 }
 export const accountInvitationMail = ({ host, protocol, token, user }) => {
-  const url = `${protocol}://${host}/smab-analytics/api/auth/verify-Account/${token}`;
+  const url = `${protocol}://${host}/smab-analytics/api/invite/invitation/${token}`;
 
   const text = `
     <strong>Hello,</strong><br><br

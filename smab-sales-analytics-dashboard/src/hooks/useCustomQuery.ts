@@ -1,5 +1,5 @@
 // hooks/useCustomQuery.ts
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 
 
 export function useCustomQuery(qKey, qFn) {
@@ -12,8 +12,8 @@ export function useCustomQuery(qKey, qFn) {
   });
 }
 
-export function useCustomMutation() {
+export function useCustomMutation(mFn) {
   return useMutation({
-    mutationFn: () => sendPasswordResetRequest()
+    mutationFn: (data) => mFn(data)
   })
 }

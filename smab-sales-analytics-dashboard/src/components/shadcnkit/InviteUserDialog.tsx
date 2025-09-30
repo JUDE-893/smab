@@ -1,6 +1,6 @@
 'use client'
 
-impoty { useState } from 'react'
+import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -18,11 +18,16 @@ import { IconUserPlus } from "@tabler/icons-react"
 import { useCustomMutation } from '@/hooks/useCustomQuery'
 import { inviteUser } from '@/services/userServices'
 
+
 export function InviteUserDialog () {
 
-  const [input, setInput] = useState("")
-  const {isPending, mutate, error} = useCustomMutation(() => inviteUser({email:input}));
+  const [input, setInput] = useState("dddd")
+  const {isPending, mutate, error} = useCustomMutation(inviteUser);
   
+  function hundleSubmit() {
+    mutate({data : {email:input}});
+    setInput("");
+  }
   return (
     <Dialog>
       <form>
@@ -38,14 +43,14 @@ export function InviteUserDialog () {
           </DialogHeader>
             <div className="grid gap-3">
                 <Label htmlFor="name-1">Email</Label>
-                <Input type="email" id="name-1" name="name" placeholder="johnDoe@example.com" value={input} onChange={setInput}/>
+                <Input type="email" id="name-1" name="name" placeholder="johnDoe@example.com" value={input} onChange={(e) => setInput(e.target.value)}/>
             </div>
 
           <DialogFooter>
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button type="submit" disable={isPending} >Invite</Button>
+            <Button type="submit" disable={isPending} onClick={hundleSubmit}>Invite</Button>
           </DialogFooter>
         </DialogContent>
       </form>
