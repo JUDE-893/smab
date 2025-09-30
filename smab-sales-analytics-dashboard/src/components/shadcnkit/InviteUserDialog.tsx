@@ -17,17 +17,28 @@ import { Label } from "@/components/ui/label"
 import { IconUserPlus } from "@tabler/icons-react"
 import { useCustomMutation } from '@/hooks/useCustomQuery'
 import { inviteUser } from '@/services/userServices'
-
+import { toast } from "sonner"
 
 export function InviteUserDialog () {
 
   const [input, setInput] = useState("dddd")
   const {isPending, mutate, error} = useCustomMutation(inviteUser);
-  
+
+  useEffect(()=> {
+  // auth error toast
+  Boolean(error) && toast("Oops! something went wrong.. Try again.", {
+     variant: "destructive",
+     description: <p className='text-destructive text-xs'>{error.message}</p>
+  });
+
+},[error])
+
+  // handle submit invitation request
   function hundleSubmit() {
     mutate({data : {email:input}});
     setInput("");
   }
+
   return (
     <Dialog>
       <form>

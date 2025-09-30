@@ -32,14 +32,15 @@ export function LoginForm({
 
   useEffect(()=> {
     console.log(authError)
-    // // auth error toast
-    // Boolean(authError) && toast(JSON.parse(authError.message).status === 'fails' ? "Validation Failed": "Oops! something went wrong.. Try again.", {
-    //    variant: "destructive",
-    //    description: <p className='text-destructive text-xs'>{JSON.parse(authError.message).message}</p>
-    // });
+    // auth error toast
+    let errorObj = JSON.parse(authError?.message?.split('Error: ')[0] ||"{}");
+    console.log("foo", Object.keys(authError || {}), errorObj, Boolean(authError));
+    Boolean(authError) && toast(errorObj.status === 200 ? "Validation Failed": "Oops! something went wrong.. Try again.", {
+       variant: "destructive",
+       description: <p className='text-destructive text-xs'>{errorObj?.code}</p>
+    });
 
   },[authError])
-
 
 
   return (

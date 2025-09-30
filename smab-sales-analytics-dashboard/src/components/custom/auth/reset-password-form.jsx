@@ -33,8 +33,7 @@ export function ResetPasswordForm({
 
   useEffect(()=> {
     // auth error toast
-    console.log(resetError);
-    Boolean(resetError) && toast(resetError.message?.status === 'fails' ? "Validation Failed": "Oops! something went wrong.. Try again.", {
+    Boolean(resetError) && toast("Oops! something went wrong.. Try again.", {
        variant: "destructive",
        description: <p className='text-destructive text-xs'>{resetError.message}</p>
     });

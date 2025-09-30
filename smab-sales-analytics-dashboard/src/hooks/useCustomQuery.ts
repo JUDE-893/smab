@@ -14,6 +14,15 @@ export function useCustomQuery(qKey, qFn) {
 
 export function useCustomMutation(mFn) {
   return useMutation({
-    mutationFn: (data) => mFn(data)
+    mutationFn: async (data) => {
+      let r = await mFn(data);
+
+      // Check for successful status codes
+      if (r.data.status !== 200 && r.data.status !== 201) {
+        throw new Error(r.data.message || "Oops! Something went wrong. Try again");
+      }
+
+      return r?.data;
+    }
   })
 }

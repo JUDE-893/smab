@@ -3,6 +3,7 @@ import "./globals.css";
 import Providers from '@/components/Providers'
 import { SidebarInset } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/shadcnkit/app-sidebar"
+import { Toaster } from "@/components/ui/sonner"
 
 // Google Fonts fetching via next/font/google is removed to avoid
 // network access during Docker builds. Using system fonts instead.
@@ -24,6 +25,7 @@ export default function RootLayout({
           <AppSidebar variant="inset" />
           <SidebarInset>
             {children}
+            <Toaster />
           </SidebarInset>
         </Providers>
       </body>

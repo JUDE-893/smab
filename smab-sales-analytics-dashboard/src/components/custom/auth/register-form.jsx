@@ -25,17 +25,21 @@ export function RegisterForm({
     mode: 'register',
     }});
 
-  const { authoToken } = useParams(); 
+  const { authoToken } = useParams();
   const {authonticate, Authenticating, authError} = useAuthenticate();
     console.log('authToken', authoToken );
-    
+
 
   useEffect(()=> {
-    // console.log("authError", authError);
-    // Boolean(authError) && toast(JSON.parse(authError.message).status === 'fails' ? "Validation Failed": "Oops! something went wrong.. Try again.", {
-    //    variant: "destructive",
-    //    description: <p className='text-secondary text-xs'>{JSON.parse(authError.message).message}</p>
-    // })
+    console.log(authError)
+    // auth error toast
+    let errorObj = JSON.parse(authError?.message?.split('Error: ')[0] ||"{}");
+    console.log("foo", Object.keys(authError || {}), errorObj, Boolean(authError));
+    Boolean(authError) && toast(errorObj.status === 200 ? "Validation Failed": "Oops! something went wrong.. Try again.", {
+       variant: "destructive",
+       description: <p className='text-destructive text-xs'>{errorObj?.code}</p>
+    });
+
   },[authError])
 
 

@@ -8,9 +8,11 @@ import { log } from "console";
 
 class InvalidLoginError extends CredentialsSignin {
   code = "custom";
-  constructor(message) {
-    super(message);
+  status= 500;
+  constructor(message, status) {
+    super(message, status);
     this.code = message;
+    this.status = "status";
   }
 }
 
@@ -47,12 +49,11 @@ export const credentialOption = CredentialsProvider({
 
           // response
           const data = await response.json();
-          console.log("[[data]]", data, '__ _ __', response);
-          
+
           // ✅ CORRECT: Return only serializable data
           if (response.ok && data.status === 'success') {
             const token = await encryptJWT(data?.token, process.env.JWT_ENCRYPTION_SECRET);
-            
+
             return {
               id: data.user.id,
               email: data.user.email,
@@ -64,18 +65,15 @@ export const credentialOption = CredentialsProvider({
               // ⚠️ AUTH FAILURE: Throw structured error that NextAuth can handle
               const errorMessage = data.message || 'Authentication failed';
               const errorStatus = response.status;
-              console.log("fff", data);
-              
+
               // Create an error that NextAuth understands
-              throw new InvalidLoginError("fddddddddddddddddddddddddddddddddddddddddd");
+              throw new InvalidLoginError(errorMessage, 'fails');
             }
-          
+
         } catch (error) {
           console.log("_____________3RR0R________________", error);
-          
-          throw new InvalidLoginError(error.message);
+
+          throw new InvalidLoginError(error.message, 'fails');
         }
       }
     })
-
-

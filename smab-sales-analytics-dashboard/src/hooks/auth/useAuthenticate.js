@@ -15,14 +15,14 @@ export function useAuthenticate(data) {
       console.log("dd",response);
       if (response.error) {
           // Handle API-level errors
-          throw new Error(response.error);
+          throw new Error(JSON.stringify(response));
           return null
         }
       router.push(`/sales`);
       return response
           },
     // onSuccess : (data) => console.log('Success',data),
-    onError : (e) => console.log('Error',JSON.parse(e.message))
+    // onError : (e) => console.log('Error',JSON.parse(e.message))
   })
 
   return {Authenticating: isPending,authonticate: mutate, authError: error}

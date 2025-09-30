@@ -26,15 +26,14 @@ export function ForgetPasswordForm({
   const {requesting, requestReset, requestError} = useRequestPasswordReset();
 
 
-  // useEffect(()=> {
-  //   console.log(requestError)
-  //   // auth error toast
-  //   Boolean(requestError) && toast(JSON.parse(requestError.message).status === 'fails' ? "Validation Failed": "Oops! something went wrong.. Try again.", {
-  //      variant: "destructive",
-  //      description: <p className='text-destructive text-xs'>{JSON.parse(requestError.message).message}</p>
-  //   });
-  //
-  // },[requestError])
+  useEffect(()=> {
+    // auth error toast
+    Boolean(requestError) && toast("Oops! something went wrong.. Try again.", {
+       variant: "destructive",
+       description: <p className='text-destructive text-xs'>{requestError.message}</p>
+    });
+
+  },[requestError])
 
 
 
