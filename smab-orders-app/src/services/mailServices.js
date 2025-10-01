@@ -5,6 +5,7 @@ import { generatePdf, printPDF } from "./printerServices.js";
 import * as cheerio from "cheerio";
 import logger from "../utils/logger.js";
 import fs from "fs/promises";
+import { encrypt } from '../utils/helpers.js'
 import { log } from "console";
 
 
@@ -357,12 +358,13 @@ function mergeProducts(existingProducts, incomingProducts) {
 // Redirect data to Backend
 async function redirectDataToBackend(rOrder) {
   console.log("vvv", JSON.stringify(rOrder), `${process.env.BACKEND_URL}/orders/new`);
+  const encToken = encrypt(process.env.AUTHORIZATION_TOKEN, process.env.AUTHORIZATION_SECRET);
+  
   const response = await fetch(`${process.env.BACKEND_URL}/orders/new`, {
-
-    
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${encToken}`
     },
     body: JSON.stringify(rOrder)
   });

@@ -6,14 +6,12 @@ import Order from '../models/orderModel.js';
 import logger from '../utils/logger.js';
 import { format } from 'date-fns';
 // import pool from '../config/db/mysql.js';
-// import { mergeProducts } from '../utils/helpers.js';
+import { decryptToken } from '../utils/helpers.js';
+import  AppError from '../utils/AppError.js';
 
 
 
-function filterOutWarehouseProducts(existingProducts, warehouse) {
-    let filteredPds = existingProducts.filter((pds) => pds.warehouse !== warehouse)
-    return filteredPds
-  }
+
 
 /**
  * Insert new order document or update existing one.
@@ -145,34 +143,18 @@ async function getClientData(orderID) {
       return response.json();
 }
 
-export const createOrUpdateOrder = errorCatchingLayer(async (req, res, next) => {
-    
-    const orderData = req?.body;
-
-    const clientData = await getClientData(orderData?.orderNumber)
-
-    const lead = clientData?.lead ?? null;
-    const prixttc = lead?.prixttc ?? clientData?.prixttc ?? null;
-    const paymentMethod = lead?.typedepaiement?.label ?? clientData?.typedepaiement?.label ?? null;
-    const customerName = lead?.customer?.label ?? clientData?.customer?.label ?? null;
-
- 
-
-    const order = await insertOrUpdateOrder({ ...orderData, prixttc, paymentMethod, customerName });
-
-    return res.status(200).json({
-        message: 'Order created successfully',
-        data: order
-    });
-});
 
 
+function filterOutWarehouseProducts(existingProducts, warehouse) {
+  let filteredPds = existingProducts.filter((pds) => pds.warehouse !== warehouse)
+  return filteredPds
+}
 
 /**
  * Enriches products with details from database or external API
  * @param {Array} products - Array of product objects with barcode field
  * @returns {Promise<Array>} - Updated products array with details _id
- */
+*/
 async function enrichProductsWithDetails(products) {
   try {
     // Step 1: Extract all barcodes from products
@@ -219,7 +201,7 @@ async function enrichProductsWithDetails(products) {
         });
         
         const apiProducts = response?.data?.data; // Expected format: [{ref: 'p345345', prix_ttc: 100}, ...]
-
+        
         console.log('[apiProducts]', apiProducts);
         
         
@@ -279,3 +261,40 @@ async function enrichProductsWithDetailsBatched(products, batchSize = 50) {
   return results;
 }
 
+
+export const verifyAuthorisationToken = errorCatchingLayer(async (req, res, next) => {
+    
+  let encToken = req?.headers?.authorization;
+
+  if (!encToken) return next(new AppError('Access denied. Authorization token was missing'));
+
+  encToken = encToken.split(' ')[1];
+  
+  const decToken = decryptToken(encToken, process.env.AUTHORIZATION_SECRET ?? "");
+
+  if ((process.env.AUTHORIZATION_TOKEN || "") !== decToken) return next(new AppError('Access denied. Authorization token mismatch'));
+  
+  return  next();
+
+});
+
+export const createOrUpdateOrder = errorCatchingLayer(async (req, res, next) => {
+    
+    const orderData = req?.body;
+
+    const clientData = await getClientData(orderData?.orderNumber)
+
+    const lead = clientData?.lead ?? null;
+    const prixttc = lead?.prixttc ?? clientData?.prixttc ?? null;
+    const paymentMethod = lead?.typedepaiement?.label ?? clientData?.typedepaiement?.label ?? null;
+    const customerName = lead?.customer?.label ?? clientData?.customer?.label ?? null;
+
+ 
+
+    const order = await insertOrUpdateOrder({ ...orderData, prixttc, paymentMethod, customerName });
+
+    return res.status(200).json({
+        message: 'Order created successfully',
+        data: order
+    });
+});

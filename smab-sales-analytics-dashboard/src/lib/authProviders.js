@@ -3,7 +3,7 @@ import { AuthError } from "next-auth";
 import { headersToObject } from '@/lib/requestHelpers';
 import { encryptJWT } from '@/lib/cryptoHelpers';
 import { CredentialsSignin } from "next-auth";
-import { log } from "console";
+
 
 
 class InvalidLoginError extends CredentialsSignin {
