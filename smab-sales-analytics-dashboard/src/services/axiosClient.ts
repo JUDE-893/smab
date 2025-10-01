@@ -30,13 +30,17 @@ axiosClient.interceptors.request.use(
 // 🛬 Response Interceptor
 axiosClient.interceptors.response.use(
   (response) => {
+
+    if (`${response.data.statusCode}`.startsWith('4')) {
+      window.location.href = "/login";
+    }
     return response;
   },
   (error) => {
-    console.error('Response Error:', error);
     // Optional: handle global errors like 401, 500 etc.
     if (error.response?.status === 401) {
-      // Redirect to login or show message
+      // Redirect to login or show message      
+      window.location.href = "/login";
     }
     return Promise.reject(error);
   }

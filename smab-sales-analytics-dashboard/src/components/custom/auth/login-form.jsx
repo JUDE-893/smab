@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-
+import { useSidebar } from "@/components/ui/sidebar"
 
 export function LoginForm({
   className,
@@ -27,8 +27,16 @@ export function LoginForm({
   const searchParams = useSearchParams();
   const reason = searchParams.get('reason');
 
+  const { setOpen } = useSidebar();
+
+  
+  
+
   const {authonticate, Authenticating, authError} = useAuthenticate();
 
+  useEffect(() => {
+    setOpen(false);
+  },[])
 
   useEffect(()=> {
     console.log(authError)

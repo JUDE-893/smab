@@ -41,6 +41,7 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --animate-spin: spin 2s linear infinite;
 }
 
 :root {
@@ -124,7 +125,6 @@
   --sidebar-ring: oklch(0.646 0.222 41.116);
 }
 
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -133,25 +133,6 @@
     @apply bg-background text-foreground;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* styles/search.css */
 .search-container {
@@ -220,9 +201,6 @@
   50% { background-color: rgba(255, 230, 0, 0.3); }
   100% { background-color: transparent; }
 }
-
-
-
 
 /* HEAT MAP */
 .heatmap-grid {

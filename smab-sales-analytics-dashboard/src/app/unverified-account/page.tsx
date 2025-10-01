@@ -1,12 +1,18 @@
 "use client"
 
+import { useEffect } from 'react';
 import { useSendVerificationMail } from '@/hooks/auth/useAuthenticate';
 import ReportInterface from "@/components/shadcnkit/ReportInterface";
 import { Loader } from "lucide-react"
-
+import { useSidebar } from "@/components/ui/sidebar"
 
 export default function Unverified() {
   const {sending, reSend, sendError} = useSendVerificationMail()
+  const { setOpen } = useSidebar();
+
+  useEffect(() => {
+    setOpen(false);
+  },[])
 
   if (!sending) return <ReportInterface className="bg-background absolute z-10 h-screen" image='/unverified-account.svg' message={
     <span>

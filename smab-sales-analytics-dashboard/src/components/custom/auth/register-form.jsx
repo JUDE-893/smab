@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-
+import { useSidebar } from "@/components/ui/sidebar"
 
 export function RegisterForm({
   className,
@@ -27,7 +27,11 @@ export function RegisterForm({
 
   const { authoToken } = useParams();
   const {authonticate, Authenticating, authError} = useAuthenticate();
-    console.log('authToken', authoToken );
+  const { setOpen } = useSidebar();
+
+  useEffect(() => {
+    setOpen(false);
+  },[])
 
 
   useEffect(()=> {

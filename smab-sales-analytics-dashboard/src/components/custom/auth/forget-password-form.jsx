@@ -10,7 +10,7 @@ import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { useSidebar } from "@/components/ui/sidebar"
 
 
 export function ForgetPasswordForm({
@@ -24,7 +24,11 @@ export function ForgetPasswordForm({
   const reason = searchParams.get('reason');
 
   const {requesting, requestReset, requestError} = useRequestPasswordReset();
+  const { setOpen } = useSidebar();
 
+  useEffect(() => {
+    setOpen(false);
+  },[])
 
   useEffect(()=> {
     // auth error toast
