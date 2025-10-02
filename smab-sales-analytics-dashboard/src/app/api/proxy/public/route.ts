@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     }
   };
 
-  // Only add body if data exists and is truthy
+  // Add body for POST Request
   if (data) {
     fetchOptions.body = JSON.stringify(data);
   }

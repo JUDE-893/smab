@@ -114,6 +114,7 @@ const chartMetaData = {
     title : "Total Sales",
     description: 'metrics of total sales values',
     dataKey: "date"
+
   }
 
 export function TotalSalesChart() {
@@ -132,6 +133,7 @@ export function TotalSalesChart() {
         chartMetaData={{...chartMetaData, isLoading: isLoading, error}}
         chartConfig={chartConfig}
         chartData={data?.salesMetricsPerDay}
+        id="export-sales-as-excel"
        />
     )
   }

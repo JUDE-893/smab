@@ -58,6 +58,8 @@ export const credentialOption = CredentialsProvider({
               id: data.user.id,
               email: data.user.email,
               name: data.user.name,
+              role: data.user.role,
+              profilePic: data.user.profilePic,
               verifiedAt: data.user.verifiedAt,
               token: token ?? null,
             }

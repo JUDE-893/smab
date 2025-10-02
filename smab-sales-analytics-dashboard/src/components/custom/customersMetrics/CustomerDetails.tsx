@@ -65,7 +65,7 @@ export function CustomerDetails({ customerName, className }: ProductDetailsProps
                     <div className="flex items-center gap-3">
                       <DollarSign className="h-5 w-5 text-muted-foreground" />
                       <div>
-                        <p className="text-sm font-medium">Total Sales</p>
+                        <p className="text-sm font-medium" id='export-sales-as-excel'>Total Sales</p>
                         <p className="text-sm text-muted-foreground">{data?.totalRevenue ? <span> {formatPrice(data?.totalRevenue)} <span className='text-xs'>MAD</span> </span> : "Unknown"}</p>
                       </div>
                     </div>

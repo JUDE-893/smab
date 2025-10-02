@@ -56,6 +56,8 @@ callbacks: {
       token.id = user.id;
       token.email = user.email;
       token.name = user.name;
+      token.role = user.role;
+      token.profilePic = user.profilePic;
       token.verifiedAt = user.verifiedAt;
       token.accessToken = user.token;
     }
@@ -63,10 +65,12 @@ callbacks: {
   },
 
   async session({ session, token }) {
-    session.user.id = token.id;
+    // session.user.id = token.id;
     session.user.email = token.email;
     session.user.name = token.name;
-    session.accessToken = token.accessToken;
+    session.user.role = token.role;
+    session.user.profilePic = token.profilePic;
+    // session.accessToken = token.accessToken;
     return session;
   },
 

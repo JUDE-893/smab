@@ -9,7 +9,7 @@ export function GenerateReportButton({ reportMetadate }) {
     // Create URL with proper encoding
     const targetUrl = new URL(window.location.href);
     targetUrl.searchParams.set('generatePDFMode', 'true');
-    
+
     const params = new URLSearchParams();
     params.append('url', targetUrl.toString());
     if (fileName?.length > 0) params.append('fileName', fileName);
@@ -18,7 +18,7 @@ export function GenerateReportButton({ reportMetadate }) {
 
     try {
       console.log("ocess.env.NEXT_PUBLIC_GENERATE_PDF_REPORT_API",process.env.NEXT_PUBLIC_GENERATE_PDF_REPORT_API);
-      
+
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_GENERATE_PDF_REPORT_API}?${params.toString()}`
       );
@@ -44,7 +44,7 @@ export function GenerateReportButton({ reportMetadate }) {
   return (
     <Button variant="outline" size="sm" onClick={handleClick}>
       <IconChartBar />
-      <span className="hidden lg:inline">Generate Report</span>
+      <span id="generate-report" className="hidden lg:inline">Generate Report</span>
     </Button>
   );
 }

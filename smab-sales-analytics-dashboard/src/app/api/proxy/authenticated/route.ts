@@ -1,16 +1,16 @@
 import { NextResponse } from 'next/server';
 import { headersToObject } from '@/lib/requestHelpers';
-import { auth } from '@/auth';
+import { getToken } from 'next-auth/jwt';
 import { decryptJWT } from '@/lib/cryptoHelpers';
 
 export async function POST(request: Request) {
   const headersObj = headersToObject(request);
   const { target, data } = await request.json();
 
-  const session = await auth();
+    const session = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
 
   const token = await await decryptJWT(session?.accessToken, process.env.JWT_ENCRYPTION_SECRET);
- 
+
   const fetchOptions: RequestInit = {
     method: data ? 'POST' : 'GET',
     headers: {
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
     }
   };
 
-  // Only add body if data exists and is truthy
+  // Add body for POST Request
   if (data) {
     fetchOptions.body = JSON.stringify(data);
   }

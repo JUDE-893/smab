@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect } from 'react';
 import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useFieldArray, useForm } from "react-hook-form"
@@ -26,6 +27,7 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
+import { useSidebar } from "@/components/ui/sidebar"
 
 const profileFormSchema = z.object({
   username: z
@@ -63,6 +65,13 @@ const defaultValues: Partial<ProfileFormValues> = {
 }
 
 export function ProfileForm() {
+
+    const { setOpen } = useSidebar();
+
+    useEffect(() => {
+      setOpen(false);
+    },[])
+
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues,

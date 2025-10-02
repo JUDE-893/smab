@@ -10,6 +10,32 @@ export function capitalizeFirst(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+  /**
+   *  getCapChars("johny Deep")                     // "JD"
+   *  getCapChars("johny AL Deep")                  // "JD"
+   *  getCapChars("@#johny")                        // "J"
+   *  getCapChars("johny 1999")                     // "J"
+   *  getCapChars("johny maria fernando Gonzalez")  // "JF"
+   * @param {string} text - The input string to extract initials from.
+   * @returns {string} - The extracted initials (1 or 2 characters).
+   */
+export function getCapChars(text) {
+  // Replace non-letters with spaces, then split
+  const words = text.replace(/[^a-zA-Z\s]/g, " ").split(/\s+/).filter(Boolean);
+
+  if (words.length === 0) return "";
+
+  // Always take the first letter of the first word
+  let result = words[0][0].toUpperCase();
+
+  // If more than one valid word, also take the first letter of the last word
+  if (words.length > 1) {
+    result += words[words.length - 1][0].toUpperCase();
+  }
+
+  return result;
+}
+
 
 type DateRange = {
   from: Date;

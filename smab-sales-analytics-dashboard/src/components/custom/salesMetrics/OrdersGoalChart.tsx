@@ -42,6 +42,7 @@ export function OrdersGoalChart() {
         chartMetaData={{...chartMetaData, isLoading: isLoading, error}}
         chartConfig={chartConfig}
         chartData={chartData}
+        id='orders-goal'
        />
     )
   }

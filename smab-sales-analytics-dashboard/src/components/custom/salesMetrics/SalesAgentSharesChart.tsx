@@ -60,7 +60,7 @@ export function SalesAgentSharesChart() {
   )
 
   chartMetaData.chartFooter = {
-    title: ( <> <span className="text-md text-muted-foreground">#1</span> {data?.agentSales?.[0]?.agent?.replace("_", " ")}{" "} <TrendingUp className="h-4 w-4" /> </> ),
+    title: ( <> <span id='sales-shares' className="text-md text-muted-foreground">#1</span> {data?.agentSales?.[0]?.agent?.replace("_", " ")}{" "} <TrendingUp className="h-4 w-4" /> </> ),
     description: (
       <>
         Leading the sales revenue with{" "}

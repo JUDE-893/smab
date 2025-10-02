@@ -1,6 +1,6 @@
 "use client"
 
-import { Suspense } from 'react'
+import { Suspense, useState, useEffect } from 'react'
 import Image from 'next/image';
 import * as React from "react"
 import {
@@ -36,144 +36,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { Modal } from '@/components/shadcnkit/modal'
-import SearchBox from '@/components/shadcnkit/page-content-searchBox'
+import { sectionsConfig, reconcileObjects } from '@/components/config/app-sidebar-config'
 import { useQueryParams } from "@/hooks/useQueryParams"
 
-const data = {
-  user: {
-    name: "John Deer",
-    email: "JD@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  navMain: [
-    {
-      title: "Dashboard",
-      url: "/sales",
-      icon: IconDashboard,
-    },
-    {
-      title: "Growth Metrics",
-      url: "/growth-metrics",
-      icon: IconChartBar,
-    },
-    {
-      title: "Sales Metrics",
-      url: "/sales",
-      icon: IconCurrencyDollar,
-    },
-    {
-      title: "Fast Moving Products",
-      url: "/products",
-      icon: IconShoppingCartBolt,
-    },
-    {
-      title: "Customers Activities",
-      url: "/customers",
-      icon: IconUsers,
-    },
-    // {
-    //   title: "Lifecycle",
-    //   url: "#",
-    //   icon: IconListDetails,
-    // },
-    // {
-    //   title: "Analytics",
-    //   url: "#",
-    //   icon: IconChartBar,
-    // },
-    // {
-    //   title: "Projects",
-    //   url: "#",
-    //   icon: IconFolder,
-    // }
-  ],
-  navClouds: [
-    {
-      title: "Capture",
-      icon: IconCamera,
-      isActive: true,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Proposal",
-      icon: IconFileDescription,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Prompts",
-      icon: IconFileAi,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  navSecondary: [
-    {
-      title: "Settings",
-      url: "#",
-      icon: IconSettings,
-    },
-    {
-      title: "Get Help",
-      url: "#",
-      icon: IconHelp,
-    },
-    {
-      title: (<Modal trigger={<h1>Search</h1>}
-                     className='w-[2000]'
-              >
-                <SearchBox />
-             </Modal>),
-      url: "#",
-      icon: IconSearch,
-    },
-  ],
-  documents: [
-    // {
-    //   name: "Data Library",
-    //   url: "#",
-    //   icon: IconDatabase,
-    // },
-    {
-      name: "Reports",
-      url: "#",
-      icon: IconReport,
-    },
-    // {
-    //   name: "Word Assistant",
-    //   url: "#",
-    //   icon: IconFileWord,
-    // },
-  ],
+type SectionsConfig = {
+  [key: string]: any
 }
 
 function SidebarLoading() {
@@ -192,10 +59,39 @@ function SidebarLoading() {
   )
 }
 
+// const data = sectionsSetting;
+
 function AppSidebarContent({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { generatePDFMode } = useQueryParams();
 
+  const [data, setData] = useState<SectionsConfig | null>(null)
+
+  useEffect(() => {
+    let settings;
+    // 1. Try localStorage first
+    settings = JSON?.parse(localStorage.getItem("sectionsSetting"));
+
+    if (!settings) {
+      // 2. Fallback: lazy load the module
+      import("@/components/config/app-sidebar-config")
+        .then((mod) => {
+          // Optionally cache it for next time
+          localStorage.setItem("sectionsSetting", JSON.stringify(mod.sectionsSetting))
+          setData(reconcileObjects(mod.sectionsSetting, sectionsConfig));
+        })
+        .catch((err) => {
+          console.error("Failed to load sectionsSetting", err)
+        })
+    } else {
+      setData(reconcileObjects(settings, sectionsConfig))
+    };
+  }, [])
+
   if (generatePDFMode) return <></>
+
+
+
+  if (!data) return <SidebarLoading />
 
   return (
     <Sidebar collapsible="offcanvas" {...props}>

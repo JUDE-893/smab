@@ -3,32 +3,34 @@ import Image from "next/image"
 
 import { Separator } from "@/components/ui/separator"
 import { SidebarNav } from "@/components/ui/sidebar-nav"
+import { PageDescriptions } from '@/components/custom/salesMetrics/PageDescriptions';
+import { SiteHeader } from "@/components/shadcnkit/site-header"
 
 export const metadata: Metadata = {
-  title: "Forms",
-  description: "Advanced form example using react-hook-form and Zod.",
+  title: "Settings",
+  description: "account, appearance, settings an preferance",
 }
 
 const sidebarNavItems = [
   {
     title: "Profile",
-    href: "/examples/forms",
+    href: "/settings",
   },
   {
     title: "Account",
-    href: "/examples/forms/account",
+    href: "/settings/account",
   },
   {
     title: "Appearance",
-    href: "/examples/forms/appearance",
+    href: "/settings/appearance",
   },
   {
     title: "Notifications",
-    href: "/examples/forms/notifications",
+    href: "/settings/notifications",
   },
   {
     title: "Display",
-    href: "/examples/forms/display",
+    href: "/settings/display",
   },
 ]
 
@@ -39,6 +41,7 @@ interface SettingsLayoutProps {
 export default function SettingsLayout({ children }: SettingsLayoutProps) {
   return (
     <>
+    <SiteHeader pageTitle="" />
       <div className="md:hidden">
         <Image
           src="/examples/forms-light.png"
