@@ -54,3 +54,41 @@ the data does not contain sections url so you just leave it as place holder
 # Sales orders:
 - Sales orders details
 - Sales orders data table
+
+
+#### PRODUCTS
+
+Best Selling Record
+ -> Most Selled Product
+
+Fastest Moving Product
+ -> order frequancy
+ -> most ordered products
+ -> fastest moving customer good 
+ -> FMCG
+
+Total Products
+ -> Total Products Quantity Sold
+ -> masse sold 
+
+Sales Analytics
+Custom analytics dates
+-> date filters
+-> custome date range
+
+Generate Report product report
+
+Total Product Quantity
+ -> metrics of total product quantity sold in this period
+
+Best Sellers Products
+ -> Top #10 Best selling products with heightest revenue
+
+Total Product Revenue
+ -> Overview of total revenue for product sold
+
+Sales products details
+ -> products details list
+ -> product details
+ -> search product
+ -> sort products by

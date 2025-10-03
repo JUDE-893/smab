@@ -1,0 +1,182 @@
+[
+    {
+      "objectID": "/products#most-selled-product",
+      "hierarchy": { "lvl0": "Best Selling Record", "lvl1": "Most Selled Product" },
+      "title": "Best Selling Record",
+      "section": "Most Selled Product",
+      "url": "/products#most-selled-product",
+      "content": "Information about the most sold products and best selling records.",
+      "keywords": ["most sold", "best seller", "top products", "sales records"],
+      "sectionId": "most-selled-product"
+    },
+    {
+      "objectID": "/products#order-frequency",
+      "hierarchy": { "lvl0": "Fastest Moving Product", "lvl1": "Order Frequency" },
+      "title": "Fastest Moving Product",
+      "section": "Order Frequency",
+      "url": "/products#order-frequency",
+      "content": "Data and metrics related to order frequency and product movement velocity.",
+      "keywords": ["order frequency", "movement rate", "sales velocity", "turnover"],
+      "sectionId": "order-frequency"
+    },
+    {
+      "objectID": "/products#most-ordered-products",
+      "hierarchy": { "lvl0": "Fastest Moving Product", "lvl1": "Most Ordered Products" },
+      "title": "Fastest Moving Product",
+      "section": "Most Ordered Products",
+      "url": "/products#most-ordered-products",
+      "content": "List and analysis of the most frequently ordered products.",
+      "keywords": ["frequently ordered", "popular products", "high demand", "fast movers"],
+      "sectionId": "most-ordered-products"
+    },
+    {
+      "objectID": "/products#fastest-moving-customer-good",
+      "hierarchy": { "lvl0": "Fastest Moving Product", "lvl1": "Fastest Moving Customer Good" },
+      "title": "Fastest Moving Product",
+      "section": "Fastest Moving Customer Good",
+      "url": "/products#fastest-moving-customer-good",
+      "content": "Tracking and analysis of fastest moving consumer goods (FMCG).",
+      "keywords": ["fast moving", "consumer goods", "FMCG", "quick turnover"],
+      "sectionId": "fastest-moving-customer-good"
+    },
+    {
+      "objectID": "/products#fmcg",
+      "hierarchy": { "lvl0": "Fastest Moving Product", "lvl1": "FMCG" },
+      "title": "Fastest Moving Product",
+      "section": "FMCG",
+      "url": "/products#fmcg",
+      "content": "Fast Moving Consumer Goods analysis and tracking.",
+      "keywords": ["FMCG", "fast moving goods", "consumer products", "retail goods"],
+      "sectionId": "fmcg"
+    },
+    {
+      "objectID": "/products#total-products-quantity-sold",
+      "hierarchy": { "lvl0": "Total Products", "lvl1": "Total Products Quantity Sold" },
+      "title": "Total Products",
+      "section": "Total Products Quantity Sold",
+      "url": "/products#total-products-quantity-sold",
+      "content": "Metrics and data for total quantity of products sold.",
+      "keywords": ["total quantity", "units sold", "sales volume", "product count"],
+      "sectionId": "total-products-quantity-sold"
+    },
+    {
+      "objectID": "/products#masse-sold",
+      "hierarchy": { "lvl0": "Total Products", "lvl1": "Masse Sold" },
+      "title": "Total Products",
+      "section": "Masse Sold",
+      "url": "/products#masse-sold",
+      "content": "Bulk sales data and mass quantity sold metrics.",
+      "keywords": ["bulk sales", "mass quantity", "volume sales", "wholesale"],
+      "sectionId": "masse-sold"
+    },
+    {
+      "objectID": "/products#custom-analytics-dates",
+      "hierarchy": { "lvl0": "Sales Analytics", "lvl1": "Custom Analytics Dates" },
+      "title": "Sales Analytics",
+      "section": "Custom Analytics Dates",
+      "url": "/products#custom-analytics-dates",
+      "content": "Custom date range selection and filtering for sales analytics.",
+      "keywords": ["date filters", "custom dates", "date range", "time period"],
+      "sectionId": "custom-analytics-dates"
+    },
+    {
+      "objectID": "/products#date-filters",
+      "hierarchy": { "lvl0": "Sales Analytics", "lvl1": "Date Filters" },
+      "title": "Sales Analytics",
+      "section": "Date Filters",
+      "url": "/products#date-filters",
+      "content": "Date filtering options and time period selection tools.",
+      "keywords": ["date filters", "time filters", "period selection", "date range"],
+      "sectionId": "date-filters"
+    },
+    {
+      "objectID": "/products#custom-date-range",
+      "hierarchy": { "lvl0": "Sales Analytics", "lvl1": "Custom Date Range" },
+      "title": "Sales Analytics",
+      "section": "Custom Date Range",
+      "url": "/products#custom-date-range",
+      "content": "Customizable date range selection for detailed sales analysis.",
+      "keywords": ["custom date range", "specific dates", "date selection", "time frame"],
+      "sectionId": "custom-date-range"
+    },
+    {
+      "objectID": "/products#product-report",
+      "hierarchy": { "lvl0": "Generate Report", "lvl1": "Product Report" },
+      "title": "Generate Report",
+      "section": "Product Report",
+      "url": "/products#product-report",
+      "content": "Generate comprehensive product performance and sales reports.",
+      "keywords": ["product report", "generate report", "sales report", "performance report"],
+      "sectionId": "product-report"
+    },
+    {
+      "objectID": "/products#metrics",
+      "hierarchy": { "lvl0": "Total Product Quantity", "lvl1": "Metrics" },
+      "title": "Total Product Quantity",
+      "section": "Metrics",
+      "url": "/products#metrics",
+      "content": "Metrics and analytics for total product quantity sold during specific periods.",
+      "keywords": ["quantity metrics", "sales metrics", "period analysis", "volume data"],
+      "sectionId": "metrics"
+    },
+    {
+      "objectID": "/products#top-10",
+      "hierarchy": { "lvl0": "Best Sellers Products", "lvl1": "Top 10" },
+      "title": "Best Sellers Products",
+      "section": "Top 10",
+      "url": "/products#top-10",
+      "content": "Top 10 best selling products with highest revenue and sales performance.",
+      "keywords": ["top 10", "best sellers", "highest revenue", "top performers"],
+      "sectionId": "top-10"
+    },
+    {
+      "objectID": "/products#overview",
+      "hierarchy": { "lvl0": "Total Product Revenue", "lvl1": "Overview" },
+      "title": "Total Product Revenue",
+      "section": "Overview",
+      "url": "/products#overview",
+      "content": "Overview and analysis of total revenue generated from product sales.",
+      "keywords": ["revenue overview", "total revenue", "sales revenue", "income analysis"],
+      "sectionId": "overview"
+    },
+    {
+      "objectID": "/products#products-details-list",
+      "hierarchy": { "lvl0": "Sales Products Details", "lvl1": "Products Details List" },
+      "title": "Sales Products Details",
+      "section": "Products Details List",
+      "url": "/products#products-details-list",
+      "content": "Comprehensive list of product details and specifications.",
+      "keywords": ["product list", "details list", "product catalog", "item details"],
+      "sectionId": "products-details-list"
+    },
+    {
+      "objectID": "/products#product-details",
+      "hierarchy": { "lvl0": "Sales Products Details", "lvl1": "Product Details" },
+      "title": "Sales Products Details",
+      "section": "Product Details",
+      "url": "/products#product-details",
+      "content": "Detailed information and specifications for individual products.",
+      "keywords": ["product details", "item specifications", "product info", "details view"],
+      "sectionId": "product-details"
+    },
+    {
+      "objectID": "/products#search-product",
+      "hierarchy": { "lvl0": "Sales Products Details", "lvl1": "Search Product" },
+      "title": "Sales Products Details",
+      "section": "Search Product",
+      "url": "/products#search-product",
+      "content": "Search functionality to find specific products in the catalog.",
+      "keywords": ["product search", "search function", "find products", "search catalog"],
+      "sectionId": "search-product"
+    },
+    {
+      "objectID": "/products#sort-products",
+      "hierarchy": { "lvl0": "Sales Products Details", "lvl1": "Sort Products" },
+      "title": "Sales Products Details",
+      "section": "Sort Products",
+      "url": "/products#sort-products",
+      "content": "Sorting options and functionality for organizing product listings.",
+      "keywords": ["sort products", "organize list", "sort by", "arrange products"],
+      "sectionId": "sort-products"
+    }
+  ]

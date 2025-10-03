@@ -49,6 +49,7 @@ export function TotalProductRevenueChart() {
         chartConfig={chartConfig}
         chartData={dataRec}
         itemsPerPage={12} // Optional: customize items per page
+        id="top-10"
       />
     )
   }

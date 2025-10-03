@@ -22,7 +22,7 @@ export default function Page() {
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <HeaderMetrics />
 
-              <h1 className="text-5xl font-bold ml-8 mt-12 mb-4">Sales Analytics</h1>
+              <h1 className="text-5xl font-bold ml-8 mt-12 mb-4">Products Analytics</h1>
 
               <PageToolBar reportMetadate={{
                   fileName: 'products-activity-report',
@@ -38,7 +38,7 @@ export default function Page() {
                 <TotalProductRevenueChart />
               </div>
 
-              <h1 className="text-3xl font-bold ml-8 mt-7" id="sales-orders">Sales products details</h1>
+              <h1 className="text-3xl font-bold ml-8 mt-7" id="product-details">Sales products details</h1>
               <ProductsDataTable />
             </div>
           </div>

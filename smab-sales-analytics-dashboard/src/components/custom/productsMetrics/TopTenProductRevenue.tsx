@@ -48,7 +48,7 @@ export function TopTenProductRevenue() {
  });
 
  chartMetaData.chartFooter = {
-   title: ( <> <span className="text-md text-muted-foreground">#1</span> {data?.[0]?.name}{" "} <TrendingUp className="h-4 w-4" /> </> ),
+   title: ( <> <span id="top-10" className="text-md text-muted-foreground">#1</span> {data?.[0]?.name}{" "} <TrendingUp className="h-4 w-4" /> </> ),
    description: (
      <>
        {data?.[0]?.barcode}{" - "}Leading the purchase value with{" "}

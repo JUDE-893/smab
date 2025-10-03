@@ -38,7 +38,7 @@ export default function Page() {
                 <TotalCustomerOrdersChart />
               </div>
 
-              <h1 className="text-3xl font-bold ml-8 mt-7" id="sales-orders">Customers purchase details</h1>
+              <h1 id="customers-details" className="text-3xl font-bold ml-8 mt-7" id="sales-orders">Customers purchase details</h1>
               <CustomersDataTable />
             </div>
           </div>
