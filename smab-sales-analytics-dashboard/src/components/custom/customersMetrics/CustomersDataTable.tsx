@@ -59,6 +59,7 @@ export function CustomersDataTable() {
             columns={columns}
             tableFilterConfig={tableFilterConfig}
             exportDataConfig={exportDataConfig}
+            key={isLoading ? "key" : initialData?.length}
         />
     )
 }

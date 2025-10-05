@@ -76,7 +76,7 @@ export function ProductDetails({ barcode, className }: ProductDetailsProps) {
                       <DollarSign className="h-5 w-5 text-muted-foreground" />
                       <div>
                         <p className="text-sm font-medium">Price TTC</p>
-                        <p className="text-sm text-muted-foreground">{formatPrice(data?.price_ttc) || "Unknown"}</p>
+                        <p className="text-sm text-muted-foreground">{formatPrice(data?.prix_ttc) || "Unknown"}</p>
                       </div>
                     </div>
                   </div>

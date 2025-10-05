@@ -23,8 +23,9 @@ export const revalidate = 0;
 
 const filterDocTltp = `Note: any search, sort or filter operation are only applyed on data within the selected date range`
 
-export default function Page() {
+export default async function Page() {
 
+  await new Promise(() => {});
 
   return (
       <>

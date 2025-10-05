@@ -414,7 +414,7 @@ export function SalesOrdersDataTable() {
             columns={columns}
             tableFilterConfig={tableFilterConfig}
             exportDataConfig={exportDataConfig}
-            key={initialData?.length}
+            key={isLoading ? "key" : initialData?.length}
         />
     )
 }

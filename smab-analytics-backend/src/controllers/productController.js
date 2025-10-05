@@ -74,7 +74,7 @@ export const getProductsRevenue = errorCatchingLayer(async (req, res, next) => {
   // Create a map of barcode to price
   const priceMap = new Map();
   productDetails.forEach(detail => {
-    priceMap.set(detail.ref, detail.price_ttc);
+    priceMap.set(detail.ref, detail.prix_ttc);
   });
 
   // Aggregate product revenue
@@ -137,7 +137,7 @@ export const getSalesProduct = errorCatchingLayer(async (req, res, next) => {
   // Create a map of barcode to price
   const priceMap = new Map();
   productDetails.forEach(detail => {
-    priceMap.set(detail.ref, detail.price_ttc);
+    priceMap.set(detail.ref, detail.prix_ttc);
   });
 
   // Aggregate product revenue
@@ -231,7 +231,7 @@ export const getProductAnalytics = errorCatchingLayer(async (req, res, next) => 
     if (!productInOrder) return;
 
     const quantity = productInOrder.quantity;
-    const revenue = productDetail.price_ttc * quantity;
+    const revenue = productDetail.prix_ttc * quantity;
 
     totalSalesValue += revenue;
 
@@ -262,7 +262,7 @@ export const getProductAnalytics = errorCatchingLayer(async (req, res, next) => 
     data: {
       barcode,
       name: productName,
-      price_ttc: productDetail.price_ttc,
+      prix_ttc: productDetail.prix_ttc,
       totalSalesValue,
       productActivity: monthlyData,
       fmcg: fmcgData

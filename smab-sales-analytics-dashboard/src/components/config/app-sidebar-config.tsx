@@ -30,7 +30,7 @@ export const sectionsConfig = {
   navMain: [
     {
       title: "Dashboard",
-      url: "/sales",
+      url: "/sales#dashboard",
       icon: IconDashboard,
     },
     {
@@ -159,7 +159,7 @@ export const sectionsConfig = {
 
 export const sectionsSetting = {
   navMain: [
-    { ref: "/sales", active: true },          // Dashboard
+    { ref: "/sales#dashboard", active: true },          // Dashboard
     { ref: "/growth-metrics", active: false },
     { ref: "/sales", active: true },          // Sales Metrics
     { ref: "/products", active: true },
