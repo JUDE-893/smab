@@ -1,6 +1,8 @@
 import { Separator } from "@/components/ui/separator"
 import { AccountForm } from "@/app/settings/account-form"
 
+export const dynamic = 'force-dynamic';
+
 export default function SettingsAccountPage() {
   return (
     <div className="space-y-6">

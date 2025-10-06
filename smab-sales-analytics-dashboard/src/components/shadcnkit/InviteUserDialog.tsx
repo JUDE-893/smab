@@ -21,7 +21,7 @@ import { toast } from "sonner"
 
 export function InviteUserDialog () {
 
-  const [input, setInput] = useState("dddd")
+  const [input, setInput] = useState("")
   const {isPending, mutate, error} = useCustomMutation(inviteUser);
 
   useEffect(()=> {

@@ -6,16 +6,18 @@ import { getHeaderMetrics,
         getOrderMetricsPerDay,
         getAgentSales,
         getPlansMetrics,
-        getSalesAgentAnalytics }
+        getSalesAgentAnalytics,
+        getAllPlansMetrics,
+        updatePlansMetrics }
         from '../controllers/salesControllers.js';
 import { protect, verifiedAccess}  from '../controllers/authController.js';
 import { restrictForIp }  from '../controllers/integrityController.js';
 
 const router = Router();
 
-router.use(restrictForIp)
+// router.use(restrictForIp)
 
-router.use(protect, verifiedAccess)
+// router.use(protect, verifiedAccess)
 
 router.get('/header-metrics', getHeaderMetrics);
 
@@ -27,6 +29,8 @@ router.get('/agent-sales', getAgentSales);
 router.get('/order-metrics-per-day', getOrderMetricsPerDay);
 router.get('/sales-metrics-per-day', getSalesMetricsPerDay);
 router.get('/metrics-plans', getPlansMetrics);
+router.get('/all-metrics-plans', getAllPlansMetrics)
+router.post('/all-metrics-plans', updatePlansMetrics)
 router.get('/sales-agent-analytics', getSalesAgentAnalytics);
 
 

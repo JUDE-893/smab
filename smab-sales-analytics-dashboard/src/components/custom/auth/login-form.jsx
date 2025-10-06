@@ -19,9 +19,8 @@ export function LoginForm({
   }) {
 
   const [payload, setPayload] = useState({
-    redirect: false,
-    email: 'Kristopher.Bauermann@mail.de',
-    password:'Password123'
+    redirect: false,   // <-- important
+    callbackUrl: "/sales"
   });
   const router = useRouter();
   const searchParams = useSearchParams();

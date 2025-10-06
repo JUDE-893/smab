@@ -21,6 +21,10 @@ const sidebarNavItems = [
     href: "/settings/account",
   },
   {
+    title: "Metrics Plans",
+    href: "/settings/plan-metrics",
+  },
+  {
     title: "Appearance",
     href: "/settings/appearance",
   },

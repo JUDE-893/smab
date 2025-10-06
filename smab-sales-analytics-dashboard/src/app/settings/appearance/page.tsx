@@ -1,6 +1,8 @@
 import { Separator } from "@/components/ui/separator"
 import { AppearanceForm } from "@/app/settings/appearance/appearance-form"
 
+export const dynamic = 'force-dynamic';
+
 export default function SettingsAppearancePage() {
   return (
     <div className="space-y-6">

@@ -534,3 +534,46 @@ export const getSalesAgentAnalytics = errorCatchingLayer(async (req, res, next) 
     }
   });
 });
+
+export const getAllPlansMetrics = errorCatchingLayer(async (req, res, next) => {
+  const metrics = await MetricsPlans.find();
+
+  return res.status(200).json({message: 'sales metrics plan fetched successfully', data: metrics});
+});
+
+export const updatePlansMetrics = errorCatchingLayer(async (req, res, next) => {
+  const metrics = req.body;
+  
+  // Validate that we received an array
+  if (!Array.isArray(metrics)) {
+    return res.status(400).json({ message: 'Request body must be an array of metrics plans' });
+  }
+
+  try {
+    // Assuming you have a MetricsPlan model
+    const updatePromises = metrics.map(plan => 
+      MetricsPlans.findByIdAndUpdate(
+        plan._id,
+        {
+          day: plan.day,
+          week: plan.week,
+          month: plan.month,
+          year: plan.year
+        },
+        { new: true } // Return the updated document
+      )
+    );
+
+    const updatedPlans = await Promise.all(updatePromises);
+    
+    return res.status(200).json({
+      message: 'Metrics plans updated successfully',
+      data: updatedPlans
+    });
+  } catch (error) {
+    return res.status(500).json({ 
+      message: 'Error updating metrics plans',
+      error: error.message 
+    });
+  }
+});

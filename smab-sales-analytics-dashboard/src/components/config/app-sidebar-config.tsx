@@ -124,8 +124,8 @@ export const sectionsConfig = {
       icon: IconSettings,
     },
     {
-      title: "Get Help",
-      url: "#Help",
+      title: "Help Assistant",
+      url: "/help-assistant",
       icon: IconHelp,
     },
     {
@@ -167,7 +167,7 @@ export const sectionsSetting = {
   ],
   navSecondary: [
     { ref: "/settings", active: true },
-    { ref: "#Help", active: true },
+    { ref: "/help-assistant", active: true },
     { ref: "#Search", active: true },               // Search (Modal)
   ],
   documents: [

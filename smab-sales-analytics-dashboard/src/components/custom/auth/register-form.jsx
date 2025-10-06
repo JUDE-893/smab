@@ -21,8 +21,9 @@ export function RegisterForm({
 }) {
 
   const { register, handleSubmit, watch, formState: { errors }} = useForm({defaultValues: {
-    redirect: false,
     mode: 'register',
+    redirect: false,   // <-- important
+    callbackUrl: "/sales",
     }});
 
   const { authoToken } = useParams();
@@ -54,8 +55,10 @@ export function RegisterForm({
       <Card className="overflow-hidden bg-background p-0 w-110">
         <CardContent className="grid p-0 ">
           <form onSubmit={handleSubmit((data) => {
-            let r = authonticate({...data, authoToken, redirect: false, mode: 'register'});
-            console.log("r",r);
+            let r = authonticate({...data, authoToken, redirect: false, mode: 'register', callbackUrl: "/sales"}, {
+              onSuccess: () => router.push('/sales')
+            });
+
           })}
             className="p-6 md:p-8">
             <div className="flex flex-col gap-6" >

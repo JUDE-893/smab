@@ -35,6 +35,17 @@ export async function getMetricsPlans(plan) {
 
   return data.data
 }
+export async function getAllMetricsPlans() {
+  const { data } = await axiosClient.post('/proxy/protected', { target: `sales/all-metrics-plans` });
+
+  return data.data
+}
+
+export async function putAllMetricsPlans(pld) {
+  const { data } = await axiosClient.post('/proxy/protected', { target: `sales/all-metrics-plans`, data: pld});
+
+  return data.data
+}
 
 export async function getAgentAnalysis(salesAgent, year) {
   const { data } = await axiosClient.post('/proxy/protected', { target: `sales/sales-agent-analytics?salesAgent=${salesAgent}${year ? `&year=${year}` : ""}` });
