@@ -130,10 +130,10 @@ const processEmail = async (gmail, message) => {
       await redirectDataToBackend(orderInfo);
 
       // Generate PDF
-      let pdfPath = await generatePdf(rOrder);
+      let pdfPath = await generatePdf(orderInfo);
       console.log("[pdfPath]", pdfPath);
 
-      pdfPath = null;
+      // pdfPath = null;
       if (!pdfPath) {
         logger.error(
           `Failed to generate PDF for order #${orderInfo.orderNumber}`
@@ -152,22 +152,22 @@ const processEmail = async (gmail, message) => {
       );
 
       // Print with longer timeout for PM2 environment
-      // const printResult = await printPDF(pdfPath, process.env.DEFAULT_PRINTER);
+      const printResult = await printPDF(pdfPath, process.env.DEFAULT_PRINTER);
 
-      // if (!printResult) {
-      //   logger.error(`Printing failed for ${pdfPath} - Email will remain unread`);
-      //   return;
-      // }
+      if (!printResult) {
+        logger.error(`Printing failed for ${pdfPath} - Email will remain unread`);
+        return;
+      }
 
       // Add delay between printing and marking as read
       await new Promise((resolve) => setTimeout(resolve, 3000));
 
-      // const readMarkResult = await markAsRead(gmail, message.id);
-      // if (!readMarkResult) {
-      //   logger.warn(
-      //     `Failed to mark message ${message.id} as read despite successful processing`
-      //   );
-      // }
+      const readMarkResult = await markAsRead(gmail, message.id);
+      if (!readMarkResult) {
+        logger.warn(
+          `Failed to mark message ${message.id} as read despite successful processing`
+        );
+      }
 
       logger.info(`Successfully completed processing email ${message.id}`);
     } catch (error) {

@@ -20,7 +20,7 @@ export const listPrinters = async () => {
       );
       return printers;
     } catch (error) {
-      logger.error("Error fetching printers:", error.message);
+      logger.error("Error fetching printers:", error.message, error);
       return [];
     }
   };
