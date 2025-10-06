@@ -32,6 +32,7 @@ export function PurchaseActivityChart({data, isLoading, error}) {
         chartConfig={chartConfig}
         chartData={data}
         className=' lg:px-[4%] lg:py-[3%] bg-background border-none '
+        className='chart-container'
        />
     )
   }

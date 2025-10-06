@@ -415,6 +415,7 @@ export function SalesOrdersDataTable() {
             tableFilterConfig={tableFilterConfig}
             exportDataConfig={exportDataConfig}
             key={isLoading ? "key" : initialData?.length}
+            className='table-container'
         />
     )
 }

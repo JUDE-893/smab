@@ -135,6 +135,7 @@ export function TotalOrdersChart() {
         chartMetaData={{...chartMetaData, isLoading: isLoading, error}}
         chartConfig={chartConfig}
         chartData={data?.orderMetricsPerDay}
+        className='chart-container'
        />
     )
   }

@@ -145,6 +145,7 @@ export function TotalSalesChart() {
         chartMetaData={{...chartMetaData, isLoading: isLoading, error}}
         chartConfig={chartConfig}
         chartData={data?.salesMetricsPerDay}
+        className='chart-container'
        />
     )
   }

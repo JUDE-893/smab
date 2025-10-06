@@ -42,6 +42,7 @@ export function SellGoalChart() {
         chartMetaData={{...chartMetaData, isLoading: isLoading, error}}
         chartConfig={chartConfig}
         chartData={chartData}
+        className='chart-container'
        />
     )
   }

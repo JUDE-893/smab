@@ -76,6 +76,7 @@ export function AgentOrdersSharesChart() {
         chartMetaData={{...chartMetaData, isLoading: isLoading, error}}
         chartConfig={chartConfig}
         chartData={dataRec}
+        className="chart-container"
        />
     )
   }

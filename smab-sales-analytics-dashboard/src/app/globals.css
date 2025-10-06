@@ -251,3 +251,19 @@
   scrollbar-width: thin;
   scrollbar-color: rgba(79, 70, 229, 0.6) transparent;
 }
+
+/* PDF PRINT */
+@media print {
+  .chart-container,
+  .table-container {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    page-break-before: auto;
+    page-break-after: auto;
+  }
+
+  svg {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}

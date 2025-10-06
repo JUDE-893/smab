@@ -84,6 +84,7 @@ export function SalesAgentSharesChart() {
       chartMetaData={{...chartMetaData, isLoading: isLoading, error}}
       chartConfig={chartConfig}
       chartData={data?.agentSales}
+      className='chart-container'
      />
   )
 }

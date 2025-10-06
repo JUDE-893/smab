@@ -44,6 +44,7 @@ export function TotalCustomerRevenueAndQantittyChart() {
         chartConfig={chartConfig}
         chartData={data}
         className='lg:px-[4%] lg:py-[3%]'
+        className='chart-container'
        />
     )
   }

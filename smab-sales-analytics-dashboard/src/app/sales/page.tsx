@@ -36,8 +36,8 @@ export default  function Page() {
               <h1 className="text-5xl font-bold ml-8 mt-12 mb-4">Sales Analytics</h1>
               <PageToolBar reportMetadate={{
                   fileName: 'sales-activity-report',
-                  filePageWidth: 480,
-                  filePageHeight: 320
+                  filePageWidth: 210, // 480
+                  filePageHeight: 297 // 320
                 }} />
 
               <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow- lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-3 mb-6 mt-4">

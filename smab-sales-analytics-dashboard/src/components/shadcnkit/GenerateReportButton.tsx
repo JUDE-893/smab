@@ -6,6 +6,9 @@ export function GenerateReportButton({ reportMetadate }) {
   const handleClick = async () => {
     let { fileName, filePageHeight, filePageWidth } = reportMetadate;
 
+    console.log("fileName, filePageHeight, filePageWidth", fileName, filePageHeight, filePageWidth);
+    
+
     // Create URL with proper encoding
     const targetUrl = new URL(window.location.href);
     targetUrl.searchParams.set('generatePDFMode', 'true');

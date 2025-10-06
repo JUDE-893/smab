@@ -1,8 +1,12 @@
 import chromium from "@sparticuz/chromium-min";
 import { Browser } from "puppeteer";
 import { Browser as CoreBrowser } from "puppeteer-core";
+import { cookies } from "next/headers";
 
 export async function GET(req: Request) {
+  const authToken = cookies().get("authjs.session-token");
+  console.log("°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°", authToken);
+
   const reqUrl = new URL(req.url);
   const pageUrl = reqUrl.searchParams.get("url");
   const fileName = reqUrl.searchParams.get("fileName");
@@ -23,18 +27,33 @@ export async function GET(req: Request) {
     headless: "new",
     executablePath: process.env.BROWSER_PATH,
   });
-  
+
   const page = await browser.newPage();
+
+  // ✅ Inject the NextAuth cookie into Puppeteer
+  if (authToken?.value) {
+    const urlObj = new URL(pageUrl);
+    await page.setCookie({
+      name: "authjs.session-token",
+      value: authToken.value,
+      domain: urlObj.hostname,   // must match your app’s domain
+      path: "/",                 // default path
+      httpOnly: true,
+      secure: urlObj.protocol === "https:",
+    });
+  }
+
   await page.goto(pageUrl, { waitUntil: "networkidle0" });
 
   // Wait for animations/data to finish
   await new Promise(resolve => setTimeout(resolve, 0));
 
-
   const pdfBuffer = await page.pdf({
     width: `${filePageWidth || 210}mm`,
     height: `${filePageHeight || 297}mm`,
     printBackground: true,
+    preferCSSPageSize: true,
+    scale: 0.7,
   });
 
   await browser.close();
@@ -42,7 +61,7 @@ export async function GET(req: Request) {
   return new Response(pdfBuffer, {
     headers: {
       "Content-Type": "application/pdf",
-      "Content-Disposition": `attachment; filename="${fileName || 'page'}.pdf"`,
+      "Content-Disposition": `attachment; filename="${fileName || "page"}.pdf"`,
     },
   });
 }

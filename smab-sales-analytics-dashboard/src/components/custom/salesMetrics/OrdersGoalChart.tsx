@@ -43,6 +43,7 @@ export function OrdersGoalChart() {
         chartConfig={chartConfig}
         chartData={chartData}
         id='orders-goal'
+        className='chart-container'
        />
     )
   }
